@@ -14,7 +14,7 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  // Derive initial status from token presence — no setState needed for no-token case
+  
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [resendSent, setResendSent] = useState(false);
 

@@ -15,7 +15,7 @@ interface Product {
   title: string;
   price_cents: number;
   status: ProductStatus;
-  thumbnail_url?: string | null;
+  thumbnail?: string | null;
   created_at: string;
 }
 
@@ -87,10 +87,10 @@ function ProductCard({ product, onToggle, isToggling }: ProductCardProps) {
     >
       {/* Thumbnail */}
       <div className="h-40 bg-[var(--bg)] flex items-center justify-center overflow-hidden relative">
-        {product.thumbnail_url ? (
+        {product.thumbnail ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={product.thumbnail_url}
+            src={product.thumbnail}
             alt={product.title}
             className="w-full h-full object-cover"
           />
@@ -238,11 +238,21 @@ const {
 
   console.log(products)
 
+  const [toggleError, setToggleError] = useState<string | null>(null);
+
   const toggleMutation = useMutation<void, ApiError, { id: string; action: "publish" | "unpublish" }>({
     mutationFn: async ({ id, action }) => {
       await api.post(`/products/${id}/${action}`);
     },
-    onMutate: ({ id }) => setTogglingId(id),
+    onMutate: ({ id }) => {
+      setToggleError(null);
+      setTogglingId(id);
+    },
+    onError: (err) => {
+    
+      const message = err?.response?.data?.message ?? "Something went wrong";
+      setToggleError(message);
+    },
     onSettled: () => {
       setTogglingId(null);
       queryClient.invalidateQueries({ queryKey: ["products", "me"] });
@@ -257,6 +267,7 @@ const {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-syne font-extrabold text-white text-2xl">Products</h1>
@@ -274,6 +285,11 @@ const {
         </Link>
       </div>
 
+      {toggleError && (
+  <div className="mb-6 bg-red-500/8 border border-red-500/20 text-red-400 text-sm rounded-xl px-4 py-3 font-inter">
+    {toggleError}
+  </div>
+)}
       {/* Error state */}
       {isError && <ErrorState onRetry={refetch} />}
 

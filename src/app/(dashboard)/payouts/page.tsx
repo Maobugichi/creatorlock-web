@@ -11,9 +11,11 @@ interface ApiError {
   response?: { data?: { message?: string } };
 }
 
+// Fix the interface to match what the backend actually returns
 interface BalanceResponse {
-  available_cents: number;
-  pending_cents: number;
+  total_earned: number;
+  total_paid_out: number;
+  available: number;
 }
 
 interface Bank {
@@ -50,16 +52,15 @@ const STATUS_STYLES: Record<Payout['status'], { label: string; classes: string }
   failed:     { label: 'Failed',     classes: 'bg-red-500/10 text-red-400 border-red-500/20' },
 };
 
-function BalanceCard({ available_cents, pending_cents }: BalanceResponse) {
+// Fix BalanceCard props to match
+function BalanceCard({ available, total_earned, total_paid_out }: BalanceResponse) {
   return (
     <div className="bg-surface border border-[var(--border)] rounded-2xl p-6">
       <p className="text-xs text-[var(--muted)] uppercase tracking-widest mb-1">Available balance</p>
-      <p className="font-mono text-4xl font-bold text-white">{formatNGN(available_cents)}</p>
-      {pending_cents > 0 && (
-        <p className="text-xs text-[var(--muted)] mt-2">
-          <span className="font-mono">{formatNGN(pending_cents)}</span> pending clearance
-        </p>
-      )}
+      <p className="font-mono text-4xl font-bold text-white">{formatNGN(available)}</p>
+      <p className="text-xs text-[var(--muted)] mt-2">
+        <span className="font-mono">{formatNGN(total_earned)}</span> total earned
+      </p>
       <p className="text-xs text-[var(--muted)] mt-3">After 7% platform fee</p>
     </div>
   );
@@ -102,14 +103,16 @@ function AccountResolver({ bankCode, accountNumber, onResolved, onReset }: Accou
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevKeyRef = useRef('');
 
-  const { mutate, isPending, isSuccess, isError, error, reset } = useMutation({
+  const { mutate, isPending, isSuccess, isError, error, reset, data } = useMutation({
+    // Fix AccountResolver mutationFn to unwrap the data envelope
     mutationFn: async ({ code, number }: { code: string; number: string }) => {
-      const res = await api.get<ResolveResponse>('/payouts/resolve', {
-        params: { bank_code: code, account_number: number },
-      });
-      return res.data;
+      const res = await api.get<{ success: boolean; data: ResolveResponse }>(
+        '/payouts/resolve',
+        { params: { bank_code: code, account_number: number } }
+      );
+      return res.data.data; // unwrap
     },
-    onSuccess: (data) => {
+        onSuccess: (data) => {
       onResolved(data.account_name);
     },
     onError: () => {
@@ -150,12 +153,12 @@ function AccountResolver({ bankCode, accountNumber, onResolved, onReset }: Accou
           Verifying account…
         </p>
       )}
-      {isSuccess && (
+      {isSuccess && data && (
         <p className="text-xs text-green-400 flex items-center gap-1.5">
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          Account verified
+          <span>{data.account_name}</span>
         </p>
       )}
       {isError && (
@@ -175,25 +178,27 @@ export default function PayoutsPage() {
 
   const { data: balanceData, isLoading: balanceLoading } = useQuery<BalanceResponse>({
     queryKey: ['payouts', 'balance'],
+    // balance — backend returns { success, data: { total_earned, total_paid_out, available } }
     queryFn: async () => {
-      const res = await api.get<BalanceResponse>('/payouts/balance');
-      return res.data;
+      const res = await api.get<{ success: boolean; data: BalanceResponse }>('/payouts/balance');
+      return res.data.data;
     },
   });
 
   const { data: banksData, isLoading: banksLoading } = useQuery<BanksResponse>({
     queryKey: ['payouts', 'banks'],
     queryFn: async () => {
-      const res = await api.get<BanksResponse>('/payouts/banks');
-      return res.data;
+      const res = await api.get<{ success: boolean; data: Bank[] }>('/payouts/banks');
+      return { banks: res.data.data }; // unwrap the `data` array into the shape your component expects
     },
   });
 
   const { data: historyData, isLoading: historyLoading, refetch: refetchHistory } = useQuery<PayoutsResponse>({
     queryKey: ['payouts', 'me'],
+  
     queryFn: async () => {
-      const res = await api.get<PayoutsResponse>('/payouts/me');
-      return res.data;
+      const res = await api.get<{ success: boolean; data: Payout[] }>('/payouts/me');
+      return { payouts: res.data.data };
     },
   });
 
@@ -222,7 +227,8 @@ export default function PayoutsPage() {
     },
   });
 
-  const availableCents = balanceData?.available_cents ?? 0;
+  // Fix availableCents to use the correct field
+const availableCents = balanceData?.available ?? 0;
   const amountCents = Math.round(parseFloat(amountNaira || '0') * 100);
   const canWithdraw =
     !!accountName &&
@@ -275,8 +281,8 @@ export default function PayoutsPage() {
               className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 transition-colors disabled:opacity-50"
             >
               <option value="">Select bank…</option>
-              {banksData?.banks.map((bank) => (
-                <option key={bank.code} value={bank.code}>
+              {banksData?.banks.map((bank,i) => (
+                <option key={`${bank.code}-${i}`} value={bank.code}>
                   {bank.name}
                 </option>
               ))}

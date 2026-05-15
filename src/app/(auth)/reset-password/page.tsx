@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
 import Input from "@/components/ui/input";
+import AuthNav from "@/components/ui/authnav";
 
 interface ApiError {
   response?: {
@@ -47,7 +48,7 @@ export default function ResetPasswordPage() {
       "Invalid or expired reset link. Please request a new one."
     : null;
 
-  // No token in URL
+ 
   if (!token) {
     return (
       <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center px-4 font-inter">
@@ -70,17 +71,9 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter">
+    <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter w-full">
 
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-white/5">
-        <div className="font-syne font-extrabold text-xl text-white tracking-tight">
-          Creator<span className="text-brand">Lock</span>
-        </div>
-        <Link href="/login" className="text-sm text-white/30 hover:text-white/60 transition-colors">
-          Back to sign in
-        </Link>
-      </nav>
+      <AuthNav  linkLabel="Back to login" linkHref="/login"/>
 
       <div className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-[420px]">

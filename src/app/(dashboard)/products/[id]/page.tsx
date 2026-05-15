@@ -14,8 +14,14 @@ interface ApiError {
 
 interface ProductFile {
   id: string;
-  filename: string;
-  size_bytes: number;
+  product_id: string;
+  url: string;
+  public_id: string;
+  format: string | null;
+  size: number | null;
+  category: string | null;
+  original_name: string | null;
+  created_at: string;
 }
 
 interface Product {
@@ -23,7 +29,7 @@ interface Product {
   title: string;
   price_cents: number;
   description?: string;
-  thumbnail_url?: string;
+  thumbnail?: string;
   status: 'draft' | 'published' | 'unpublished' | 'flagged';
   files: ProductFile[];
 }
@@ -33,8 +39,9 @@ interface NewFile {
   file: File;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
+const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024; // 10MB — must match backend
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -63,23 +70,53 @@ function ThumbnailUpload({
         {display ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={display} alt="Thumbnail" className="absolute inset-0 w-full h-full object-cover" />
+            <img
+              src={display}
+              alt="Thumbnail"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
               </svg>
               <span className="text-white text-xs font-inter">Change image</span>
             </div>
           </>
         ) : (
           <div className="flex flex-col items-center gap-2 text-white/30">
-            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              />
             </svg>
             <span className="text-xs font-inter">Click to upload thumbnail</span>
           </div>
         )}
       </button>
+
+      {/* Size hint */}
+      <p className="mt-1.5 text-xs text-white/30 font-inter">
+        JPG, PNG, WebP or GIF · Max 10MB
+      </p>
+
       <input
         ref={inputRef}
         type="file"
@@ -88,6 +125,7 @@ function ThumbnailUpload({
         onChange={(e) => {
           const f = e.target.files?.[0];
           if (f) onChange(f);
+          e.target.value = ''; // reset so same file can be reselected after error
         }}
       />
     </div>
@@ -130,11 +168,23 @@ function FileDropZone({
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
         className={`w-full rounded-xl border border-dashed transition-colors p-5 flex flex-col items-center gap-2 cursor-pointer ${
-          isDragging ? 'border-brand bg-brand/5' : 'border-[var(--border)] hover:border-brand/40 bg-[var(--bg)]'
+          isDragging
+            ? 'border-brand bg-brand/5'
+            : 'border-[var(--border)] hover:border-brand/40 bg-[var(--bg)]'
         }`}
       >
-        <svg className="w-6 h-6 text-white/30" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+        <svg
+          className="w-6 h-6 text-white/30"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+          />
         </svg>
         <p className="text-sm font-inter text-white/50">
           <span className="text-brand">Browse</span> or drag files here
@@ -145,20 +195,41 @@ function FileDropZone({
       {newFiles.length > 0 && (
         <ul className="mt-3 space-y-2">
           {newFiles.map((nf) => (
-            <li key={nf.localId} className="flex items-center gap-3 bg-brand/5 border border-brand/20 rounded-xl px-4 py-3">
-              <svg className="w-4 h-4 text-brand flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            <li
+              key={nf.localId}
+              className="flex items-center gap-3 bg-brand/5 border border-brand/20 rounded-xl px-4 py-3"
+            >
+              <svg
+                className="w-4 h-4 text-brand flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                />
               </svg>
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-white font-inter truncate">{nf.file.name}</p>
-                <p className="text-xs text-white/30 font-mono">{formatFileSize(nf.file.size)} · pending upload</p>
+                <p className="text-xs text-white/30 font-mono">
+                  {formatFileSize(nf.file.size)} · pending upload
+                </p>
               </div>
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); onRemove(nf.localId); }}
                 className="text-white/30 hover:text-red-400 transition-colors flex-shrink-0"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -171,8 +242,6 @@ function FileDropZone({
 }
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
-// Rendered only once product data is available — no useEffect pre-fill needed.
-// Receives product as a prop so initial values can be set directly as useState defaults.
 
 interface ProductFormProps {
   product: Product;
@@ -184,7 +253,6 @@ interface ProductFormProps {
 function ProductForm({ product, productId, onPublishToggle, isPublishing }: ProductFormProps) {
   const queryClient = useQueryClient();
 
-  // Local UI-only state — no effects, initial values set once from prop
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(String(product.price_cents / 100));
   const [description, setDescription] = useState(product.description ?? '');
@@ -195,33 +263,38 @@ function ProductForm({ product, productId, onPublishToggle, isPublishing }: Prod
   const [saveStage, setSaveStage] = useState<'idle' | 'saving' | 'uploading'>('idle');
 
   const patchMutation = useMutation({
-    mutationFn: (data: FormData | Record<string, unknown>) => {
-      if (data instanceof FormData) {
-        return api.patch(`/products/${productId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
-      }
-      return api.patch(`/products/${productId}`, data);
-    },
+    mutationFn: (data: FormData) =>
+      api.patch(`/products/${productId}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['product', productId] }),
   });
 
   const uploadFileMutation = useMutation({
-  mutationFn: (file: File) => {
-    const form = new FormData();
-    form.append('file', file);
-    return api.post(`/products/${productId}/files`, form, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-  },
-});
+    mutationFn: (file: File) => {
+      const form = new FormData();
+      form.append('file', file);
+      return api.post(`/products/${productId}/files`, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    },
+  });
 
-const deleteFileMutation = useMutation({
-  mutationFn: (fileId: string) =>
-    api.delete(`/products/${productId}/files/${fileId}`),
-  onSuccess: () =>
-    queryClient.invalidateQueries({ queryKey: ['product', productId] }),
-});
+  const deleteFileMutation = useMutation({
+    mutationFn: (fileId: string) =>
+      api.delete(`/products/${productId}/files/${fileId}`),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['product', productId] }),
+  });
 
   const handleThumbnailChange = (file: File) => {
+    if (file.size > MAX_THUMBNAIL_SIZE) {
+      setError(
+        `Thumbnail is too large. Max size is 10MB (yours is ${formatFileSize(file.size)}).`
+      );
+      return;
+    }
+    setError(null);
     setThumbnailFile(file);
     setThumbnailPreview(URL.createObjectURL(file));
   };
@@ -240,6 +313,7 @@ const deleteFileMutation = useMutation({
 
   const handleSave = async () => {
     setError(null);
+
     if (!title.trim()) { setError('Title is required.'); return; }
     const priceNum = parseFloat(price);
     if (!price || isNaN(priceNum) || priceNum < 0) { setError('Enter a valid price.'); return; }
@@ -247,19 +321,15 @@ const deleteFileMutation = useMutation({
     try {
       setSaveStage('saving');
 
-      await patchMutation.mutateAsync({
-        title: title.trim(),
-        price_cents: Math.round(priceNum * 100),
-        description: description.trim() || undefined,
-      });
+      const form = new FormData();
+      form.append('title', title.trim());
+      form.append('price_cents', String(Math.round(priceNum * 100)));
+      if (description.trim()) form.append('description', description.trim());
+      if (thumbnailFile) form.append('thumbnail', thumbnailFile);
 
-      if (thumbnailFile) {
-        const form = new FormData();
-        form.append('thumbnail', thumbnailFile);
-        await patchMutation.mutateAsync(form);
-        setThumbnailFile(null);
-        setThumbnailPreview(null);
-      }
+      await patchMutation.mutateAsync(form);
+      setThumbnailFile(null);
+      setThumbnailPreview(null);
 
       if (newFiles.length > 0) {
         setSaveStage('uploading');
@@ -271,7 +341,10 @@ const deleteFileMutation = useMutation({
 
       setSaveStage('idle');
     } catch (err) {
-      setError((err as ApiError)?.response?.data?.message ?? 'Something went wrong. Try again.');
+      console.error('[handleSave error]', err);
+      setError(
+        (err as ApiError)?.response?.data?.message ?? 'Something went wrong. Try again.'
+      );
       setSaveStage('idle');
     }
   };
@@ -288,12 +361,14 @@ const deleteFileMutation = useMutation({
     <div className="space-y-6">
       {/* Status badge */}
       <div>
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-inter font-medium ${
-          product.status === 'published' ? 'bg-green-500/10 text-green-400' :
-          product.status === 'unpublished' ? 'bg-brand/10 text-brand' :
-          product.status === 'flagged' ? 'bg-red-500/10 text-red-400' :
-          'bg-white/[0.06] text-white/40'
-        }`}>
+        <span
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-inter font-medium ${
+            product.status === 'published' ? 'bg-green-500/10 text-green-400' :
+            product.status === 'unpublished' ? 'bg-brand/10 text-brand' :
+            product.status === 'flagged' ? 'bg-red-500/10 text-red-400' :
+            'bg-white/[0.06] text-white/40'
+          }`}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
           {product.status.charAt(0).toUpperCase() + product.status.slice(1)}
         </span>
@@ -353,7 +428,9 @@ const deleteFileMutation = useMutation({
           Price <span className="text-red-400">*</span>
         </label>
         <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono text-sm select-none">₦</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono text-sm select-none">
+            ₦
+          </span>
           <input
             id="price"
             type="number"
@@ -382,7 +459,7 @@ const deleteFileMutation = useMutation({
 
       {/* Thumbnail */}
       <ThumbnailUpload
-        currentUrl={product.thumbnail_url}
+        currentUrl={product.thumbnail}
         preview={thumbnailPreview}
         onChange={handleThumbnailChange}
       />
@@ -394,28 +471,55 @@ const deleteFileMutation = useMutation({
           <p className="text-sm text-white/30 font-inter mb-3">No files yet. Add files below.</p>
         ) : (
           <ul className="space-y-2 mb-3">
-            {product.files.map((f) => (
-              <li key={f.id} className="flex items-center gap-3 bg-white/[0.03] border border-[var(--border)] rounded-xl px-4 py-3">
+           {product.files.map((f) => (
+              <li
+                key={f.id}
+                className="flex items-center gap-3 bg-white/[0.03] border border-[var(--border)] rounded-xl px-4 py-3"
+              >
                 <div className="w-8 h-8 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0">
                   <svg className="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white font-inter truncate">{f.filename}</p>
-                  <p className="text-xs text-white/30 font-mono">{formatFileSize(f.size_bytes)}</p>
+                  {/* filename → original_name, with fallback */}
+                  <p className="text-sm text-white font-inter truncate">
+                    {f.original_name ?? f.public_id}
+                  </p>
+                  {/* size_bytes → size */}
+                  <p className="text-xs text-white/30 font-mono">
+                    {f.size ? formatFileSize(f.size) : 'Unknown size'}
+                    {f.category && <span className="ml-2 opacity-60">{f.category}</span>}
+                  </p>
                 </div>
-                <button
-                  type="button"
-                  disabled={deleteFileMutation.isPending}
-                  onClick={() => deleteFileMutation.mutate(f.id)}
-                  className="text-white/30 hover:text-red-400 disabled:opacity-40 transition-colors flex-shrink-0"
-                  title="Remove file"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                  </svg>
-                </button>
+                <div className="flex items-center gap-2 flex-shrink-0">
+  
+                  <a
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-white/30 hover:text-brand transition-colors"
+                    title="View file"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                  </a>
+
+                
+                  <button
+                    type="button"
+                    disabled={deleteFileMutation.isPending}
+                    onClick={() => deleteFileMutation.mutate(f.id)}
+                    className="text-white/30 hover:text-red-400 disabled:opacity-40 transition-colors"
+                    title="Remove file"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -451,20 +555,21 @@ export default function EditProductPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
- const { data: product, isLoading, isError } = useQuery<Product>({
-  queryKey: ['product', productId],
-  queryFn: () =>
-    api.get(`/products/${productId}`).then((r) => {
-      const d = r.data;
-      // handles { success, data: {...} } or bare object
-      return d?.data ?? d;
-    }),
-  enabled: !!productId,
-});
+  const { data: product, isLoading, isError } = useQuery<Product>({
+    queryKey: ['product', productId],
+    queryFn: () =>
+      api.get(`/products/${productId}`).then((r) => {
+        const d = r.data;
+        return d?.data ?? d;
+      }),
+    enabled: !!productId,
+  });
 
   const publishMutation = useMutation({
-    mutationFn: (action: 'publish' | 'unpublish') => api.post(`/products/${productId}/${action}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['product', productId] }),
+    mutationFn: (action: 'publish' | 'unpublish') =>
+      api.post(`/products/${productId}/${action}`),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['product', productId] }),
   });
 
   const handleTogglePublish = () => {
@@ -486,7 +591,9 @@ export default function EditProductPage() {
   if (isError || !product) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 text-center">
-        <p className="text-[var(--muted)] font-inter text-sm">Product not found or you don&#39;t have access.</p>
+        <p className="text-[var(--muted)] font-inter text-sm">
+          Product not found or you don&#39;t have access.
+        </p>
         <button
           onClick={() => router.push('/products')}
           className="mt-4 text-brand hover:underline font-inter text-sm"
@@ -497,6 +604,9 @@ export default function EditProductPage() {
     );
   }
 
+ 
+console.log('files:', product.files)
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       {/* Header */}
@@ -506,8 +616,18 @@ export default function EditProductPage() {
             onClick={() => router.push('/products')}
             className="flex items-center gap-1.5 text-[var(--muted)] hover:text-white font-inter text-sm transition-colors mb-2"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              />
             </svg>
             Products
           </button>
@@ -515,11 +635,6 @@ export default function EditProductPage() {
         </div>
       </div>
 
-      {/*
-        Key on product.id means React remounts ProductForm fresh if the user
-        navigates between products — ensuring useState defaults re-initialise
-        from the new product prop without any effect.
-      */}
       <ProductForm
         key={product.id}
         product={product}
