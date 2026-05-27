@@ -13,9 +13,9 @@ export function useLogin() {
     mutationFn: (data: LoginInput) =>
       api.post<LoginResponse>("/auth/login", data).then((r) => r.data),
     onSuccess: (data) => {
-      setUser(data.user, data.accessToken);
-      const from = searchParams.get("from") ?? "/dashboard";
-      router.push(from);
+      setUser(data.user); // no token arg needed anymore
+      const from = searchParams.get("from");
+      router.push(from ?? (data.user.role === "creator" ? "/dashboard" : "/discover"));
     },
   });
 

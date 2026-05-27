@@ -1,19 +1,21 @@
+// _hooks/useSignup.ts
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
+import type { ApiError } from "../types";
 import { useAuthStore } from "@/store/auth.store";
-import type { ApiError, SignupInput, SignupResponse } from "../types";
 
 export function useSignup() {
   const router = useRouter();
   const setUser = useAuthStore((s) => s.setUser);
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (data: SignupInput) =>
-      api.post<SignupResponse>("/auth/signup", data).then((r) => r.data),
+    mutationFn: (data: { email: string; password: string }) =>
+      api.post("/auth/signup", data).then((r) => r.data),
     onSuccess: (data) => {
-      setUser(data.user, data.accessToken);
-      router.push(data.user.role === "creator" ? "/dashboard" : "/library");
+      console.log(data)
+      setUser(data.user);
+      router.push("/verify-email/pending");
     },
   });
 

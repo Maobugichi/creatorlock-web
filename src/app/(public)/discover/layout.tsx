@@ -1,11 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Sidebar, { creatorNavItems } from "@/components/layout/sidebar";
+import Sidebar, { buyerNavItems } from "@/components/layout/sidebar";
 import Topbar from "@/components/layout/topbar";
+import { useAuthStore } from "@/store/auth.store";
 
-export default function DashboardLayout({
+// Returns false on server/first paint, true after hydration — no effect needed
+function useHasMounted() {
+  return useSyncExternalStore(
+    () => () => {},          // no-op subscribe
+    () => true,              // client snapshot
+    () => false              // server snapshot
+  );
+}
+
+export default function DiscoverLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -13,13 +24,18 @@ export default function DashboardLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const mounted = useHasMounted();
+  const user = useAuthStore((s) => s.user);
+  const isBuyer = user?.role === "buyer";
+
+  if (!mounted || !isBuyer) return <>{children}</>;
+
   return (
     <div className="flex h-screen bg-[#0C0C0C] overflow-hidden font-inter">
-
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}
-        navItems={creatorNavItems}
+        navItems={buyerNavItems}
       />
 
       <AnimatePresence>
@@ -42,7 +58,7 @@ export default function DashboardLayout({
               <Sidebar
                 collapsed={false}
                 onToggle={() => setMobileOpen(false)}
-                navItems={creatorNavItems}
+                navItems={buyerNavItems}
               />
             </motion.div>
           </>

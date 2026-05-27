@@ -6,9 +6,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export type NavItem = {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+};
+
 // ─── Nav items ────────────────────────────────────────────────────────────────
 
-const navItems = [
+export const creatorNavItems: NavItem[] = [
   {
     label: "Dashboard",
     href: "/dashboard",
@@ -69,19 +77,43 @@ const navItems = [
     label: "Buyers",
     href: "/buyers",
     icon: (
-      <svg
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.119-1.243l1.263-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
-      />
-    </svg>
+      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.119-1.243l1.263-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+];
+
+export const buyerNavItems: NavItem[] = [
+  {
+    label: "Discover",
+    href: "/discover",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M11 8v6M8 11h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Library",
+    href: "/library",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
     ),
   },
   {
@@ -102,7 +134,7 @@ function NavItem({
   item,
   collapsed,
 }: {
-  item: (typeof navItems)[0];
+  item: NavItem;
   collapsed: boolean;
 }) {
   const pathname = usePathname();
@@ -118,7 +150,6 @@ function NavItem({
           : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
       )}
     >
-      {/* Active background */}
       {isActive && (
         <motion.div
           layoutId="active-nav"
@@ -127,7 +158,6 @@ function NavItem({
         />
       )}
 
-      {/* Icon */}
       <span
         className={cn(
           "relative z-10 flex-shrink-0 transition-colors",
@@ -137,7 +167,6 @@ function NavItem({
         {item.icon}
       </span>
 
-      {/* Label */}
       <AnimatePresence>
         {!collapsed && (
           <motion.span
@@ -152,7 +181,6 @@ function NavItem({
         )}
       </AnimatePresence>
 
-      {/* Active dot when collapsed */}
       {collapsed && isActive && (
         <motion.div
           layoutId="active-dot"
@@ -163,14 +191,16 @@ function NavItem({
   );
 }
 
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 export default function Sidebar({
   collapsed,
   onToggle,
+  navItems,
 }: {
   collapsed: boolean;
   onToggle: () => void;
+  navItems: NavItem[];
 }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
@@ -224,10 +254,9 @@ export default function Sidebar({
           "flex items-center gap-3 px-3 py-2.5 rounded-xl",
           collapsed ? "justify-center" : ""
         )}>
-          {/* Avatar */}
           <div className="w-8 h-8 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center flex-shrink-0">
             <span className="text-brand text-xs font-bold font-syne">
-              {user?.name?.charAt(0).toUpperCase() ?? "C"}
+              {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </span>
           </div>
 
@@ -241,7 +270,7 @@ export default function Sidebar({
                 className="flex-1 min-w-0 overflow-hidden"
               >
                 <p className="text-xs font-medium text-white truncate font-inter">
-                  {user?.name ?? "Creator"}
+                  {user?.name ?? "User"}
                 </p>
                 <p className="text-[10px] text-white/30 truncate font-inter">
                   {user?.email ?? ""}

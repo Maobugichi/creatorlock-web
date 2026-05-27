@@ -1,41 +1,31 @@
+// app/(auth)/signup/page.tsx
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import AuthNav from "@/components/ui/authnav";
 import Input from "@/components/ui/input";
-import { RoleSelector } from "./_component/role-selector";
 import { useSignup } from "./_hooks/useSignup";
-import type { Role } from "./types";
 
 const SignupPage = () => {
-  const [role, setRole] = useState<Role>("creator");
   const { mutate, isPending, errorMessage } = useSignup();
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     mutate({
-      name: fd.get("name") as string,
       email: fd.get("email") as string,
       password: fd.get("password") as string,
-      role,
     });
   };
 
   return (
     <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter w-full">
-      <AuthNav
-        prompt="Have an account?"
-        linkLabel="Sign in"
-        linkHref="/login"
-      />
+      <AuthNav prompt="Have an account?" linkLabel="Sign in" linkHref="/login" />
 
       <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
         <div className="w-full max-w-md">
-          {/* Eyebrow */}
           <div className="flex items-center justify-center gap-2 mb-5">
             <div className="w-1.5 h-1.5 rounded-full bg-brand" />
             <span className="text-xs text-white/30 tracking-wide font-inter">
@@ -48,14 +38,7 @@ const SignupPage = () => {
               Join Creator
               <span className="text-brand inline-flex items-center">
                 L
-                <Image
-                  src="/og-icon.svg"
-                  alt="o"
-                  width={40}
-                  height={40}
-                  priority
-                  className="w-[0.75em] h-[0.75em] relative top-[0.05em]"
-                />
+                <Image src="/og-icon.svg" alt="o" width={40} height={40} priority className="w-[0.75em] h-[0.75em] relative top-[0.05em]" />
                 ck
               </span>
             </span>
@@ -64,10 +47,7 @@ const SignupPage = () => {
             Turn what you know into what you earn.
           </p>
 
-          {/* Card */}
           <div className="bg-[#111] border border-white/[0.07] rounded-2xl p-5 sm:p-7">
-            <RoleSelector value={role} onChange={setRole} />
-
             <AnimatePresence>
               {errorMessage && (
                 <motion.div
@@ -83,13 +63,6 @@ const SignupPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
-                label="Full name"
-                type="text"
-                name="name"
-                required
-                placeholder="Adaeze Okonkwo"
-              />
-              <Input
                 label="Email address"
                 type="email"
                 name="email"
@@ -104,9 +77,7 @@ const SignupPage = () => {
                 placeholder="••••••••"
                 minLength={8}
               />
-              <p className="text-xs text-white/20 font-inter">
-                Minimum 8 characters
-              </p>
+              <p className="text-xs text-white/20 font-inter">Minimum 8 characters</p>
 
               <button
                 type="submit"
@@ -119,7 +90,7 @@ const SignupPage = () => {
                     Creating account...
                   </>
                 ) : (
-                  `Create ${role === "creator" ? "creator" : "buyer"} account`
+                  "Create account"
                 )}
               </button>
             </form>
@@ -127,20 +98,12 @@ const SignupPage = () => {
 
           <p className="text-center text-sm text-white/25 mt-5 font-inter">
             Already have an account?{" "}
-            <Link href="/login" className="text-brand hover:underline">
-              Sign in
-            </Link>
+            <Link href="/login" className="text-brand hover:underline">Sign in</Link>
           </p>
-
           <p className="text-center text-[11px] text-white/15 mt-3 leading-relaxed font-inter">
             By signing up you agree to our{" "}
-            <Link href="/terms" className="underline">
-              Terms
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="underline">
-              Privacy Policy
-            </Link>
+            <Link href="/terms" className="underline">Terms</Link> and{" "}
+            <Link href="/privacy" className="underline">Privacy Policy</Link>
           </p>
         </div>
       </div>
