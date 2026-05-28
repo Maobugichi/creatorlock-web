@@ -2,8 +2,9 @@ import { formatNGN } from "@/lib/utils";
 import type { BuyerRow } from '../_lib/types';
 
 export function SummaryCards({ buyers }: { buyers: BuyerRow[] }) {
-  const totalSpent = buyers.reduce((sum, b) => sum + b.total_spent_cents, 0);
-  const totalOrders = buyers.reduce((sum, b) => sum + b.total_purchases, 0);
+  
+  const totalSpent = buyers.reduce((sum, b) => sum + parseInt(b.total_spent_cents), 0);
+  const totalOrders = buyers.reduce((sum, b) => sum + parseInt(b.total_purchases), 0);
 
   const stats = [
     { label: 'Total Buyers', value: buyers.length.toLocaleString() },

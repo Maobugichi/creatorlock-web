@@ -9,6 +9,8 @@ import { SummaryCardSkeleton, BuyerRowSkeleton } from './skeleton';
 export function BuyersClient() {
   const { buyers, isLoading, isError } = useBuyers();
 
+  
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">

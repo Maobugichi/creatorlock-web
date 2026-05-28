@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { StoreData } from '@/types/store';
 import StoreHeader from '@/components/store/StoreHeader';
 import ProductGrid from '@/components/store/ProductGrid';
+import CaptureAffiliateRef from '@/components/store/CaptureAffiliateRef';
 
 // ── Server-side data fetch ────────────────────
 // Route: GET /store/:slug  (no /creator prefix)
@@ -86,6 +87,7 @@ export default async function StorePage(
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--bg)' }}>
+      <CaptureAffiliateRef />
       <StoreHeader profile={profile} productCount={total} />
       <ProductGrid products={products} storeSlug={slug} total={total} />
     </main>

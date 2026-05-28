@@ -2,7 +2,7 @@ import { formatNGN, formatDate } from '@/lib/utils';
 import type { BuyerRow } from '../_lib/types';
 
 const getInitials = (name: string) =>
-  name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  (name ?? '?').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
 
 export function BuyerRowItem({ buyer }: { buyer: BuyerRow }) {
   return (

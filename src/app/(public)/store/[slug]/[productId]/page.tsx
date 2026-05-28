@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ProductWithFiles, ProductFile } from '@/types/store';
 import { formatNGN, formatFileSize, formatDate } from '@/lib/utils';
 import CheckoutButton from '@/components/checkout/CheckoutButton';
+import CaptureAffiliateRef from '@/components/store/CaptureAffiliateRef';
 
 
 async function getProduct(productId: string): Promise<ProductWithFiles | null> {
@@ -102,7 +103,7 @@ export default async function ProductPage(
 
   return (
     <main className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
-     
+      <CaptureAffiliateRef />
       <div className="mx-auto max-w-4xl px-4 pt-6 sm:px-6">
         <Link
           href={`/store/${slug}`}

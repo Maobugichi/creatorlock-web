@@ -18,6 +18,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { formatNGN } from '@/lib/utils';
 import { ProductWithFiles, CouponResult, InitiatePaymentResult } from '@/types/store';
 import CouponField from './CouponField';
+import { getAffiliateRef, clearAffiliateRef } from '@/lib/affiliateRef';
 import { AxiosError } from 'axios';
 import api from '@/lib/api';
 
@@ -113,6 +114,11 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
         payload.coupon_code = couponCode;
       }
 
+      const affiliateRef = getAffiliateRef();
+      if (affiliateRef) {
+        payload.affiliate_code = affiliateRef;
+      }
+
       const { data } = await api.post<{
         success: boolean;
         message: string;
@@ -124,12 +130,12 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
       const result = data.data;
 
       if (result.free || result.paymentUrl === null) {
-        
+        clearAffiliateRef()
         setStep('free_ok');
         return;
       }
 
-      // Paid — redirect to Paystack
+      clearAffiliateRef()
       window.location.href = result.paymentUrl!;
     } catch (err) {
       const msg =
