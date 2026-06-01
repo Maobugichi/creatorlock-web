@@ -1,9 +1,19 @@
 'use client';
 
+import api from '@/lib/api'; // adjust path to your axios instance
+
 export function ExportButton() {
-  const handleExport = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
-    window.open(`${baseUrl}/creator/buyers/export`, '_blank', 'noopener,noreferrer');
+  const handleExport = async () => {
+    const res = await api.get('/creator/buyers/export', {
+      responseType: 'blob',
+    });
+
+    const url = URL.createObjectURL(res.data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'buyers.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (

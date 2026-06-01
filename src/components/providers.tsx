@@ -15,15 +15,17 @@ const queryClient = new QueryClient({
 
 const AuthRehydrator = ({ children }: { children: React.ReactNode }) => {
   const rehydrate = useAuthStore((s) => s.rehydrate);
+  const user = useAuthStore((s) => s.user)
   const isLoading = useAuthStore((s) => s.isLoading);
   const hasRun = useRef(false);
 
   useEffect(() => {
+    console.log(user)
     if (!hasRun.current) {
       hasRun.current = true;
       rehydrate();
     }
-  }, [rehydrate]);
+  }, [rehydrate,user]);
 
   if (isLoading) {
     return (

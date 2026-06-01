@@ -27,6 +27,9 @@ export interface CreatorProfile {
 }
 
 // Mirrors products table row
+
+export type ProductStatus =  'draft' | 'published' | 'unpublished' | 'deleted';
+
 export interface Product {
   id: string;
   creator_id: string;
@@ -35,10 +38,11 @@ export interface Product {
   description: string | null;
   price_cents: number;          // integer cents — use formatNGN(price_cents)
   thumbnail: string | null;
-  status: 'draft' | 'published' | 'unpublished' | 'deleted';
+  status: ProductStatus;
   created_at: string;
   updated_at: string;
 }
+
 
 // Mirrors ProductWithFiles from backend
 export interface ProductFile {

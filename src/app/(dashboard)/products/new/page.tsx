@@ -1,9 +1,10 @@
 'use client';
 
 import { useRef, useState, useCallback, DragEvent, ChangeEvent } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { Product, ProductStatus } from '@/types/store';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -240,7 +241,9 @@ function FileDropZone({
 export default function NewProductPage() {
   const router = useRouter();
 
-  // Form state
+  const queryClient = useQueryClient(); // add this at the top of the component
+  
+
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
@@ -348,6 +351,22 @@ export default function NewProductPage() {
         setSubmitStage('publishing');
         await publishProduct.mutateAsync(draft.id);
       }
+
+      queryClient.setQueryData<Product[]>(['products', 'me'], (old) => [
+  {
+    id: draft.id,
+    title: title.trim(),
+    price_cents: Math.round(priceNum * 100),
+    status: (publish ? 'published' : 'draft') as ProductStatus,
+    thumbnail: thumbnailPreview ?? null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    creator_id: '',
+    slug: '',
+    description: description.trim() || null,
+  },
+  ...(old ?? []),
+]);
 
       router.push('/products');
     } catch (err) {

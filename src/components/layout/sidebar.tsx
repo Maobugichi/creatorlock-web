@@ -205,6 +205,8 @@ export default function Sidebar({
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
+  console.log(user)
+
   return (
     <motion.aside
       animate={{ width: collapsed ? 68 : 240 }}

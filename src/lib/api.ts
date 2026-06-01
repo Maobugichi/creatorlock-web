@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_URL,
-  withCredentials: true, // sends cookies automatically on every request
+  withCredentials: true,
 });
 
 let isRefreshing = false;
@@ -19,10 +19,29 @@ const processQueue = (error: unknown) => {
   failedQueue = [];
 };
 
+const redirectToLogin = () => {
+  if (typeof window === "undefined") return;
+  const isProtectedRoute =
+    window.location.pathname.startsWith("/dashboard") ||
+    window.location.pathname.startsWith("/library") ||
+    window.location.pathname.startsWith("/buyer") ||
+    window.location.pathname.startsWith("/creator") ||
+    window.location.pathname.startsWith("/products");
+
+  if (isProtectedRoute) {
+    window.location.href = "/login";
+  }
+};
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (originalRequest.url?.includes("/auth/refresh")) {
+      //redirectToLogin();
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -35,7 +54,6 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Cookie is sent automatically; backend sets a new accessToken cookie
         await axios.post(
           `${process.env.NEXT_PUBLIC_URL}/auth/refresh`,
           {},
@@ -46,17 +64,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-
-        const isProtectedRoute =
-          window.location.pathname.startsWith("/dashboard") ||
-          window.location.pathname.startsWith("/library") ||
-          window.location.pathname.startsWith("/buyer") ||
-          window.location.pathname.startsWith("/creator");
-
-        if (isProtectedRoute) {
-          window.location.href = "/login";
-        }
-
+        redirectToLogin();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

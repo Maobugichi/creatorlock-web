@@ -38,9 +38,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   rehydrate: async () => {
     try {
-      // Hit refresh — if the refreshToken cookie is valid, backend sets
-      // a new accessToken cookie and we decode the user from the response
+      
       const { data } = await api.post("/auth/refresh");
+   
       set({
         user: data.user,
         isAuthenticated: true,

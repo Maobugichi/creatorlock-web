@@ -236,19 +236,38 @@ const {
   retry: 1,
 });
 
-  console.log(products)
+ 
 
   const [toggleError, setToggleError] = useState<string | null>(null);
 
-  const toggleMutation = useMutation<void, ApiError, { id: string; action: "publish" | "unpublish" }>({
+  const toggleMutation = useMutation<void, ApiError, { id: string; action: "publish" | "unpublish" }, { previous: Product[] | undefined }>({
     mutationFn: async ({ id, action }) => {
+    
       await api.post(`/products/${id}/${action}`);
     },
-    onMutate: ({ id }) => {
+    onMutate: async ({ id, action }) => {
       setToggleError(null);
       setTogglingId(id);
+
+      await queryClient.cancelQueries({ queryKey: ["products", "me"] });
+
+      const previous = queryClient.getQueryData<Product[]>(["products", "me"]);
+
+      queryClient.setQueryData<Product[]>(["products", "me"], (old) =>
+      old?.map((p) =>
+        p.id === id
+          ? { ...p, status: action === "publish" ? "published" : "unpublished" }
+          : p
+      )
+    );
+
+    return { previous };
     },
-    onError: (err) => {
+    onError: (err,_,context) => {
+      console.log("Toggle error:", err.response?.data);
+      if (context?.previous) {
+        queryClient.setQueryData(["products", "me"], context.previous);
+      }
     
       const message = err?.response?.data?.message ?? "Something went wrong";
       setToggleError(message);
