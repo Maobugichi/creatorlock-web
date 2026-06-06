@@ -37,17 +37,25 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   rehydrate: async () => {
-    try {
-      
-      const { data } = await api.post("/auth/refresh");
-   
-      set({
-        user: data.user,
-        isAuthenticated: true,
-        isLoading: false,
-      });
-    } catch {
-      set({ user: null, isAuthenticated: false, isLoading: false });
-    }
-  },
+
+  try {
+    const res = await api.post("/auth/refresh");
+
+    set({
+      user: res.data.user,
+      isAuthenticated: true,
+      isLoading: false,
+    });
+  } catch (e) {
+    console.log("C: refresh failed", e);
+
+    set({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+    });
+  }
+
+  console.log("D: rehydrate finished");
+},
 }));

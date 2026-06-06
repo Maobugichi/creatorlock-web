@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/auth.store";
 import { RoleSelector } from "../signup/_component/role-selector";
@@ -15,6 +15,7 @@ type Step = "role" | "profile" | "slug";
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const searchParams = useSearchParams()
   const setUser = useAuthStore((s) => s.setUser);
 
   const [step, setStep] = useState<Step>("role");
@@ -28,6 +29,11 @@ export default function OnboardingPage() {
       api.post("/auth/onboarding", data).then((r) => r.data),
     onSuccess: (data) => {
       setUser(data.user);
+      const next = searchParams.get("next");
+      if (next) {
+        router.push(next);
+        return;
+      }
       router.push(data.user.role === "creator" ? "/dashboard" : "/discover");
     },
   });

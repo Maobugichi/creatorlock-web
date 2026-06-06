@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
 
   if (!isProtected) return NextResponse.next();
 
-  // Check for your auth cookie — use whatever cookie name your backend sets
+  
   const token = req.cookies.get("accessToken")?.value;
 
   if (!token) {

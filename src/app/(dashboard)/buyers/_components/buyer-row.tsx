@@ -23,7 +23,7 @@ export function BuyerRowItem({ buyer }: { buyer: BuyerRow }) {
           <p className="text-[var(--muted)] text-xs">orders</p>
         </div>
         <div className="text-right">
-          <p className="text-white text-sm font-mono">{formatNGN(buyer.total_spent_cents)}</p>
+          <p className="text-white text-sm font-mono">{formatNGN(parseInt(buyer.total_spent_cents))}</p>
           <p className="text-[var(--muted)] text-xs">spent</p>
         </div>
         <div className="text-right">

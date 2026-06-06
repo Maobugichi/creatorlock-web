@@ -38,7 +38,7 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  console.log(revoked)
+
   const { mutate, isPending } = useMutation<
     { success: boolean; message: string },
     Error

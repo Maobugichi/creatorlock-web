@@ -6,9 +6,14 @@ import AuthNav from "@/components/ui/authnav";
 import Input from "@/components/ui/input";
 import { GoogleButton } from "./_components/google-button";
 import { useLogin } from "./_hooks/useLogin";
+import { useSearchParams } from "next/navigation";
 
 const LoginPage = () => {
   const { mutate, isPending, errorMessage } = useLogin();
+
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+  const signupHref = next ? `/signup?next=${encodeURIComponent(next)}` : "/signup";
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0C0C0C] flex flex-col">
-      <AuthNav prompt="No account?" linkLabel="Sign up" linkHref="/signup" />
+      <AuthNav prompt="No account?" linkLabel="Sign up" linkHref={signupHref} />
 
       <div className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-[420px]">
@@ -117,7 +122,7 @@ const LoginPage = () => {
 
           <p className="text-center text-sm text-white/25 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-brand hover:underline">
+            <Link href={signupHref} className="text-brand hover:underline">
               Create one free
             </Link>
           </p>

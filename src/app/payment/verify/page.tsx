@@ -4,11 +4,14 @@ import { redirect } from 'next/navigation';
 import PaymentVerify from './PaymentVerify';
 
 interface Props {
-  searchParams: { reference?: string };
+  searchParams: Promise<{ reference?: string }>;
 }
 
-export default function PaymentVerifyPage({ searchParams }: Props) {
-  if (!searchParams.reference) redirect('/');  // server-side, no anti-pattern
+export default async function PaymentVerifyPage({ searchParams }: Props) {
+  const { reference } = await searchParams
+  if (!reference) redirect('/');  
+
+  console.log(searchParams);
 
   return (
     <Suspense fallback={
@@ -16,7 +19,7 @@ export default function PaymentVerifyPage({ searchParams }: Props) {
         <div className="w-5 h-5 border-2 border-white/20 border-t-brand rounded-full animate-spin" />
       </div>
     }>
-      <PaymentVerify reference={searchParams.reference} />
+      <PaymentVerify reference={reference} />
     </Suspense>
   );
 }

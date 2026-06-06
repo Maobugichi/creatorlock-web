@@ -81,6 +81,7 @@ export default async function StorePage(
   const { slug } = await params;
   const data = await getStoreData(slug);
 
+  
   if (!data) notFound();
 
   const { profile, products, total } = data;

@@ -14,8 +14,8 @@ export function useLogin() {
       api.post<LoginResponse>("/auth/login", data).then((r) => r.data),
     onSuccess: (data) => {
       setUser(data.user); // no token arg needed anymore
-      const from = searchParams.get("from");
-      router.push(from ?? (data.user.role === "creator" ? "/dashboard" : "/discover"));
+      const next = searchParams.get("next");
+      router.push(next ?? (data.user.role === "creator" ? "/dashboard" : "/discover"));
     },
   });
 

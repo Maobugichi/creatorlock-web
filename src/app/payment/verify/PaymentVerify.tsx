@@ -168,7 +168,7 @@ export default function PaymentVerify({
         </div>
 
         <button
-          onClick={() => router.replace('/')}
+          onClick={() => router.replace('/discover')}
           className="rounded-xl px-8 py-3 font-syne text-sm font-bold text-white"
           style={{
             background:

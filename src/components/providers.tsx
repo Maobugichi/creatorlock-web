@@ -20,12 +20,12 @@ const AuthRehydrator = ({ children }: { children: React.ReactNode }) => {
   const hasRun = useRef(false);
 
   useEffect(() => {
-    console.log(user)
+
     if (!hasRun.current) {
       hasRun.current = true;
       rehydrate();
     }
-  }, [rehydrate,user]);
+  }, [rehydrate]);
 
   if (isLoading) {
     return (

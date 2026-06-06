@@ -7,9 +7,14 @@ import { AnimatePresence, motion } from "motion/react";
 import AuthNav from "@/components/ui/authnav";
 import Input from "@/components/ui/input";
 import { useSignup } from "./_hooks/useSignup";
+import { useSearchParams } from "next/navigation";
 
 const SignupPage = () => {
   const { mutate, isPending, errorMessage } = useSignup();
+
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+  const loginHref = next ? `/login?next=${encodeURIComponent(next)}` : "/login";
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +27,7 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter w-full">
-      <AuthNav prompt="Have an account?" linkLabel="Sign in" linkHref="/login" />
+      <AuthNav prompt="Have an account?" linkLabel="Sign in" linkHref={loginHref} />
 
       <div className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
         <div className="w-full max-w-md">
@@ -98,7 +103,7 @@ const SignupPage = () => {
 
           <p className="text-center text-sm text-white/25 mt-5 font-inter">
             Already have an account?{" "}
-            <Link href="/login" className="text-brand hover:underline">Sign in</Link>
+            <Link href={loginHref} className="text-brand hover:underline">Sign in</Link>
           </p>
           <p className="text-center text-[11px] text-white/15 mt-3 leading-relaxed font-inter">
             By signing up you agree to our{" "}

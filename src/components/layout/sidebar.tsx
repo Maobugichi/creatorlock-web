@@ -118,7 +118,7 @@ export const buyerNavItems: NavItem[] = [
   },
   {
     label: "Settings",
-    href: "/settings",
+    href: "/profile",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
