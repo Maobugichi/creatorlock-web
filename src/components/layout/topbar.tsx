@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
+import { List } from "@phosphor-icons/react";
 import api from "@/lib/api";
 
 // ─── Page title map ───────────────────────────────────────────────────────────
@@ -19,12 +20,12 @@ const pageTitles: Record<string, string> = {
 // ─── Notification bell ────────────────────────────────────────────────────────
 
 function NotificationBell() {
-  const { data  } = useQuery({
+  const { data } = useQuery({
     queryKey: ["unread-count"],
     queryFn: () =>
       api.get<{ data: { count: number } }>("/notifications/unread-count")
         .then((r) => r.data.data.count),
-    refetchInterval: 30_000, // poll every 30s
+    refetchInterval: 30_000,
   });
 
   const count = data ?? 0;
@@ -51,7 +52,6 @@ export default function Topbar({
 }) {
   const pathname = usePathname();
 
-  // Match the current page title
   const title =
     Object.entries(pageTitles).find(([path]) =>
       pathname === path || pathname.startsWith(path + "/")
@@ -62,14 +62,11 @@ export default function Topbar({
 
       {/* Left — mobile menu + page title */}
       <div className="flex items-center gap-3">
-        {/* Mobile menu button */}
         <button
           onClick={onMobileMenuOpen}
-          className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-colors"
+          className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
+          <List size={22} weight="bold" />
         </button>
 
         {/* Mobile logo */}

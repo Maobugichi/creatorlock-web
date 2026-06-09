@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useDashboard, PERIODS, Period } from "../_hooks/useDashboard";
-import { formatNGN, formatDate } from "@/lib/utils"
+import { formatDate } from "@/lib/utils";
 import { StatCard } from "./stat-card";
 import { RevenueChart } from "./revenue-chart";
 import { RecentOrders } from "./recent-orders";
@@ -24,7 +24,8 @@ export function DashboardClient() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
           label="Total revenue"
-          value={isLoading ? "—" : formatNGN(data?.summary.total_revenue_cents ?? 0)}
+          rawValue={isLoading ? undefined : (data?.summary.total_revenue_cents ?? 0) / 100}
+          value={isLoading ? "—" : undefined}
           sub="All time"
           accent
         />
@@ -40,7 +41,8 @@ export function DashboardClient() {
         />
         <StatCard
           label="Pending payout"
-          value={isLoading ? "—" : formatNGN(data?.summary.pending_payout_cents ?? 0)}
+          rawValue={isLoading ? undefined : (data?.summary.pending_payout_cents ?? 0) / 100}
+          value={isLoading ? "—" : undefined}
           sub="Awaiting withdrawal"
         />
       </div>

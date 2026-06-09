@@ -128,21 +128,25 @@ export const buyerNavItems: NavItem[] = [
   },
 ];
 
-// ─── Nav item component ───────────────────────────────────────────────────────
+// ─── Nav item ─────────────────────────────────────────────────────────────────
 
 function NavItem({
   item,
   collapsed,
+  onNavigate,
 }: {
   item: NavItem;
   collapsed: boolean;
+  onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+  const isActive =
+    pathname === item.href || pathname.startsWith(item.href + "/");
 
   return (
     <Link
       href={item.href}
+      onClick={onNavigate}
       className={cn(
         "relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors group",
         isActive
@@ -157,7 +161,6 @@ function NavItem({
           transition={{ type: "spring", stiffness: 400, damping: 35 }}
         />
       )}
-
       <span
         className={cn(
           "relative z-10 flex-shrink-0 transition-colors",
@@ -166,7 +169,6 @@ function NavItem({
       >
         {item.icon}
       </span>
-
       <AnimatePresence>
         {!collapsed && (
           <motion.span
@@ -180,7 +182,6 @@ function NavItem({
           </motion.span>
         )}
       </AnimatePresence>
-
       {collapsed && isActive && (
         <motion.div
           layoutId="active-dot"
@@ -191,77 +192,45 @@ function NavItem({
   );
 }
 
-// ─── Sidebar ──────────────────────────────────────────────────────────────────
+// ─── Shared nav content ───────────────────────────────────────────────────────
 
-export default function Sidebar({
-  collapsed,
-  onToggle,
+function NavContent({
   navItems,
+  collapsed,
+  onNavigate,
 }: {
-  collapsed: boolean;
-  onToggle: () => void;
   navItems: NavItem[];
+  collapsed: boolean;
+  onNavigate?: () => void;
 }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
-  console.log(user)
-
   return (
-    <motion.aside
-      animate={{ width: collapsed ? 68 : 240 }}
-      transition={{ type: "spring", stiffness: 400, damping: 35 }}
-      className="hidden md:flex flex-col h-screen bg-[#0E0E0E] border-r border-white/[0.06] flex-shrink-0 overflow-hidden"
-    >
-      {/* Logo + collapse toggle */}
-      <div className="flex items-center justify-between px-4 py-5 border-b border-white/[0.06]">
-        <AnimatePresence>
-          {!collapsed && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="font-syne font-extrabold text-lg text-white tracking-tight whitespace-nowrap"
-            >
-              Creator<span className="text-brand">Lock</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <button
-          onClick={onToggle}
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors flex-shrink-0"
-        >
-          <motion.svg
-            animate={{ rotate: collapsed ? 180 : 0 }}
-            transition={{ duration: 0.25 }}
-            width="16" height="16" viewBox="0 0 24 24" fill="none"
-          >
-            <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </motion.svg>
-        </button>
-      </div>
-
-      {/* Nav */}
+    <>
       <nav className="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto overflow-x-hidden">
         {navItems.map((item) => (
-          <NavItem key={item.href} item={item} collapsed={collapsed} />
+          <NavItem
+            key={item.href}
+            item={item}
+            collapsed={collapsed}
+            onNavigate={onNavigate}
+          />
         ))}
       </nav>
 
-      {/* User info + logout */}
       <div className="px-2 py-4 border-t border-white/[0.06]">
-        <div className={cn(
-          "flex items-center gap-3 px-3 py-2.5 rounded-xl",
-          collapsed ? "justify-center" : ""
-        )}>
+        <div
+          className={cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-xl",
+            collapsed ? "justify-center" : ""
+          )}
+        >
           <div className="w-8 h-8 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center flex-shrink-0">
             <span className="text-brand text-xs font-bold font-syne">
               {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </span>
           </div>
-
           <AnimatePresence>
             {!collapsed && (
               <motion.div
@@ -280,7 +249,6 @@ export default function Sidebar({
               </motion.div>
             )}
           </AnimatePresence>
-
           <AnimatePresence>
             {!collapsed && (
               <motion.button
@@ -301,6 +269,106 @@ export default function Sidebar({
           </AnimatePresence>
         </div>
       </div>
-    </motion.aside>
+    </>
+  );
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+
+export default function Sidebar({
+  collapsed,
+  onToggle,
+  navItems,
+  mobileOpen = false,
+  onMobileClose,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+  navItems: NavItem[];
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}) {
+  return (
+    <>
+      {/* ── Desktop sidebar ───────────────────────────────────────────── */}
+      <motion.aside
+        animate={{ width: collapsed ? 68 : 240 }}
+        transition={{ type: "spring", stiffness: 400, damping: 35 }}
+        className="hidden md:flex flex-col h-screen bg-[#0E0E0E] border-r border-white/[0.06] flex-shrink-0 overflow-hidden"
+      >
+        <div className="flex items-center justify-between px-4 py-5 border-b border-white/[0.06]">
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="font-syne font-extrabold text-lg text-white tracking-tight whitespace-nowrap"
+              >
+                Creator<span className="text-brand">Lock</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <button
+            onClick={onToggle}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors flex-shrink-0"
+          >
+            <motion.svg
+              animate={{ rotate: collapsed ? 180 : 0 }}
+              transition={{ duration: 0.25 }}
+              width="16" height="16" viewBox="0 0 24 24" fill="none"
+            >
+              <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </motion.svg>
+          </button>
+        </div>
+        <NavContent navItems={navItems} collapsed={collapsed} />
+      </motion.aside>
+
+      {/* ── Mobile drawer ─────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={onMobileClose}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            />
+            <motion.aside
+              key="drawer"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 40 }}
+              className="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-[#0E0E0E] border-r border-white/[0.06] md:hidden"
+            >
+              <div className="flex items-center justify-between px-4 py-5 border-b border-white/[0.06]">
+                <div className="font-syne font-extrabold text-lg text-white tracking-tight">
+                  Creator<span className="text-brand">Lock</span>
+                </div>
+                <button
+                  onClick={onMobileClose}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <NavContent
+                navItems={navItems}
+                collapsed={false}
+                onNavigate={onMobileClose}
+              />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
