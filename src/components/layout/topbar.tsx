@@ -69,10 +69,7 @@ export default function Topbar({
           <List size={22} weight="bold" />
         </button>
 
-        {/* Mobile logo */}
-        <div className="md:hidden font-syne font-extrabold text-base text-white tracking-tight">
-          Creator<span className="text-brand">Lock</span>
-        </div>
+        
 
         {/* Desktop page title */}
         <h1 className="hidden md:block font-syne font-bold text-lg text-white tracking-tight">

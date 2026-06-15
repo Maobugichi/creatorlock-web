@@ -8,8 +8,9 @@ import AuthNav from "@/components/ui/authnav";
 import Input from "@/components/ui/input";
 import { useSignup } from "./_hooks/useSignup";
 import { useSearchParams } from "next/navigation";
+import { GoogleButton } from "../login/_components/google-button";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL as string;
+
 
 const SignupPage = () => {
   const { mutate, isPending, errorMessage } = useSignup();
@@ -27,9 +28,7 @@ const SignupPage = () => {
     });
   };
 
-  const handleGoogleSignup = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_URL}/oauth/google`;
-  };
+
 
   return (
     <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter w-full">
@@ -49,7 +48,25 @@ const SignupPage = () => {
               Join Creator
               <span className="text-brand inline-flex items-center">
                 L
-                <Image src="/og-icon.svg" alt="o" width={40} height={40} priority className="w-[0.75em] h-[0.75em] relative top-[0.05em]" />
+                <div  
+                    className="bg-white grid place-items-center h-5  rounded-full w-5"
+                    
+                    >
+                      <Image
+                      src="/tlockk.png"
+                      alt="o"
+                      width={40}
+                      height={40}
+                      priority
+                      className="object-contain"
+                      style={{
+                        //display: "inline-block",
+                        width: "0.65em",
+                        height: "0.65em",
+                        
+                      }}
+                    />
+                    </div>
                 ck
               </span>
             </span>
@@ -73,14 +90,7 @@ const SignupPage = () => {
             </AnimatePresence>
 
             {/* Google OAuth */}
-            <button
-              type="button"
-              onClick={handleGoogleSignup}
-              className="w-full flex items-center justify-center gap-3 bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.08] hover:border-white/[0.14] text-white/80 hover:text-white font-inter font-medium rounded-xl py-3 text-sm transition-all mb-4"
-            >
-              <GoogleIcon />
-              Continue with Google
-            </button>
+            <GoogleButton />
 
             {/* Divider */}
             <div className="flex items-center gap-3 mb-4">

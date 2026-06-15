@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
-
+import Image from "next/image";
+import { X } from "@phosphor-icons/react";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type NavItem = {
@@ -296,18 +297,17 @@ export default function Sidebar({
         transition={{ type: "spring", stiffness: 400, damping: 35 }}
         className="hidden md:flex flex-col h-screen bg-[#0E0E0E] border-r border-white/[0.06] flex-shrink-0 overflow-hidden"
       >
-        <div className="flex items-center justify-between px-4 py-5 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-4 py-3  border-b border-white/[0.06]">
           <AnimatePresence>
             {!collapsed && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="font-syne font-extrabold text-lg text-white tracking-tight whitespace-nowrap"
-              >
-                Creator<span className="text-brand">Lock</span>
-              </motion.div>
+             <div className="relative h-8 w-32 ">
+              <Image
+                src="/desktoplogo.png"
+                alt="CreatorLock logo"
+                fill
+                className="object-contain"
+              />
+            </div>
             )}
           </AnimatePresence>
           <button
@@ -347,17 +347,18 @@ export default function Sidebar({
               transition={{ type: "spring", stiffness: 400, damping: 40 }}
               className="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-[#0E0E0E] border-r border-white/[0.06] md:hidden"
             >
-              <div className="flex items-center justify-between px-4 py-5 border-b border-white/[0.06]">
-                <div className="font-syne font-extrabold text-lg text-white tracking-tight">
-                  Creator<span className="text-brand">Lock</span>
-                </div>
+              <div className="flex items-center justify-between px-4 py- border-b border-white/[0.06]">
+                <Image
+                  src="/tisolock.png"
+                  alt="CreatorLock logo"
+                  width={55}
+                  height={55}
+                />
                 <button
                   onClick={onMobileClose}
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+                  <X size={24} />
                 </button>
               </div>
               <NavContent

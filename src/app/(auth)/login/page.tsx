@@ -42,19 +42,25 @@ const LoginPage = () => {
             Sign in to Creator
             <span className="text-brand">
               L
-              <Image
-                src="/og-icon.svg"
+              <div  
+              className="bg-white inline-block h-5 rounded-full w-5"
+              
+              >
+                <Image
+                src="/tlockk.png"
                 alt="o"
                 width={40}
                 height={40}
                 priority
+                className="object-contain"
                 style={{
-                  display: "inline-block",
+                  //display: "inline-block",
                   width: "0.75em",
                   height: "0.75em",
-                  verticalAlign: "-0.2rem",
+                  
                 }}
               />
+              </div>
               ck
             </span>
           </h1>
@@ -69,6 +75,16 @@ const LoginPage = () => {
                 {errorMessage}
               </div>
             )}
+
+            <GoogleButton />
+
+            <div className="flex items-center gap-3 my-5">
+              <div className="flex-1 h-px bg-white/[0.06]" />
+              <span className="text-xs text-white/20">or</span>
+              <div className="flex-1 h-px bg-white/[0.06]" />
+            </div>
+
+            
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
@@ -111,13 +127,7 @@ const LoginPage = () => {
               </button>
             </form>
 
-            <div className="flex items-center gap-3 my-5">
-              <div className="flex-1 h-px bg-white/[0.06]" />
-              <span className="text-xs text-white/20">or</span>
-              <div className="flex-1 h-px bg-white/[0.06]" />
-            </div>
-
-            <GoogleButton />
+            
           </div>
 
           <p className="text-center text-sm text-white/25 mt-6">
