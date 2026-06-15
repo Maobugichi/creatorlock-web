@@ -2,7 +2,15 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-export default function Hero() {
+import Image from "next/image";
+import ParallaxCoin from "./parallaxCoin";
+import { useParallax } from "@/hooks/hero.hooks";
+//import { COINS } from "../constant/hero.constant";
+
+const Hero = () => {
+  const { sectionRef, smoothX, smoothY } = useParallax();
+
+  
   const reduce = useReducedMotion();
 
   const fadeUp = {
@@ -10,41 +18,64 @@ export default function Hero() {
     animate: { opacity: 1, y: 0 },
   };
 
+   const COINS = [
+    {
+      size: 300, rotate: 10, skewX: 10, skewY: -10, scale: 0.8,
+      opacity: 0.55, blur: 0, depth: 0.03,
+      className: "top-[8%] left-[0%] hidden md:block",
+    },
+    {
+      size: 210, rotate: 30, skewX: -10, skewY: 2, scale: 1.0,
+      opacity: 0.55, blur: 0.4, depth: 0.05,
+      className: "bottom-[10%] md:left-[-3%] left-[-15%]",
+    },
+    {
+      size: 165, rotate: 18, skewX: -8, skewY: 6, scale: 0.8,
+      opacity: 0.45, blur: 0.8, depth: 0.04,
+      className: "top-[3%] right-[-4%] hidden md:block",
+    },
+    {
+      size: 220, rotate: -8, skewX: 14, skewY: -6, scale: 1.15,
+      opacity: 0.72, blur: 0, depth: 0.06,
+      className: "top-[35%] md:right-[-5%] right-[-20%]",
+    },
+    {
+      size: 185, rotate: -14, skewX: 10, skewY: -8, scale: 0.92,
+      opacity: 0.58, blur: 0.3, depth: 0.035,
+      className: "bottom-[84%] md:bottom-[80%] right-[25%]",
+    },
+  ];
+
   return (
-    <section className="relative min-h-svh bg-[var(--bg)] flex flex-col items-center justify-center px-6 overflow-hidden">
-      {/* Subtle radial glow — brand orange bled into the canvas */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 50% at 50% 60%, rgba(251,92,6,0.07) 0%, transparent 70%)",
-        }}
-      />
+    <section
+      ref={sectionRef}
+      className="min-h-[clamp(600px,90vh,900px)] flex items-center justify-center bg-neutral-950 text-white relative overflow-hidden"
+    >
+      {COINS.map((coin, i) => (
+        <ParallaxCoin key={i} {...coin} smoothX={smoothX} smoothY={smoothY} />
+      ))}
 
-      <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-8">
-        {/* Eyebrow */}
-        <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-          className="font-mono text-sm tracking-widest text-brand uppercase"
-        >
-          CreatorLock
-        </motion.p>
+      <div className="max-w-3xl relative z-10">
+        <h1 className="text-[clamp(2rem,5vw,3.75rem)] text-center font-bold mb-4">
+          Your knowledge.<br />
+          <span className="text-[#FB5C06]">
+            Pr
+            <span>
+              <Image
+                src="/lock.png"
+                alt="o"
+                width={40}
+                height={40}
+                priority
+                style={{ display: "inline", width: "0.7em", height: "0.7em", verticalAlign: "middle" }}
+              />
+            </span>
+            tected.
+          </span>{" "}
+          Profitable.
+        </h1>
 
-        {/* H1 — Syne ExtraBold, spec headline */}
-        <motion.h1
-          {...fadeUp}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-          className="font-syne font-extrabold text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight"
-        >
-          Turn what you know
-          <br />
-          <span className="text-brand">into what you earn.</span>
-        </motion.h1>
-
-        {/* Sub-copy */}
-        <motion.p
+         <motion.p
           {...fadeUp}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
           className="font-inter text-base sm:text-lg text-white/60 max-w-xl leading-relaxed"
@@ -81,9 +112,9 @@ export default function Hero() {
             Discover CreatorLock
           </a>
         </motion.div>
-      </div>
 
-      {/* Down-arrow nudge */}
+        
+      </div>
       <motion.div
         aria-hidden
         initial={{ opacity: 0 }}
@@ -104,4 +135,6 @@ export default function Hero() {
       </motion.div>
     </section>
   );
-}
+};
+
+export default Hero;
