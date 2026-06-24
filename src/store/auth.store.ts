@@ -5,7 +5,7 @@ export interface User {
   id: string;
   email: string;
   name?: string;
-  role: "creator" | "buyer" | "admin";
+  role?: "creator" | "buyer" | "admin";
 }
 
 interface AuthState {

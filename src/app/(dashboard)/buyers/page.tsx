@@ -1,5 +1,1 @@
-import { BuyersClient } from './_components/buyers-client';
-
-export default function BuyersPage() {
-  return <BuyersClient />;
-}
+export { default } from '@/features/creator/pages/buyersPage';

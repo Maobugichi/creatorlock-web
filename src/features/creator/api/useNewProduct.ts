@@ -1,0 +1,53 @@
+import { useMutation } from "@tanstack/react-query";
+import api from "@/lib/api";
+import type { ProductDraft } from "../types/product.types";
+
+// ─── Step 1: Create draft ─────────────────────────────────────────────────────
+
+interface CreateDraftPayload {
+  title: string;
+  price_cents: number;
+  description?: string;
+}
+
+export function useCreateDraft() {
+  return useMutation({
+    mutationFn: (payload: CreateDraftPayload) =>
+      api
+        .post<{ success: boolean; data: ProductDraft }>("/products", payload)
+        .then((r) => r.data.data),
+  });
+}
+
+// ─── Step 2: Upload digital file ──────────────────────────────────────────────
+
+export function useUploadFile() {
+  return useMutation({
+    mutationFn: ({ productId, file }: { productId: string; file: File }) => {
+      const form = new FormData();
+      form.append("file", file);
+      return api.post(`/products/${productId}/files`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    },
+  });
+}
+
+// ─── Step 3: Upload thumbnail ─────────────────────────────────────────────────
+
+export function usePatchProduct() {
+  return useMutation({
+    mutationFn: ({ productId, data }: { productId: string; data: FormData }) =>
+      api.patch(`/products/${productId}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
+  });
+}
+
+// ─── Step 4: Publish ──────────────────────────────────────────────────────────
+
+export function usePublishProduct() {
+  return useMutation({
+    mutationFn: (productId: string) => api.post(`/products/${productId}/publish`),
+  });
+}

@@ -1,0 +1,85 @@
+import { formatNGN } from '@/lib/utils';
+import { usePayoutHistory } from '../api/usePayoutHistory';
+import { useBanks } from '../api/useBanks';
+import { STATUS_STYLES } from '../utils/payout.utils';
+import { SkeletonRow } from './payoutSkeletonRow';
+
+export function PayoutHistory() {
+  const { payouts, isLoading } = usePayoutHistory();
+  const { banks } = useBanks();
+
+  const resolveBankName = (code: string) =>
+    banks.find((b) => b.code === code)?.name ?? code;
+
+  return (
+    <div className="space-y-3">
+      <h2 className="font-syne font-bold text-lg">Payout history</h2>
+
+      <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
+        {isLoading && (
+          <>
+            <SkeletonRow />
+            <SkeletonRow />
+            <SkeletonRow />
+          </>
+        )}
+
+        {!isLoading && payouts.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 px-6 text-center space-y-2">
+            <p className="font-syne font-semibold text-white">No payouts yet</p>
+            <p className="text-sm text-[var(--muted)]">Your withdrawal history will appear here.</p>
+          </div>
+        )}
+
+        {!isLoading && payouts.length > 0 && (
+          <ul className="divide-y divide-[var(--border)]">
+            {payouts.map((payout) => {
+              const statusStyle = STATUS_STYLES[payout.status] ?? STATUS_STYLES.pending;
+              return (
+                <li
+                  key={payout.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-syne font-semibold text-white">
+                      {resolveBankName(payout.bank_code)}
+                      <span className="font-mono font-normal text-[var(--muted)] ml-2 text-xs">
+                        ···{payout.account_number.slice(-4)}
+                      </span>
+                    </p>
+                    <p className="text-xs text-[var(--muted)] mt-0.5">
+                      {payout.account_name}
+                      {' · '}
+                      {new Date(payout.requested_at).toLocaleDateString('en-NG', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </p>
+                    {payout.failure_reason && payout.status === 'failed' && (
+                      <p className="text-xs text-red-400 mt-0.5">{payout.failure_reason}</p>
+                    )}
+                    {payout.status === 'reversed' && (
+                      <p className="text-xs text-yellow-400 mt-0.5">
+                        Transfer was reversed — contact support if funds were deducted.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="font-mono text-sm text-white">
+                      {formatNGN(payout.amount_cents)}
+                    </span>
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${statusStyle.classes}`}>
+                      {statusStyle.label}
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}

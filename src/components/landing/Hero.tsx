@@ -7,10 +7,11 @@ import ParallaxCoin from "./parallaxCoin";
 import { useParallax } from "@/hooks/hero.hooks";
 import Link from "next/link";
 import { useState } from "react";
-//import { COINS } from "../constant/hero.constant";
+
 
 const Hero = () => {
-  const [ hovered, setHovered ] = useState<boolean>(false)
+  const [ registerHovered, setRegisterHovered ] = useState<boolean>(false)
+  const [ loginHovered, setLoginHovered ] = useState<boolean>(false)
   const { sectionRef, smoothX, smoothY } = useParallax();
   
   const reduce = useReducedMotion();
@@ -52,7 +53,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-[clamp(600px,80vh,900px)] flex items-center justify-center bg-neutral-950 text-white relative overflow-hidden"
+      className="min-h-[clamp(600px,80vh,800px)] flex items-center justify-center bg-neutral-950 text-white relative overflow-hidden"
     >
       {COINS.map((coin, i) => (
         <ParallaxCoin key={i} {...coin} smoothX={smoothX} smoothY={smoothY} />
@@ -61,18 +62,20 @@ const Hero = () => {
       <div className="max-w-3xl relative z-10  grid gap-5 place-items-center">
         <h1 className="text-[clamp(2rem,5vw,3.75rem)] text-center font-bold">
           Your knowledge.<br />
-          <span className="text-[#FB5C06]">
+          <span className="text-[#FB5C06] inline-flex items-center">
             Pr
-            <span>
+
+            <span className=" inline-flex h-[0.6em] w-[0.6em] items-center justify-center rounded-full bg-white align-baseline relative top-[0.05em]">
               <Image
-                src="/lock.png"
+                src="/tlockk.png"
                 alt="o"
-                width={40}
-                height={40}
+                width={12}
+                height={12}
                 priority
-                style={{ display: "inline", width: "0.7em", height: "0.7em", verticalAlign: "middle" }}
+                className="h-[60%] w-[60%] object-contain"
               />
             </span>
+
             tected.
           </span>{" "}
           Profitable.
@@ -81,37 +84,63 @@ const Hero = () => {
          <motion.p
           {...fadeUp}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-          className="font-inter text-base text-center sm:text-lg text-white/60 max-w-xl leading-relaxed"
+          className="font-inter text-base text-center sm:text-lg text-white/55 max-w-xl leading-relaxed"
         >
           The marketplace built for Nigerian creators. Sell eBooks, courses,
-          templates, and music — paid in Naira, delivered instantly, zero
+          templates, and music, paid in Naira, delivered instantly, zero
           platform drama.
         </motion.p>
 
-        {/* Primary CTA — scroll anchor to #how-it-works */}
-        <motion.div
-            onHoverStart={() => setHovered(true)}
-            onHoverEnd={() => setHovered(false)}
-            className="overflow-hidden relative rounded-lg py-4 px-6 text-md  font-bold whitespace-nowrap cursor-pointer"
-            style={{ backgroundColor: "#FF5C00" }}
+        <div className='flex gap-5'>
+  
+          <motion.div
+            onHoverStart={() => setLoginHovered(true)}
+            onHoverEnd={() => setLoginHovered(false)}
+            className="overflow-hidden relative rounded-lg py-4 px-6 text-md font-bold whitespace-nowrap cursor-pointer border border-[#FF5C00]"
           >
-            <Link href="/discover" className="block">
+            <Link href="/login" className="block">
               <motion.span
                 aria-hidden
-                className="absolute inset-0 bg-white"
+                className="absolute inset-0 bg-[#FF5C00]"
                 initial={{ scaleX: 0, originX: 0 }}
-                animate={{ scaleX: hovered ? 1 : 0 }}
+                animate={{ scaleX: loginHovered ? 1 : 0 }}
                 transition={{ duration: 0.3 }}
               />
               <motion.span
                 className="relative z-10"
-                animate={{ color: hovered ? "#FF5C00" : "#ffffff" }}
+                animate={{ color: loginHovered ? "#ffffff" : "#FF5C00" }}
                 transition={{ duration: 0.3 }}
               >
-                Discover
+                Login
               </motion.span>
             </Link>
           </motion.div>
+
+        
+          <motion.div
+            onHoverStart={() => setRegisterHovered(true)}
+            onHoverEnd={() => setRegisterHovered(false)}
+            className="overflow-hidden relative rounded-lg py-4 px-6 text-md font-bold whitespace-nowrap cursor-pointer"
+            style={{ backgroundColor: "#FF5C00" }}
+          >
+            <Link href="/signup" className="block">
+              <motion.span
+                aria-hidden
+                className="absolute inset-0 bg-white"
+                initial={{ scaleX: 0, originX: 0 }}
+                animate={{ scaleX: registerHovered ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              />
+              <motion.span
+                className="relative z-10"
+                animate={{ color: registerHovered ? "#FF5C00" : "#ffffff" }}
+                transition={{ duration: 0.3 }}
+              >
+                Register
+              </motion.span>
+            </Link>
+          </motion.div>
+        </div>
 
         
       </div>

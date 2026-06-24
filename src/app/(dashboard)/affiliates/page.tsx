@@ -1,9 +1,6 @@
-import { AffiliatesPageClient } from './_components/affiliates-page-client';
+import { Metadata } from 'next';
+export { default } from '@/features/creator/pages/affiliatePage';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Affiliates',
 };
-
-export default function AffiliatesPage() {
-  return <AffiliatesPageClient />;
-}

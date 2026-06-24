@@ -23,40 +23,30 @@ const Nav = () => {
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Login — ghost */}
-        <Link
-          href="/login"
-          className="text-sm font-medium text-white/70 hover:text-white transition-colors duration-150 px-3 py-2 font-inter"
-        >
-          Log in
+      <motion.div
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+        className="relative overflow-hidden rounded-lg cursor-pointer"
+        style={{ backgroundColor: "#FB5C06" }}
+      >
+        <Link href="/discover" className="block px-5 py-3">
+          <motion.span
+            aria-hidden
+            className="absolute inset-0 bg-white"
+            initial={{ scaleX: 0, originX: 0 }}
+            animate={{ scaleX: hovered ? 1 : 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          />
+          <motion.span
+            className="relative z-10 text-sm font-semibold font-syne whitespace-nowrap"
+            animate={{ color: hovered ? "#FB5C06" : "#ffffff" }}
+            transition={{ duration: 0.25 }}
+          >
+            Discover
+          </motion.span>
         </Link>
-
-        {/* Register — brand fill with swipe hover */}
-        <motion.div
-          onHoverStart={() => setHovered(true)}
-          onHoverEnd={() => setHovered(false)}
-          className="relative overflow-hidden rounded-lg cursor-pointer"
-          style={{ backgroundColor: "#FB5C06" }}
-        >
-          <Link href="/signup" className="block px-5 py-3">
-            <motion.span
-              aria-hidden
-              className="absolute inset-0 bg-white"
-              initial={{ scaleX: 0, originX: 0 }}
-              animate={{ scaleX: hovered ? 1 : 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-            />
-            <motion.span
-              className="relative z-10 text-sm font-semibold font-syne whitespace-nowrap"
-              animate={{ color: hovered ? "#FB5C06" : "#ffffff" }}
-              transition={{ duration: 0.25 }}
-            >
-              Register
-            </motion.span>
-          </Link>
-        </motion.div>
-      </div>
+      </motion.div>
+   
     </nav>
   );
 };
