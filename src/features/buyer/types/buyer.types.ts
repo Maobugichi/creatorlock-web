@@ -9,6 +9,25 @@ export interface ProductFile {
   created_at: string;
 }
 
+export type ProductCategory =
+  | "ebook"
+  | "course"
+  | "template"
+  | "design"
+  | "music"
+  | "video"
+  | "other";
+
+export const CATEGORY_OPTIONS: { value: ProductCategory; label: string }[] = [
+  { value: "ebook", label: "eBooks" },
+  { value: "course", label: "Courses" },
+  { value: "template", label: "Templates" },
+  { value: "design", label: "Design" },
+  { value: "music", label: "Music" },
+  { value: "video", label: "Video" },
+  { value: "other", label: "Other" },
+];
+
 export interface DiscoverProduct {
   id: string;
   creator_id: string;
@@ -17,6 +36,7 @@ export interface DiscoverProduct {
   description: string | null;
   price_cents: number;
   thumbnail: string | null;
+  category: ProductCategory;
   status: 'draft' | 'published' | 'unpublished' | 'deleted';
   created_at: string;
   updated_at: string;
@@ -40,7 +60,6 @@ export interface GetProductsResponse {
 
 export type SortOption = 'latest' | 'popular';
 
-// ─── Profile ──────────────────────────────────────────────────────────────────
 
 export interface BuyerProfile {
   id: string;

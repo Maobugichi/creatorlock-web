@@ -1,8 +1,28 @@
-// ─── Product ──────────────────────────────────────────────────────────────────
 
 export type ProductStatus = "draft" | "published" | "unpublished" | "flagged";
 export type FilterStatus = "all" | ProductStatus;
 export type SortOption = "newest" | "oldest" | "price_high" | "price_low";
+
+
+export type ProductCategory =
+  | "ebook"
+  | "course"
+  | "template"
+  | "design"
+  | "music"
+  | "video"
+  | "other";
+
+export const CATEGORY_OPTIONS: { value: ProductCategory; label: string }[] = [
+  { value: "ebook", label: "eBook" },
+  { value: "course", label: "Course" },
+  { value: "template", label: "Template" },
+  { value: "design", label: "Design Asset" },
+  { value: "music", label: "Music" },
+  { value: "video", label: "Video" },
+  { value: "other", label: "Other" },
+];
+
 
 export interface Product {
   id: string;
@@ -10,11 +30,12 @@ export interface Product {
   price_cents: number;
   status: ProductStatus;
   thumbnail?: string | null;
+  category?: ProductCategory;
   created_at: string;
   updated_at?: string;
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+
 
 export type ToastVariant = "success" | "error" | "info";
 
@@ -24,8 +45,6 @@ export interface ToastItem {
   description?: string;
   variant: ToastVariant;
 }
-
-// ─── Edit Product ────────────────────────────────────────────────────────────
 
 export interface ProductFile {
   id: string;
@@ -45,6 +64,7 @@ export interface EditProduct {
   price_cents: number;
   description?: string;
   thumbnail?: string;
+  category?: ProductCategory;
   status: "draft" | "published" | "unpublished" | "flagged";
   files: ProductFile[];
 }

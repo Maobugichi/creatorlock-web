@@ -8,6 +8,8 @@ import ThumbnailUpload from "../component/thumbnailUpload";
 import FileDropZone from "../component/fileDropZone";
 import type { SelectedFile, SubmitStage, ApiError } from "../types/product.types";
 import type { Product, ProductStatus } from "@/types/store";
+import type { ProductCategory } from "../types/product.types";
+import { CATEGORY_OPTIONS } from "../types/product.types";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function NewProductPage() {
   const [digitalFiles, setDigitalFiles] = useState<SelectedFile[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [submitStage, setSubmitStage] = useState<SubmitStage>("idle");
+  const [category, setCategory] = useState<ProductCategory>("other");
 
   const createDraft = useCreateDraft();
   const uploadFile = useUploadFile();
@@ -53,34 +56,35 @@ export default function NewProductPage() {
     if (digitalFiles.length === 0) { setError("Add at least one digital file."); return; }
 
     try {
-      // 1. Create draft
+      
       setSubmitStage("creating");
       const draft = await createDraft.mutateAsync({
         title: title.trim(),
         price_cents: Math.round(priceNum * 100),
         description: description.trim() || undefined,
+        category,
       });
 
-      // 2. Upload digital files sequentially
+    
       setSubmitStage("uploading");
       for (const sf of digitalFiles) {
         await uploadFile.mutateAsync({ productId: draft.id, file: sf.file });
       }
 
-      // 3. Upload thumbnail if provided
+      
       if (thumbnailFile) {
         const form = new FormData();
         form.append("thumbnail", thumbnailFile);
         await patchProduct.mutateAsync({ productId: draft.id, data: form });
       }
 
-      // 4. Publish if requested
+   
       if (publish) {
         setSubmitStage("publishing");
         await publishProduct.mutateAsync(draft.id);
       }
 
-      // 5. Optimistically prepend to products cache
+    
       queryClient.setQueryData<Product[]>(["products", "me"], (old) => [
         {
           id: draft.id,
@@ -88,6 +92,7 @@ export default function NewProductPage() {
           price_cents: Math.round(priceNum * 100),
           status: (publish ? "published" : "draft") as ProductStatus,
           thumbnail: thumbnailPreview ?? null,
+          category,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           creator_id: "",
@@ -170,6 +175,25 @@ export default function NewProductPage() {
           <p className="mt-1.5 text-xs text-white/30 font-inter">
             Enter amount in naira. Set 0 for a free product.
           </p>
+        </div>
+
+        {/* Category */}
+        <div>
+          <label htmlFor="category" className="block text-sm font-inter text-white/70 mb-2">
+            Category <span className="text-red-400">*</span>
+          </label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value as ProductCategory)}
+            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+          >
+            {CATEGORY_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value} className="bg-[var(--bg)]">
+                {opt.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Description */}

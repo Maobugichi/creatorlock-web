@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import Sidebar, { buyerNavItems } from "@/components/layout/sidebar";
+import Sidebar, { creatorNavSections, buyerNavSections, withAffiliateNavItem } from "@/components/layout/sidebar";
 import Topbar from "@/components/layout/topbar";
 import { useAuthStore } from "@/store/auth.store";
+import { useAffiliateStats } from "@/features/affiliates/api/useAffiliateStats";
 
 function useHasMounted() {
   return useSyncExternalStore(
@@ -23,16 +24,27 @@ export default function DiscoverLayout({
 
   const mounted = useHasMounted();
   const user = useAuthStore((s) => s.user);
-  const isBuyer = user?.role === "buyer";
 
-  if (!mounted || !isBuyer) return <>{children}</>;
+  // Hook must be called unconditionally (before any early return) per rules
+  // of hooks — disabled via `enabled` until we know there's a real session,
+  // so logged-out visitors browsing Discover never fire an authenticated request.
+  const { data: affiliateStats } = useAffiliateStats(mounted && !!user?.role);
+
+  // Not mounted yet, or no session at all — render bare content (e.g. logged-out visitor browsing Discover)
+  if (!mounted || !user?.role) return <>{children}</>;
+
+  const baseNavSections = user.role === "creator" ? creatorNavSections : buyerNavSections;
+  const navSections = withAffiliateNavItem(
+    baseNavSections,
+    (affiliateStats?.affiliates?.length ?? 0) > 0
+  );
 
   return (
     <div className="flex h-screen bg-[#0C0C0C] overflow-hidden font-inter">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}
-        navItems={buyerNavItems}
+        navSections={navSections}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />

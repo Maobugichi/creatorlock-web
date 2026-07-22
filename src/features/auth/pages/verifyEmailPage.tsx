@@ -9,10 +9,50 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
   const [resendSent, setResendSent] = useState(false);
+  const [showResend, setShowResend] = useState(false);
 
   const { mutate, isPending, isError, errorMessage } = useResendVerification();
 
   const handleResend = () => mutate(undefined, { onSuccess: () => setResendSent(true) });
+
+  const renderResendPrompt = () => {
+    if (resendSent) {
+      return (
+        <div className="w-full bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl px-4 py-3 text-sm font-inter">
+          A new verification email has been sent. Check your inbox.
+        </div>
+      );
+    }
+
+    if (!showResend) {
+      return (
+        <button
+          onClick={() => setShowResend(true)}
+          className="text-[var(--muted)] hover:text-white font-inter text-sm transition-colors"
+        >
+          Didn&apos;t receive it?{" "}
+          <span className="text-brand font-medium">Resend</span>
+        </button>
+      );
+    }
+
+    return (
+      <button
+        onClick={handleResend}
+        disabled={isPending}
+        className="w-full bg-brand hover:bg-brand-dark active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
+      >
+        {isPending ? (
+          <>
+            <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Sending…
+          </>
+        ) : (
+          "Resend verification email"
+        )}
+      </button>
+    );
+  };
 
   if (!error) {
     return (
@@ -30,6 +70,15 @@ export default function VerifyEmailPage() {
                 We sent a verification link to your inbox. Click it to activate your account.
               </p>
             </div>
+
+            {renderResendPrompt()}
+
+            {isError && (
+              <div className="w-full bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm font-inter text-left">
+                {errorMessage}
+              </div>
+            )}
+
             <Link href="/login" className="text-[var(--muted)] hover:text-white font-inter text-sm transition-colors">
               Back to sign in
             </Link>
@@ -60,28 +109,7 @@ export default function VerifyEmailPage() {
             </p>
           </div>
 
-          {error !== "missing" && (
-            resendSent ? (
-              <div className="w-full bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl px-4 py-3 text-sm font-inter">
-                A new verification email has been sent. Check your inbox.
-              </div>
-            ) : (
-              <button
-                onClick={handleResend}
-                disabled={isPending}
-                className="w-full bg-brand hover:bg-brand-dark active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
-              >
-                {isPending ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Sending…
-                  </>
-                ) : (
-                  "Resend verification email"
-                )}
-              </button>
-            )
-          )}
+          {error !== "missing" && renderResendPrompt()}
 
           {isError && (
             <div className="w-full bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm font-inter text-left">

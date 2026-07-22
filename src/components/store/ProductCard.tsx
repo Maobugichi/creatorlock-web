@@ -28,7 +28,7 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
       style={{ background: 'var(--color-surface)', borderColor: 'var(--border)' }}
     >
       {/* ── Thumbnail ────────────────────────────── */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#1a1a1a]">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[var(--bg)]">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}
@@ -39,10 +39,7 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <span
-              className="font-syne text-4xl font-extrabold opacity-20"
-              style={{ color: 'var(--color-brand)' }}
-            >
+            <span className="font-syne text-4xl font-extrabold opacity-20 text-brand">
               {product.title.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -58,23 +55,19 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
       {/* ── Body ─────────────────────────────────── */}
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         {/* Title */}
-        <h3 className="line-clamp-2 font-syne text-sm font-bold leading-snug text-white transition-colors group-hover:text-[color:var(--color-brand)]">
+        <h3 className="line-clamp-2 font-syne text-sm font-bold leading-snug text-white transition-colors group-hover:text-brand">
           {product.title}
         </h3>
 
         {/* Description */}
         {product.description && (
-          <p
-            className="line-clamp-2 font-inter text-xs leading-relaxed"
-            style={{ color: 'var(--muted)' }}
-          >
+          <p className="line-clamp-2 font-inter text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
             {product.description}
           </p>
         )}
 
-        {/* ── Footer ───────────────────────────── */}
+        
         <div className="mt-auto flex items-center justify-between pt-1">
-          {/* price_cents → formatNGN */}
           <span className="font-mono text-sm font-medium">
             {isFree ? (
               <span className="text-emerald-400">Free</span>
@@ -83,16 +76,23 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
             )}
           </span>
 
-          {/* File count from files[] array */}
-          {fileCount > 0 && (
-            <span
-              className="flex items-center gap-1 font-inter text-[11px]"
-              style={{ color: 'var(--muted)' }}
+          <div className="flex items-center gap-2">
+            {fileCount > 0 && (
+              <span className="flex items-center gap-1 font-inter text-[11px]" style={{ color: 'var(--muted)' }}>
+                <FileIcon />
+                {fileCount} {fileCount === 1 ? 'file' : 'files'}
+              </span>
+            )}
+
+            <span className="rounded-lg text-[var(--muted)] border-[var(--border)] border px-2.5 py-1 font-mono text-[11px] font-medium transition-colors duration-200 group-hover:bg-brand group-hover:border-brand group-hover:text-white"
+              style={{
+                borderColor: '',
+                color: '',
+              }}
             >
-              <FileIcon />
-              {fileCount} {fileCount === 1 ? 'file' : 'files'}
+              {isFree ? 'Get' : 'Buy'}
             </span>
-          )}
+          </div>
         </div>
       </div>
     </Link>

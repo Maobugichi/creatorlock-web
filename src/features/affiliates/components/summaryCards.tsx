@@ -3,7 +3,7 @@ import { formatNGN } from '@/lib/utils';
 
 export function SummaryCards({ affiliates }: { affiliates: Affiliate[] }) {
   const totalConversions = affiliates.reduce((sum, a) => sum + a.total_conversions, 0);
-  const totalEarned = affiliates.reduce((sum, a) => sum + (a.total_earned ?? 0), 0);
+  const totalEarned = affiliates.reduce((sum, a) => sum + (a.total_earned_cents ?? 0), 0);
   const activeCount = affiliates.filter((a) => a.active).length;
 
   return (

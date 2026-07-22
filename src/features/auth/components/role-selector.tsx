@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
-import type { Role } from "../../../app/(auth)/signup/types";
+import type { Role } from "../types/auth.types";
 
 const ROLES: { id: Role; label: string; description: string }[] = [
   {

@@ -4,18 +4,19 @@ import Link from 'next/link';
 import { formatNGN } from '@/lib/utils';
 import { ArrowRightIcon, FileIcon } from '@/features/buyer/components/icons';
 import type { DiscoverProduct } from '@/features/buyer/types/buyer.types';
+import { CATEGORY_OPTIONS } from '@/features/buyer/types/buyer.types';
 
 export function DiscoverProductCardSkeleton() {
   return (
     <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
       <div className="bg-white/[0.03] animate-pulse aspect-[4/3] w-full" />
-      <div className="p-4 space-y-3">
+      <div className="p-3 lg:p-4 space-y-3">
         <div className="bg-white/[0.03] rounded-lg animate-pulse h-4 w-16" />
         <div className="space-y-1.5">
           <div className="bg-white/[0.03] rounded-xl animate-pulse h-4 w-full" />
           <div className="bg-white/[0.03] rounded-xl animate-pulse h-4 w-3/4" />
         </div>
-        <div className="bg-white/[0.03] rounded-xl animate-pulse h-3 w-full" />
+        <div className="bg-white/[0.03] rounded-xl animate-pulse h-3 w-full hidden lg:block" />
         <div className="flex items-center justify-between pt-1">
           <div className="bg-white/[0.03] rounded-xl animate-pulse h-5 w-24" />
           <div className="bg-white/[0.03] rounded-xl animate-pulse h-8 w-8" />
@@ -33,6 +34,7 @@ interface DiscoverProductCardProps {
 export function DiscoverProductCard({ product, index }: DiscoverProductCardProps) {
   const isFree = product.price_cents === 0;
   const fileCount = product.files.length;
+  const categoryLabel = CATEGORY_OPTIONS.find((c) => c.value === product.category)?.label;
 
   return (
     <motion.div
@@ -48,7 +50,7 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
             alt={product.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 1024px) 50vw, 33vw"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -63,15 +65,23 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
         )}
 
         {isFree && (
-          <div className="absolute top-3 left-3">
-            <span className="bg-emerald-500/90 text-white font-syne font-bold text-[10px] uppercase tracking-wider px-2 py-1 rounded-lg backdrop-blur-sm">
+          <div className="absolute top-2 left-2 lg:top-3 lg:left-3">
+            <span className="bg-emerald-500/90 text-white font-syne font-bold text-[9px] lg:text-[10px] uppercase tracking-wider px-1.5 lg:px-2 py-0.5 lg:py-1 rounded-lg backdrop-blur-sm">
               Free
+            </span>
+          </div>
+        )}
+
+        {categoryLabel && (
+          <div className="hidden lg:block absolute top-3 right-3">
+            <span className="bg-black/50 text-white font-syne font-semibold text-[10px] uppercase tracking-wider px-2 py-1 rounded-lg backdrop-blur-sm">
+              {categoryLabel}
             </span>
           </div>
         )}
       </div>
 
-      <div className="p-4 space-y-3">
+      <div className="p-3 lg:p-4 space-y-2.5 lg:space-y-3">
         {fileCount > 0 && (
           <div className="flex items-center gap-1.5 text-[var(--muted)]">
             <FileIcon />
@@ -81,20 +91,20 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
           </div>
         )}
 
-        <div className="flex justify-between">
+        <div className="flex flex-col gap-1 lg:flex-row lg:items-start lg:justify-between lg:gap-2">
           <h3 className="font-syne font-bold text-white text-sm leading-snug line-clamp-2">
             {product.title}
           </h3>
           <Link
             href={`/store/${product.store_slug}`}
-            className="inline-flex items-center gap-1 text-[10px] text-[var(--muted)] hover:text-brand transition-colors"
+            className="inline-flex items-center gap-1 text-[10px] text-[var(--muted)] hover:text-brand transition-colors shrink-0"
           >
             {product.display_name}
           </Link>
         </div>
 
         {product.description && (
-          <p className="font-inter text-xs text-[var(--muted)] line-clamp-2 leading-relaxed">
+          <p className="hidden lg:block font-inter text-xs text-[var(--muted)] line-clamp-2 leading-relaxed">
             {product.description}
           </p>
         )}
@@ -103,10 +113,22 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
           <span className="font-mono font-bold text-white text-sm">
             {isFree ? <span className="text-emerald-400">Free</span> : formatNGN(product.price_cents)}
           </span>
+
+          {/* Mobile / 2-col: icon-only */}
           <Link
             href={`/store/${product.store_slug}/${product.id}`}
-            className="w-8 h-8 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand transition-all duration-200 hover:bg-brand hover:border-brand hover:text-white"
+            className="lg:hidden w-8 h-8 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand transition-all duration-200 hover:bg-brand hover:border-brand hover:text-white"
+            aria-label={`View ${product.title}`}
           >
+            <ArrowRightIcon />
+          </Link>
+
+          {/* Desktop: labeled */}
+          <Link
+            href={`/store/${product.store_slug}/${product.id}`}
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-xl bg-brand/10 border border-brand/20 px-3 py-1.5 text-brand font-syne font-semibold text-xs transition-all duration-200 hover:bg-brand hover:border-brand hover:text-white"
+          >
+            View
             <ArrowRightIcon />
           </Link>
         </div>

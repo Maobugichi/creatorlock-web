@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useInviteAffiliate } from '../api/useInviteAffiliate';
+import { useInviteAffiliate } from '../../creator/api/useInviteAffiliate';
 
 export function InviteAffiliateForm() {
   const formRef = useRef<HTMLFormElement>(null);

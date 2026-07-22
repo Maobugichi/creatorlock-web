@@ -93,28 +93,22 @@ const Hero = () => {
 
         <div className='flex gap-5'>
   
-          <motion.div
-            onHoverStart={() => setLoginHovered(true)}
-            onHoverEnd={() => setLoginHovered(false)}
-            className="overflow-hidden relative rounded-lg py-4 px-6 text-md font-bold whitespace-nowrap cursor-pointer border border-[#FF5C00]"
+          <Link
+            href="/login"
+            className="group relative inline-block text-md font-bold text-[#FF5C00]   py-4 px-6 text-md whitespace-nowrap cursor-pointer"
           >
-            <Link href="/login" className="block">
-              <motion.span
-                aria-hidden
-                className="absolute inset-0 bg-[#FF5C00]"
-                initial={{ scaleX: 0, originX: 0 }}
-                animate={{ scaleX: loginHovered ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-              />
-              <motion.span
-                className="relative z-10"
-                animate={{ color: loginHovered ? "#ffffff" : "#FF5C00" }}
-                transition={{ duration: 0.3 }}
-              >
-                Login
-              </motion.span>
-            </Link>
-          </motion.div>
+            Login
+
+            <motion.span
+              className="
+                absolute left-0 -bottom-1 h-0.5 w-full bg-[#FF5C00]
+                scale-x-100 md:scale-x-0
+                origin-left
+                transition-transform duration-300
+                md:group-hover:scale-x-100
+              "
+            />
+          </Link>
 
         
           <motion.div

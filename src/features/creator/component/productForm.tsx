@@ -7,8 +7,11 @@ import ThumbnailUpload from "./thumbnailUpload";
 import FileDropZone from "./fileDropZone";
 import ExistingFileList from "./existingFileList";
 import type { EditProduct, SelectedFile, SaveStage, ApiError } from "../types/product.types";
+import type { ProductCategory } from "../types/product.types";
+import { CATEGORY_OPTIONS } from "../types/product.types";
 
-const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024; // 10MB
+
+const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024; 
 
 interface ProductFormProps {
   product: EditProduct;
@@ -31,6 +34,7 @@ export default function ProductForm({
   const [newFiles, setNewFiles] = useState<SelectedFile[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saveStage, setSaveStage] = useState<SaveStage>("idle");
+  const [category, setCategory] = useState<ProductCategory>(product.category ?? "other");
 
   const patchMutation = usePatchEditProduct(productId);
   const uploadFileMutation = useUploadEditFile(productId);
@@ -71,6 +75,7 @@ export default function ProductForm({
       const form = new FormData();
       form.append("title", title.trim());
       form.append("price_cents", String(Math.round(priceNum * 100)));
+      form.append("category", category);
       if (description.trim()) form.append("description", description.trim());
       if (thumbnailFile) form.append("thumbnail", thumbnailFile);
 
@@ -185,6 +190,25 @@ export default function ProductForm({
             className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-8 pr-4 py-3 text-white font-mono text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
           />
         </div>
+      </div>
+
+      {/* Category */}
+      <div>
+        <label htmlFor="category" className="block text-sm font-inter text-white/70 mb-2">
+          Category <span className="text-red-400">*</span>
+        </label>
+        <select
+          id="category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value as ProductCategory)}
+          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+        >
+          {CATEGORY_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value} className="bg-[var(--bg)]">
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Description */}

@@ -7,12 +7,13 @@ import CaptureAffiliateRef from '@/components/store/CaptureAffiliateRef';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
-async function getStoreData(slug: string): Promise<StoreData | null> {
+async function getStoreData(slug: string,page = 1): Promise<StoreData | null> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/store/${slug}`,
+      `${process.env.NEXT_PUBLIC_URL}/store/${slug}?page=${page}&limit=12`,
       { next: { revalidate: 60 } },
     );
     if (res.status === 404) return null;
@@ -62,19 +63,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function StorePage({ params }: PageProps) {
+export default async function StorePage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const data = await getStoreData(slug);
+  
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? '1', 10));
 
+  const data = await getStoreData(slug, page);
   if (!data) notFound();
 
-  const { profile, products, total } = data;
+  const { profile, products, total , totalPages } = data;
 
   return (
-    <main className="min-h-screen" style={{ background: 'var(--bg)' }}>
+    <main className="min-h-screen" style={{ background: 'var(--bg)' }} aria-label={`${profile.display_name}'s store`}>
       <CaptureAffiliateRef />
       <StoreHeader profile={profile} productCount={total} />
-      <ProductGrid products={products} storeSlug={slug} total={total} />
+      <ProductGrid products={products} storeSlug={slug} total={total} page={page} totalPages={totalPages}/>
     </main>
   );
 }

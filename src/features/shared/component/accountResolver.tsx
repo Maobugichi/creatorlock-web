@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useResolveAccount } from '../api/useResolveAccount';
-import type { ApiError } from '../types/payout.types';
+import type { ApiError } from '@/features/auth/types/auth.types';
 
 interface AccountResolverProps {
   bankCode: string;
@@ -13,22 +13,28 @@ interface AccountResolverProps {
 
 export function AccountResolver({ bankCode, accountNumber, onResolved, onReset }: AccountResolverProps) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const prevKeyRef = useRef('');
 
   const { mutate, isPending, isSuccess, isError, error, reset, data } = useResolveAccount(
     onResolved,
     onReset,
   );
 
-  useEffect(() => {
-    const key = `${bankCode}:${accountNumber}`;
-    if (key === prevKeyRef.current) return;
-    prevKeyRef.current = key;
+  const key = `${bankCode}:${accountNumber}`;
+  const [trackedKey, setTrackedKey] = useState(key);
 
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
+  // Clear the stale result/error the moment the inputs change, computed during
+  // render rather than in an effect — this is React's documented pattern for
+  // "reset state when a prop changes" and avoids the extra render pass that
+  // calling setState synchronously inside an effect body would trigger.
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  if (key !== trackedKey) {
+    setTrackedKey(key);
     onReset();
     reset();
+  }
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     if (!bankCode || accountNumber.length !== 10) return;
 
@@ -52,11 +58,17 @@ export function AccountResolver({ bankCode, accountNumber, onResolved, onReset }
         </p>
       )}
       {isSuccess && data && (
-        <p className="text-xs text-green-400 flex items-center gap-1.5">
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <p className="text-xs text-green-400 flex items-start gap-1.5">
+          <svg
+            className="w-3.5 h-3.5 mt-0.5 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          {data.account_name}
+          <span>{data.account_name}</span>
         </p>
       )}
       {isError && (

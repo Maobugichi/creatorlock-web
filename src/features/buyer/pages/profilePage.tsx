@@ -3,6 +3,7 @@
 import { useBuyerProfile, useUpdateBuyerProfile } from "@/features/buyer/api/useBuyerProfile";
 import BuyerAvatar from "@/features/buyer/components/buyerAvatar";
 import { ProfileSkeleton, FieldSkeleton } from "@/features/buyer/components/profileSkeletons";
+import { BecomeCreatorCard } from "../components/becomeCreatorCard";
 
 export default function ProfilePage() {
   const { data: profile, isLoading } = useBuyerProfile();
@@ -176,6 +177,7 @@ export default function ProfilePage() {
           </form>
         )}
       </div>
+      <BecomeCreatorCard />
     </div>
   );
 }

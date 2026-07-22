@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDiscoverProducts } from '@/features/buyer/api/useDiscoverProducts';
-import { SearchIcon } from '@/features/buyer/components/icons';
 import {
   DiscoverProductCard,
   DiscoverProductCardSkeleton,
@@ -11,7 +10,9 @@ import {
 import { DiscoverErrorBanner } from '@/features/buyer/components/discoverErrorBanner';
 import { DiscoverEmptyState } from '@/features/buyer/components/discoverEmptyState';
 import { DiscoverPagination } from '@/features/buyer/components/discoverPagination';
-import type { SortOption } from '@/features/buyer/types/buyer.types';
+import type { SortOption, ProductCategory } from '@/features/buyer/types/buyer.types';
+import { CATEGORY_OPTIONS } from '@/features/buyer/types/buyer.types';
+import { SearchIcon, ShieldIcon, BoltIcon, NairaIcon } from '@/features/buyer/components/icons';
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'latest', label: 'Latest' },
@@ -25,6 +26,8 @@ export default function DiscoverPage() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sort, setSort] = useState<SortOption>('latest');
   const [page, setPage] = useState(1);
+  const [category, setCategory] = useState<ProductCategory | null>(null);
+
 
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -44,6 +47,11 @@ export default function DiscoverPage() {
     setPage(1);
   }, []);
 
+  const handleCategoryChange = useCallback((value: ProductCategory | null) => {
+    setCategory(value);
+    setPage(1);
+  }, []);
+
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -55,7 +63,7 @@ export default function DiscoverPage() {
     isError: productsError,
     isFetching,
     refetch,
-  } = useDiscoverProducts({ search: debouncedSearch, sort, page });
+  } = useDiscoverProducts({ search: debouncedSearch, sort, category, page });
 
   const products = productsData?.products ?? [];
   const totalPages = productsData?.totalPages ?? 1;
@@ -86,22 +94,75 @@ export default function DiscoverPage() {
           </motion.div>
 
           <motion.div
+  initial={{ opacity: 0, y: 14 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.35, ease: 'easeOut', delay: 0.07 }}
+  className="mt-6 relative"
+>
+  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--muted)]">
+    <SearchIcon />
+  </div>
+  <input
+    type="search"
+    value={search}
+    onChange={handleSearchChange}
+    placeholder="Search products…"
+    className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-10 pr-4 py-3 font-inter text-white text-sm placeholder:text-[var(--muted)] focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all"
+    aria-label="Search products"
+  />
+          </motion.div>
+
+          <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut', delay: 0.07 }}
-            className="mt-6 relative"
+            transition={{ duration: 0.35, ease: 'easeOut', delay: 0.1 }}
+            className="mt-4 flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide"
           >
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--muted)]">
-              <SearchIcon />
+            <button
+              onClick={() => handleCategoryChange(null)}
+              className={[
+                'shrink-0 rounded-full px-3.5 py-1.5 font-syne font-semibold text-xs transition-all border',
+                category === null
+                  ? 'bg-brand border-brand text-white'
+                  : 'border-[var(--border)] text-[var(--muted)] hover:text-white hover:border-brand/40',
+              ].join(' ')}
+            >
+              All
+            </button>
+            {CATEGORY_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => handleCategoryChange(opt.value)}
+                className={[
+                  'shrink-0 rounded-full px-3.5 py-1.5 font-syne font-semibold text-xs transition-all border',
+                  category === opt.value
+                    ? 'bg-brand border-brand text-white'
+                    : 'border-[var(--border)] text-[var(--muted)] hover:text-white hover:border-brand/40',
+                ].join(' ')}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut', delay: 0.13 }}
+            className="mt-6 pt-5 border-t border-[var(--border)] flex flex-wrap items-center gap-x-6 gap-y-2"
+          >
+            <div className="flex items-center gap-2 text-[var(--muted)]">
+              <ShieldIcon />
+              <span className="font-inter text-xs">Secure checkout via Paystack</span>
             </div>
-            <input
-              type="search"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Search products…"
-              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-10 pr-4 py-3 font-inter text-white text-sm placeholder:text-[var(--muted)] focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all"
-              aria-label="Search products"
-            />
+            <div className="flex items-center gap-2 text-[var(--muted)]">
+              <BoltIcon />
+              <span className="font-inter text-xs">Instant digital delivery</span>
+            </div>
+            <div className="flex items-center gap-2 text-[var(--muted)]">
+              <NairaIcon />
+              <span className="font-inter text-xs">Nigerian creators, Naira pricing</span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -151,7 +212,7 @@ export default function DiscoverPage() {
           ].join(' ')}
         >
           {showSkeletons && (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
               {Array.from({ length: 9 }).map((_, i) => (
                 <DiscoverProductCardSkeleton key={i} />
               ))}
@@ -159,7 +220,7 @@ export default function DiscoverPage() {
           )}
 
           {showGrid && (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-1 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
               {products.length === 0 ? (
                 <DiscoverEmptyState search={debouncedSearch} />
               ) : (

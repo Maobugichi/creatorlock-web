@@ -9,10 +9,10 @@ export default function PayoutsPage() {
   const { data: balanceData, isLoading: balanceLoading } = useBalance();
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      <div>
-        <h1 className="text-2xl font-syne font-extrabold">Payouts</h1>
-        <p className="text-sm text-[var(--muted)] mt-1">
+    <div className="max-w-4xl mx-auto px-4 py-10 sm:py-14 space-y-10 sm:space-y-14">
+      <div className="space-y-2">
+        <h1 className="text-3xl sm:text-4xl font-syne font-extrabold tracking-tight">Payouts</h1>
+        <p className="text-sm text-[var(--muted)]">
           Withdraw your earnings to your Nigerian bank account.
         </p>
       </div>

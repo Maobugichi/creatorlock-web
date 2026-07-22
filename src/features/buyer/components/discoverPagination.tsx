@@ -26,7 +26,7 @@ export function DiscoverPagination({ page, totalPages, onPageChange, isFetching 
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1 || isFetching}
-        className="w-9 h-9 rounded-xl border border-[var(--border)] bg-surface flex items-center justify-center text-[var(--muted)] hover:text-white hover:border-brand/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        className="w-11 h-11 rounded-xl border border-[var(--border)] bg-surface flex items-center justify-center text-[var(--muted)] hover:text-white hover:border-brand/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         aria-label="Previous page"
       >
         <ChevronIcon direction="left" />
@@ -34,7 +34,7 @@ export function DiscoverPagination({ page, totalPages, onPageChange, isFetching 
 
       {pages.map((p, i) =>
         p === 'ellipsis' ? (
-          <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center font-mono text-xs text-[var(--muted)]">
+          <span key={`ellipsis-${i}`} className="w-11 h-11 flex items-center justify-center font-mono text-xs text-[var(--muted)]">
             …
           </span>
         ) : (
@@ -43,7 +43,7 @@ export function DiscoverPagination({ page, totalPages, onPageChange, isFetching 
             onClick={() => onPageChange(p)}
             disabled={isFetching}
             className={[
-              'w-9 h-9 rounded-xl border font-mono text-xs transition-all disabled:cursor-not-allowed',
+              'w-11 h-11 rounded-xl border font-mono text-xs transition-all disabled:cursor-not-allowed',
               p === page
                 ? 'bg-brand border-brand text-white font-bold'
                 : 'border-[var(--border)] bg-surface text-[var(--muted)] hover:text-white hover:border-brand/40',
@@ -59,7 +59,7 @@ export function DiscoverPagination({ page, totalPages, onPageChange, isFetching 
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages || isFetching}
-        className="w-9 h-9 rounded-xl border border-[var(--border)] bg-surface flex items-center justify-center text-[var(--muted)] hover:text-white hover:border-brand/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        className="w-11 h-11 rounded-xl border border-[var(--border)] bg-surface flex items-center justify-center text-[var(--muted)] hover:text-white hover:border-brand/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         aria-label="Next page"
       >
         <ChevronIcon direction="right" />

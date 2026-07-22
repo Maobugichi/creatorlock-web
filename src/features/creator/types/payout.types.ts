@@ -1,6 +1,8 @@
 import type { ApiError } from '@/features/auth/types/auth.types';
+import type { Bank, ResolveResponse } from '@/features/shared/types/bank-account.types';
+import type { PayoutStatus } from '@/features/shared/types/payout-status.types';
 
-export type { ApiError };
+export type { ApiError, Bank, ResolveResponse, PayoutStatus };
 
 export interface BalanceResponse {
   total_earned: number;
@@ -8,20 +10,10 @@ export interface BalanceResponse {
   available: number;
 }
 
-export interface Bank {
-  code: string;
-  name: string;
-}
-
-export interface ResolveResponse {
-  account_name: string;
-  account_number: string;
-}
-
 export interface Payout {
   id: string;
   amount_cents: number;
-  status: 'pending' | 'approved' | 'processing' | 'paid' | 'failed' | 'reversed';
+  status: PayoutStatus;
   bank_code: string;
   account_number: string;
   account_name: string;

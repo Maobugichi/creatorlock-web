@@ -1,4 +1,6 @@
+// api.ts
 import axios from "axios";
+import { useToastStore } from "@/store/toast.store";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_URL,
@@ -33,13 +35,30 @@ const redirectToLogin = () => {
   }
 };
 
+const redirectForUnverifiedEmail = (message: string) => {
+  if (typeof window === "undefined") return;
+
+  useToastStore.getState().show(message, "error", "Please verify your email to continue.");
+
+  setTimeout(() => {
+    window.location.href = "/verify-email";
+  }, 1800);
+};
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     if (originalRequest.url?.includes("/auth/refresh")) {
-      //redirectToLogin();
+      return Promise.reject(error);
+    }
+
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.message === "Please verify your email before continuing"
+    ) {
+      redirectForUnverifiedEmail(error.response.data.message);
       return Promise.reject(error);
     }
 

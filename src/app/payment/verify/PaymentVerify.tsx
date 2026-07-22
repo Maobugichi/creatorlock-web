@@ -1,5 +1,4 @@
 
-// app/payment/verify/PaymentVerify.tsx
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';

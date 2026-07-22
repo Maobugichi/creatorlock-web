@@ -1,17 +1,5 @@
 'use client';
-// ─────────────────────────────────────────────
-//  CreatorLock — CheckoutModal
-//  src/components/checkout/CheckoutModal.tsx
-//
-//  Step flow:
-//   1. REVIEW   — price + optional coupon field
-//   2. PAYING   — POST /payments/initiate
-//   3. FREE_OK  — free product claimed, check email
-//   4. ERROR    — surface error with retry
-//
-//  Auth: getAccessToken() from @/lib/api
-//  If no token → redirect /login?next=current URL
-// ─────────────────────────────────────────────
+
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
@@ -27,7 +15,9 @@ interface CheckoutModalProps {
   onClose: () => void;
 }
 
-type Step = 'review' | 'paying' | 'free_ok' | 'error';
+type Step = 'review' | 'email' | 'paying' | 'free_ok' | 'error';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // ── Trap focus inside modal ───────────────────
 function useFocusTrap(active: boolean) {
@@ -59,6 +49,11 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
   // Coupon state
   const [couponResult, setCouponResult] = useState<CouponResult | null>(null);
   const [couponCode, setCouponCode] = useState('');
+
+  // Guest checkout state
+  const [guestEmail, setGuestEmail] = useState('');
+  const [emailInput, setEmailInput] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   // Derived price
   const displayPriceCents = couponResult
@@ -92,15 +87,8 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     setCouponCode('');
   }, []);
 
-  // ── Main purchase handler ─────────────────
-  const handlePurchase = async () => {
-    // Auth gate — must have access token
-   
-    if (!isAuthenticated) {  // was: getAccessToken()
-      router.push(`/login?next=${encodeURIComponent(pathname)}`);
-      return;
-    }
-
+  // ── Submits the actual purchase to the backend ─────
+  const submitPurchase = async (email?: string) => {
     setStep('paying');
     setErrorMsg('');
 
@@ -117,6 +105,10 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
       const affiliateRef = getAffiliateRef();
       if (affiliateRef) {
         payload.affiliate_code = affiliateRef;
+      }
+
+      if (!isAuthenticated && email) {
+        payload.guest_email = email;
       }
 
       const { data } = await api.post<{
@@ -147,6 +139,30 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
       setErrorMsg(msg);
       setStep('error');
     }
+  };
+
+  // ── Main purchase handler (review step CTA) ─────────────────
+  const handlePurchase = async () => {
+    if (!isAuthenticated && !guestEmail) {
+      setStep('email');
+      return;
+    }
+
+    await submitPurchase(guestEmail || undefined);
+  };
+
+  // ── Email step submit ─────────────────
+  const handleEmailSubmit = async () => {
+    const trimmed = emailInput.trim().toLowerCase();
+
+    if (!EMAIL_REGEX.test(trimmed)) {
+      setEmailError('Enter a valid email address');
+      return;
+    }
+
+    setEmailError('');
+    setGuestEmail(trimmed);
+    await submitPurchase(trimmed);
   };
 
   // ── Backdrop click ────────────────────────
@@ -240,21 +256,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
               </div>
             )}
 
-            {/* Auth hint if no token */}
-            {!isAuthenticated && (
-              <div
-                className="flex items-center gap-2.5 rounded-xl border px-4 py-3"
-                style={{ borderColor: 'rgba(251,92,6,0.25)', background: 'rgba(251,92,6,0.06)' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB5C06" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                <p className="font-inter text-xs" style={{ color: 'rgba(251,92,6,0.9)' }}>
-                  You&apos;ll be asked to log in before completing your purchase.
-                </p>
-              </div>
-            )}
-
             {/* CTA */}
             <button
               onClick={handlePurchase}
@@ -270,6 +271,67 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
             <p className="text-center font-inter text-xs" style={{ color: 'var(--muted)' }}>
               Secure checkout · Instant delivery via email
             </p>
+          </>
+        )}
+
+        {/* ══════════════════════════════════════
+            STEP: EMAIL (guest checkout)
+        ══════════════════════════════════════ */}
+        {step === 'email' && (
+          <>
+            <div>
+              <p className="font-inter text-xs mb-1" style={{ color: 'var(--muted)' }}>
+                Almost there
+              </p>
+              <h2 className="font-syne text-lg font-extrabold text-white leading-snug pr-8">
+                Where should we send it?
+              </h2>
+              <p className="mt-1.5 font-inter text-sm" style={{ color: 'var(--muted)' }}>
+                We&apos;ll send your download link and receipt to this email.
+              </p>
+            </div>
+
+            <div>
+              <input
+                type="email"
+                inputMode="email"
+                autoFocus
+                value={emailInput}
+                onChange={(e) => {
+                  setEmailInput(e.target.value);
+                  if (emailError) setEmailError('');
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleEmailSubmit();
+                }}
+                placeholder="you@example.com"
+                className="w-full rounded-xl border px-4 py-3.5 font-inter text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[var(--color-brand)]"
+                style={{ borderColor: emailError ? '#ef4444' : 'var(--border)', background: 'var(--color-surface)' }}
+              />
+              {emailError && (
+                <p className="mt-1.5 font-inter text-xs text-red-400">{emailError}</p>
+              )}
+            </div>
+
+            <button
+              onClick={handleEmailSubmit}
+              type="button"
+              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-white transition-opacity hover:opacity-90 active:opacity-80"
+              style={{ background: 'var(--color-brand)' }}
+            >
+              {isFree || isEffectivelyFree
+                ? 'Claim for Free'
+                : `Pay ${formatNGN(displayPriceCents)}`}
+            </button>
+
+            <button
+              onClick={() => setStep('review')}
+              type="button"
+              className="text-center font-inter text-xs transition-colors hover:text-white"
+              style={{ color: 'var(--muted)' }}
+            >
+              ← Back
+            </button>
           </>
         )}
 

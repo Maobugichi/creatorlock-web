@@ -1,11 +1,4 @@
-// ─────────────────────────────────────────────
-//  CreatorLock — Store & Buyer Type Definitions
-//  src/types/store.ts
-//  NOTE: Dashboard types live in their own file — do not merge.
-//  All field names mirror the exact backend DB columns.
-// ─────────────────────────────────────────────
 
-// Mirrors creator_profiles table row
 export interface CreatorProfile {
   id: string;
   user_id: string;

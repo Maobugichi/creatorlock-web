@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar, { creatorNavItems } from "@/components/layout/sidebar";
+import Sidebar, { creatorNavSections, withAffiliateNavItem } from "@/components/layout/sidebar";
 import Topbar from "@/components/layout/topbar";
+import { useAffiliateStats } from "@/features/affiliates/api/useAffiliateStats";
 
 export default function DashboardLayout({
   children,
@@ -12,12 +13,18 @@ export default function DashboardLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const { data: affiliateStats } = useAffiliateStats();
+  const navSections = withAffiliateNavItem(
+    creatorNavSections,
+    (affiliateStats?.affiliates?.length ?? 0) > 0
+  );
+
   return (
     <div className="flex h-screen bg-[#0C0C0C] overflow-hidden font-inter">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}
-        navItems={creatorNavItems}
+        navSections={navSections}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />

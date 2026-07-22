@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
-import type { ApiError } from '../types/affiliate.types';
+import type { ApiError } from '../../affiliates/types/affiliate.types';
 
 interface InvitePayload {
   affiliate_email: string;

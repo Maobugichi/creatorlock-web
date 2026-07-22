@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import Providers from "@/components/providers";
+import { GlobalToasts } from "@/components/ui/globalToast";
 import { Syne, Inter, Space_Mono } from "next/font/google";
 
 const syne = Syne({
@@ -21,11 +22,14 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
+
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${syne.variable} ${inter.variable} ${spaceMono.variable}`}>
       <body>
         <Providers>{children}</Providers>
+        <GlobalToasts/>
         </body>
     </html>
   );

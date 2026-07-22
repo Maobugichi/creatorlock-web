@@ -33,3 +33,28 @@ export function useUpdateBuyerProfile() {
 
   return { ...mutation, errorMessage };
 }
+
+interface UpgradeToCreatorFields {
+  storeSlug: string;
+}
+
+interface UpgradeToCreatorResponse {
+  user: { id: string; email: string; role: string; name: string };
+}
+
+export function useUpgradeToCreator() {
+  const mutation = useMutation({
+    mutationFn: async (fields: UpgradeToCreatorFields) => {
+      const res = await api.post<UpgradeToCreatorResponse>(
+        '/auth/upgrade-to-creator',
+        fields
+      );
+      return res.data;
+    },
+  });
+
+  const errorMessage =
+    (mutation.error as ApiError)?.response?.data?.message ?? 'Something went wrong. Try again.';
+
+  return { ...mutation, errorMessage };
+}

@@ -1,7 +1,7 @@
 // src/lib/affiliateRef.ts
 
 const STORAGE_KEY = 'cl_ref';
-const EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; 
 
 export const saveAffiliateRef = (code: string) => {
   try {

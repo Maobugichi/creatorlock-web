@@ -1,15 +1,14 @@
-// ─────────────────────────────────────────────
-//  CreatorLock — ProductGrid
-//  src/components/store/ProductGrid.tsx
-//  Server Component
-// ─────────────────────────────────────────────
+
 import { ProductWithFiles } from '@/types/store';
 import ProductCard from './ProductCard';
+import StorePagination from '@/features/buyer/components/storePagination';
 
 interface ProductGridProps {
   products: ProductWithFiles[];
   storeSlug: string;
   total: number;
+  page: number;
+  totalPages: number;
 }
 
 const EmptyState = () => (
@@ -34,7 +33,7 @@ const EmptyState = () => (
   </div>
 );
 
-export default function ProductGrid({ products, storeSlug, total }: ProductGridProps) {
+export default function ProductGrid({ products, storeSlug, total , page, totalPages }: ProductGridProps) {
   // Backend already filters status = 'published' in listProductsByCreator
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -56,6 +55,7 @@ export default function ProductGrid({ products, storeSlug, total }: ProductGridP
           ))
         )}
       </div>
+      <StorePagination page={page} totalPages={totalPages} />
     </section>
   );
 }

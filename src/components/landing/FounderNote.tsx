@@ -42,7 +42,7 @@ export default function FounderNote() {
             </div>
             <div className="flex flex-col">
               <span className="font-syne font-bold text-sm text-white">
-                Founder Name
+                Maobugichi
               </span>
               <span className="font-mono text-xs text-white/30">
                 Founder, CreatorLock · Lagos

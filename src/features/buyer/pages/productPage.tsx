@@ -13,17 +13,26 @@ interface PageProps {
 }
 
 async function getProduct(productId: string): Promise<ProductWithFiles | null> {
+  const url = `${process.env.NEXT_PUBLIC_URL}/products/${productId}`;
+  console.log('[getProduct] fetching', url);
+
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/products/${productId}`,
-      { next: { revalidate: 60 } },
-    );
-    if (res.status === 404) return null;
+    const res = await fetch(url, { next: { revalidate: 60 } });
+
+    if (res.status === 404) {
+      console.log('[getProduct] backend 404 for', productId);
+      return null;
+    }
     if (!res.ok) throw new Error(`Product fetch failed: ${res.status}`);
+
     const json = await res.json();
-    if (!json.success) return null;
+    if (!json.success) {
+      console.log('[getProduct] backend success=false', json);
+      return null;
+    }
     return json.data as ProductWithFiles;
-  } catch {
+  } catch (err) {
+    console.error('[getProduct] threw', err);
     return null;
   }
 }
@@ -59,6 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductPage({ params }: PageProps) {
   const { productId, slug } = await params;
+
   const product = await getProduct(productId);
 
   if (!product) notFound();

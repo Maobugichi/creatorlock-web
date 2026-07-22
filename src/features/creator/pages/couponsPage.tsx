@@ -1,3 +1,4 @@
+// CouponsPage.tsx
 'use client';
 
 import { useCoupons } from '../api/useCoupon';
@@ -18,8 +19,6 @@ export default function CouponsPage() {
         </p>
       </div>
 
-      <CreateCouponForm />
-
       <div className="space-y-3">
         <h2 className="font-syne font-bold text-lg">Your coupons</h2>
 
@@ -36,7 +35,7 @@ export default function CouponsPage() {
             <div className="flex flex-col items-center justify-center py-14 px-6 text-center space-y-2">
               <p className="font-syne font-semibold text-white">No coupons yet</p>
               <p className="text-sm text-[var(--muted)]">
-                Create your first coupon above to start offering discounts.
+                Create your first coupon below to start offering discounts.
               </p>
             </div>
           )}
@@ -50,6 +49,8 @@ export default function CouponsPage() {
           )}
         </div>
       </div>
+
+      <CreateCouponForm />
     </div>
   );
 }

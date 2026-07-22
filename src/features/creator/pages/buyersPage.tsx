@@ -381,7 +381,7 @@ export default function BuyersPage() {
           }
         </div>
 
-        {/* Spacer so floating bar doesn't obscure the last row */}
+       
        <div className="h-20" aria-hidden/>
       </div>
 

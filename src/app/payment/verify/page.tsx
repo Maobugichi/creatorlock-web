@@ -1,4 +1,3 @@
-// app/payment/verify/page.tsx
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import PaymentVerify from './PaymentVerify';
@@ -10,8 +9,6 @@ interface Props {
 export default async function PaymentVerifyPage({ searchParams }: Props) {
   const { reference } = await searchParams
   if (!reference) redirect('/');  
-
-  console.log(searchParams);
 
   return (
     <Suspense fallback={

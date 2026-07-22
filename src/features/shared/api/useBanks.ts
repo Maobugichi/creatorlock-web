@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/api';
-import type { Bank } from '../types/payout.types';
+import type { Bank } from '../types/bank-account.types';
 
-export const BANKS_KEY = ['payouts', 'banks'] as const;
+export const BANKS_KEY = ['shared', 'banks'] as const;
 
 export function useBanks() {
   const query = useQuery<{ banks: Bank[] }>({

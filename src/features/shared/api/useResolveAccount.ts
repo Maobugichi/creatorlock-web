@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '@/lib/api';
-import type { ResolveResponse } from '../types/payout.types';
+import type { ResolveResponse } from '../types/bank-account.types';
 
 export function useResolveAccount(onResolved: (name: string) => void, onReset: () => void) {
   return useMutation({

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
-import type { ProductDraft } from "../types/product.types";
+import type { ProductCategory, ProductDraft } from "../types/product.types";
 
 // ─── Step 1: Create draft ─────────────────────────────────────────────────────
 
@@ -8,6 +8,7 @@ interface CreateDraftPayload {
   title: string;
   price_cents: number;
   description?: string;
+  category?: ProductCategory;
 }
 
 export function useCreateDraft() {
@@ -19,7 +20,7 @@ export function useCreateDraft() {
   });
 }
 
-// ─── Step 2: Upload digital file ──────────────────────────────────────────────
+
 
 export function useUploadFile() {
   return useMutation({
