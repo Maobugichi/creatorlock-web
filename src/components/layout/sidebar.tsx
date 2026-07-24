@@ -181,9 +181,7 @@ export const affiliateDashboardNavItem: NavItem = {
   ),
 };
 
-// Returns a new NavSection[] with the affiliate item appended to the first
-// (unlabeled) section — never mutates the shared exported arrays, since
-// those are module-level constants reused across every user's session.
+
 export function withAffiliateNavItem(
   sections: NavSection[],
   hasAffiliateAccess: boolean
@@ -455,3 +453,21 @@ export default function Sidebar({
     </>
   );
 }
+
+export const adminNavSections: NavSection[] = [
+  {
+    items: [
+      {
+        label: "Payouts",
+        href: "/admin/payouts",
+        icon: (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+            <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
+            <path d="M6 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        ),
+      },
+    ],
+  },
+];

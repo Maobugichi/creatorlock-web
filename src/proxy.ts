@@ -25,11 +25,17 @@ async function getSession(token: string | undefined): Promise<SessionPayload | n
   }
 }
 
+function getDefaultRoute(role: string | undefined) {
+  if (role === "creator") return "/dashboard";
+  if (role === "admin") return "/admin-payouts";
+  return "/discover";
+}
+
 const CREATOR_ONLY = [
   "/dashboard", "/products", "/payouts",
   "/affiliates", "/coupons", "/subscribers", "/settings",
 ];
-const ADMIN_ONLY = ["/admin"];
+const ADMIN_ONLY = ["/admin-payouts"];
 const LOGIN_REQUIRED = ["/library"];
 const BUYER_ONLY = ["/profile"];
 const AUTH_ROUTES = ["/login", "/signup", "/forgot-password", "/reset-password"];
@@ -44,8 +50,7 @@ export async function proxy(request: NextRequest) {
 
   if (pathname === "/") {
     if (needsOnboarding) return NextResponse.redirect(new URL("/onboarding", request.url));
-    if (session?.role === "creator") return NextResponse.redirect(new URL("/dashboard", request.url));
-    if (session?.role === "buyer") return NextResponse.redirect(new URL("/discover", request.url));
+    if (session) return NextResponse.redirect(new URL(getDefaultRoute(session.role), request.url));
     return NextResponse.next();
   }
 
@@ -69,7 +74,7 @@ export async function proxy(request: NextRequest) {
     if (needsOnboarding) return NextResponse.redirect(new URL("/onboarding", request.url));
     if (needsVerification) return NextResponse.redirect(new URL("/verify-email", request.url));
     if (session.role !== "creator") {
-      return NextResponse.redirect(new URL("/discover", request.url));
+      return NextResponse.redirect(new URL(getDefaultRoute(session.role), request.url));
     }
     return NextResponse.next();
   }
@@ -89,8 +94,8 @@ export async function proxy(request: NextRequest) {
     }
     if (needsOnboarding) return NextResponse.redirect(new URL("/onboarding", request.url));
     if (needsVerification) return NextResponse.redirect(new URL("/verify-email", request.url));
-    if (session.role === "creator") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (session.role !== "buyer") {
+      return NextResponse.redirect(new URL(getDefaultRoute(session.role), request.url));
     }
     return NextResponse.next();
   }
@@ -108,8 +113,7 @@ export async function proxy(request: NextRequest) {
   if (isAuthRoute && session) {
     if (needsOnboarding) return NextResponse.redirect(new URL("/onboarding", request.url));
     if (needsVerification) return NextResponse.redirect(new URL("/verify-email", request.url));
-    const dest = session.role === "creator" ? "/dashboard" : "/discover";
-    return NextResponse.redirect(new URL(dest, request.url));
+    return NextResponse.redirect(new URL(getDefaultRoute(session.role), request.url));
   }
 
   return NextResponse.next();

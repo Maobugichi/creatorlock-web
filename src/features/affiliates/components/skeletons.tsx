@@ -1,7 +1,7 @@
 export function SummarySkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {[0, 2].map((i) => (
+      {[0, 1, 2].map((i) => (
         <div key={i} className="bg-surface border border-[var(--border)] rounded-2xl p-5 space-y-3">
           <div className="h-3.5 w-28 bg-white/[0.03] rounded-xl animate-pulse" />
           <div className="h-7 w-40 bg-white/[0.03] rounded-xl animate-pulse" />
@@ -25,7 +25,12 @@ export function AffiliateRowSkeleton() {
         <div className="h-3.5 w-10 bg-white/[0.03] rounded-xl animate-pulse" />
         <div className="h-3.5 w-20 bg-white/[0.03] rounded-xl animate-pulse" />
         <div className="h-6 w-16 bg-white/[0.03] rounded-xl animate-pulse" />
-        <div className="h-7 w-16 bg-white/[0.03] rounded-xl animate-pulse" />
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-white/[0.03] rounded-lg animate-pulse" />
+          <div className="h-7 w-16 bg-white/[0.03] rounded-lg animate-pulse" />
+          <div className="h-7 w-20 bg-white/[0.03] rounded-lg animate-pulse" />
+          <div className="w-8 h-8 bg-white/[0.03] rounded-lg animate-pulse" />
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,12 @@ import api from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import type { ApiError, LoginInput, LoginResponse } from "../types/auth.types";
 
+function getDefaultRoute(role: string) {
+  if (role === "creator") return "/dashboard";
+  if (role === "admin") return "/admin-payouts";
+  return "/discover";
+}
+
 export function useLogin() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -13,9 +19,9 @@ export function useLogin() {
     mutationFn: (data: LoginInput) =>
       api.post<LoginResponse>("/auth/login", data).then((r) => r.data),
     onSuccess: (data) => {
-      setUser(data.user); 
+      setUser(data.user);
       const next = searchParams.get("next");
-      router.push(next ?? (data.user.role === "creator" ? "/dashboard" : "/discover"));
+      router.push(next ?? getDefaultRoute(data.user.role));
     },
   });
 
