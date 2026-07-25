@@ -116,14 +116,14 @@ export function CreateCouponForm() {
             />
           </div>
 
-          <div className="space-y-1.5 sm:col-span-2">
+          <div className="space-y-1.5">
             <label htmlFor="expires_at" className="text-xs text-[var(--muted)] uppercase tracking-widest block">
               Expiry date <span className="normal-case text-[var(--muted)]">(optional)</span>
             </label>
             <input
               id="expires_at" name="expires_at" type="date"
               min={new Date().toISOString().split('T')[0]}
-              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 focus:ring-2 focus:ring-brand/20 transition-colors"
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 focus:ring-2 focus:ring-brand/20 transition-colors [color-scheme:dark]"
             />
           </div>
         </div>
