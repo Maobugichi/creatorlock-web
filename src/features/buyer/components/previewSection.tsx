@@ -74,10 +74,10 @@ export default function PreviewSection({ preview }: PreviewSectionProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 8 }}
               transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-lg -translate-y-1/2 rounded-2xl border sm:inset-x-auto"
+              className="fixed inset-x-4 top-1/2 z-50 mx-auto flex max-h-[85vh] max-w-lg -translate-y-1/2 flex-col overflow-hidden rounded-2xl border sm:inset-x-auto"
               style={{ background: 'var(--color-surface)', borderColor: 'var(--border)' }}
             >
-              <div className="flex items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex shrink-0 items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
                 <h2 className="font-syne text-sm font-bold text-white">{label}</h2>
                 <button
                   type="button"
@@ -90,10 +90,10 @@ export default function PreviewSection({ preview }: PreviewSectionProps) {
                 </button>
               </div>
 
-              <div className="p-5">
+              <div className="overflow-y-auto p-5">
                 {preview.category === 'document' && (
                   <div className="overflow-hidden rounded-xl border" style={{ borderColor: 'var(--border)' }}>
-                    <iframe src={`${preview.url}#toolbar=0`} className="h-[70vh] w-full" title="Preview" />
+                    <iframe src={`${preview.url}#toolbar=0`} className="h-[55vh] w-full" title="Preview" />
                   </div>
                 )}
 

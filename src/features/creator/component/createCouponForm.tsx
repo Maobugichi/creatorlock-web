@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { useCreateCoupon } from '../api/useCreateCoupon';
 import { extractApiError } from '../utils/coupon.utils';
 import type { CreateCouponPayload } from '../types/coupon.types';
+import DatePicker from '@/components/ui/datePicker';
 
 export function CreateCouponForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -116,16 +117,12 @@ export function CreateCouponForm() {
             />
           </div>
 
-          <div className="space-y-1.5 min-w-0">
-            <label htmlFor="expires_at" className="text-xs text-[var(--muted)] uppercase tracking-widest block">
-              Expiry date <span className="normal-case text-[var(--muted)]">(optional)</span>
-            </label>
-            <input
-              id="expires_at" name="expires_at" type="date"
-              min={new Date().toISOString().split('T')[0]}
-              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 focus:ring-2 focus:ring-brand/20 transition-colors [color-scheme:dark]"
-            />
-          </div>
+          <div className="space-y-1.5">
+          <label className="text-xs text-[var(--muted)] uppercase tracking-widest block">
+            Expiry date <span className="normal-case text-[var(--muted)]">(optional)</span>
+          </label>
+          <DatePicker name="expires_at" minDate={new Date().toISOString().split('T')[0]} />
+        </div>
         </div>
 
         <button
