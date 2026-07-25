@@ -116,7 +116,7 @@ export function CreateCouponForm() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 min-w-0">
             <label htmlFor="expires_at" className="text-xs text-[var(--muted)] uppercase tracking-widest block">
               Expiry date <span className="normal-case text-[var(--muted)]">(optional)</span>
             </label>
