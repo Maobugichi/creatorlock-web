@@ -25,12 +25,10 @@ export default function DiscoverLayout({
   const mounted = useHasMounted();
   const user = useAuthStore((s) => s.user);
 
-  // Hook must be called unconditionally (before any early return) per rules
-  // of hooks — disabled via `enabled` until we know there's a real session,
-  // so logged-out visitors browsing Discover never fire an authenticated request.
+  
   const { data: affiliateStats } = useAffiliateStats(mounted && !!user?.role);
 
-  // Not mounted yet, or no session at all — render bare content (e.g. logged-out visitor browsing Discover)
+ 
   if (!mounted || !user?.role) return <>{children}</>;
 
   const baseNavSections = user.role === "creator" ? creatorNavSections : buyerNavSections;
@@ -40,7 +38,7 @@ export default function DiscoverLayout({
   );
 
   return (
-    <div className="flex h-screen bg-[#0C0C0C] overflow-hidden font-inter">
+    <div className="flex h-dvh bg-[#0C0C0C] overflow-hidden font-inter">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}

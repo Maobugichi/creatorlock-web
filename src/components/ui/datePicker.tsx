@@ -74,7 +74,7 @@ export default function DatePicker({ name, minDate, placeholder = 'Select date' 
 
       {open && (
         <div
-          className="absolute z-50 mt-2 w-72 rounded-2xl border p-4 shadow-xl"
+          className="absolute z-50 bottom-full mb-2 left-0 w-72 rounded-2xl border p-4 shadow-xl"
           style={{ background: '#111', borderColor: 'var(--border)' }}
         >
           <div className="flex items-center justify-between mb-3">
