@@ -17,18 +17,40 @@ export default function ExistingFileList({ files, onDelete, isDeleting }: Existi
       {files.map((f) => (
         <li
           key={f.id}
-          className="flex items-center gap-3 bg-white/[0.03] border border-[var(--border)] rounded-xl px-4 py-3"
+          className={`flex items-center gap-3 border rounded-xl px-4 py-3 ${
+            f.is_preview
+              ? "bg-brand/[0.04] border-brand/20"
+              : "bg-white/[0.03] border-[var(--border)]"
+          }`}
         >
-          <div className="w-8 h-8 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0">
-            <svg className="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
+          <div
+            className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+              f.is_preview ? "bg-brand/10 border border-brand/20" : "bg-white/[0.05]"
+            }`}
+          >
+            {f.is_preview ? (
+              <svg className="w-4 h-4 text-brand" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            )}
           </div>
 
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-white font-inter truncate">
-              {f.original_name ?? f.public_id}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-white font-inter truncate">
+                {f.original_name ?? f.public_id}
+              </p>
+              {f.is_preview && (
+                <span className="shrink-0 text-[10px] font-syne font-bold text-brand bg-brand/10 border border-brand/20 rounded-md px-1.5 py-0.5 uppercase tracking-wide">
+                  Preview
+                </span>
+              )}
+            </div>
             <p className="text-xs text-white/30 font-mono">
               {f.size ? formatFileSize(f.size) : "Unknown size"}
               {f.category && <span className="ml-2 opacity-60">{f.category}</span>}

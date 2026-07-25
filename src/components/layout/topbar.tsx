@@ -9,8 +9,6 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 
-// ─── Types (adjust field names to match your actual API shape) ───────────────
-
 interface Notification {
   id: string;
   type: string;
@@ -21,8 +19,6 @@ interface Notification {
   created_at: string;
 }
 
-// ─── Page title map ───────────────────────────────────────────────────────────
-
 const pageTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/products": "Products",
@@ -32,8 +28,6 @@ const pageTitles: Record<string, string> = {
   "/subscribers": "Subscribers",
   "/settings": "Settings",
 };
-
-// ─── Notification bell + dropdown ─────────────────────────────────────────────
 
 function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -177,8 +171,6 @@ function NotificationBell() {
   );
 }
 
-// ─── Topbar ───────────────────────────────────────────────────────────────────
-
 export default function Topbar({
   onMobileMenuOpen,
 }: {
@@ -194,8 +186,6 @@ export default function Topbar({
 
   return (
     <header className="h-14 flex items-center justify-between px-4 md:px-6 border-b border-white/[0.06] bg-[#0C0C0C] flex-shrink-0">
-
-      {/* Left — mobile menu + page title */}
       <div className="flex items-center gap-3">
         <button
           onClick={onMobileMenuOpen}
@@ -204,13 +194,11 @@ export default function Topbar({
           <List size={22} weight="bold" />
         </button>
 
-        {/* Desktop page title */}
         <h1 className="hidden md:block font-syne font-bold text-lg text-white tracking-tight">
           {title}
         </h1>
       </div>
 
-      {/* Right — actions */}
       <div className="flex items-center gap-2">
         <NotificationBell />
       </div>

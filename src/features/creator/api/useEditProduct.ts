@@ -30,20 +30,18 @@ export function usePatchEditProduct(productId: string) {
   });
 }
 
-// ─── Upload new digital file ──────────────────────────────────────────────────
-
 export function useUploadEditFile(productId: string) {
   return useMutation({
-    mutationFn: (file: File) => {
+    mutationFn: ({ file, isPreview }: { file: File; isPreview?: boolean }) => {
       const form = new FormData();
       form.append("file", file);
+      if (isPreview) form.append("isPreview", "true");
       return api.post(`/products/${productId}/files`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
     },
   });
 }
-
 // ─── Delete existing digital file ────────────────────────────────────────────
 
 export function useDeleteFile(productId: string) {

@@ -7,6 +7,7 @@ import { formatNGN, formatDate } from '@/lib/utils';
 import CheckoutButton from '@/components/checkout/CheckoutButton';
 import CaptureAffiliateRef from '@/components/store/CaptureAffiliateRef';
 import FileRow from '@/features/buyer/components/fileRow';
+import PreviewSection from '../components/previewSection';
 
 interface PageProps {
   params: Promise<{ slug: string; productId: string }>;
@@ -128,6 +129,7 @@ export default async function ProductPage({ params }: PageProps) {
               </div>
             )}
 
+            <PreviewSection preview={product.preview} />
             {hasFiles && (
               <div>
                 <h2 className="mb-3 font-syne text-sm font-bold text-white">

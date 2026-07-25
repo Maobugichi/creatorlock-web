@@ -54,6 +54,7 @@ export interface ProductFile {
   format: string | null;
   size: number | null;
   category: string | null;
+  is_preview: boolean;
   original_name: string | null;
   created_at: string;
 }

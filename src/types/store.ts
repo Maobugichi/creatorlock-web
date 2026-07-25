@@ -48,13 +48,15 @@ export interface ProductFile {
   category: string | null;
   original_name: string | null;
   created_at: string;
+ 
 }
 
 export interface ProductWithFiles extends Product {
   files: ProductFile[];
+  preview: ProductFile | null;
 }
 
-// GET /store/:slug → data envelope
+
 export interface StoreData {
   profile: CreatorProfile;
   products: ProductWithFiles[];

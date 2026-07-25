@@ -9,6 +9,7 @@ import ExistingFileList from "./existingFileList";
 import type { EditProduct, SelectedFile, SaveStage, ApiError } from "../types/product.types";
 import type { ProductCategory } from "../types/product.types";
 import { CATEGORY_OPTIONS } from "../types/product.types";
+import PreviewUpload from "./productPreview";
 
 
 const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024; 
@@ -35,6 +36,8 @@ export default function ProductForm({
   const [error, setError] = useState<string | null>(null);
   const [saveStage, setSaveStage] = useState<SaveStage>("idle");
   const [category, setCategory] = useState<ProductCategory>(product.category ?? "other");
+
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
 
   const patchMutation = usePatchEditProduct(productId);
   const uploadFileMutation = useUploadEditFile(productId);
@@ -84,12 +87,17 @@ export default function ProductForm({
       setThumbnailPreview(null);
 
       if (newFiles.length > 0) {
-        setSaveStage("uploading");
-        for (const sf of newFiles) {
-          await uploadFileMutation.mutateAsync(sf.file);
-        }
-        setNewFiles([]);
+      setSaveStage("uploading");
+      for (const sf of newFiles) {
+        await uploadFileMutation.mutateAsync({ file: sf.file });
       }
+      setNewFiles([]);
+    }
+    if (previewFile) {
+      setSaveStage("uploading");
+      await uploadFileMutation.mutateAsync({ file: previewFile, isPreview: true });
+      setPreviewFile(null);
+    }
 
       setSaveStage("idle");
     } catch (err) {
@@ -249,6 +257,12 @@ export default function ProductForm({
           files={newFiles}
           onAdd={handleAddFiles}
           onRemove={handleRemoveNewFile}
+        />
+
+        <PreviewUpload
+          file={previewFile}
+          onChange={setPreviewFile}
+          onRemove={() => setPreviewFile(null)}
         />
       </div>
 

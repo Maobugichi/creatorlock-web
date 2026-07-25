@@ -10,6 +10,7 @@ import type { SelectedFile, SubmitStage, ApiError } from "../types/product.types
 import type { Product, ProductStatus } from "@/types/store";
 import type { ProductCategory } from "../types/product.types";
 import { CATEGORY_OPTIONS } from "../types/product.types";
+import PreviewUpload from "../component/productPreview";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function NewProductPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitStage, setSubmitStage] = useState<SubmitStage>("idle");
   const [category, setCategory] = useState<ProductCategory>("other");
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
 
   const createDraft = useCreateDraft();
   const uploadFile = useUploadFile();
@@ -69,6 +71,12 @@ export default function NewProductPage() {
       setSubmitStage("uploading");
       for (const sf of digitalFiles) {
         await uploadFile.mutateAsync({ productId: draft.id, file: sf.file });
+      }
+
+     
+
+      if (previewFile) {
+        await uploadFile.mutateAsync({ productId: draft.id, file: previewFile, isPreview: true });
       }
 
       
@@ -216,6 +224,12 @@ export default function NewProductPage() {
 
         {/* Digital files */}
         <FileDropZone files={digitalFiles} onAdd={handleAddFiles} onRemove={handleRemoveFile} />
+
+        <PreviewUpload
+          file={previewFile}
+          onChange={setPreviewFile}
+          onRemove={() => setPreviewFile(null)}
+        />
 
         <div className="border-t border-[var(--border)]" />
 

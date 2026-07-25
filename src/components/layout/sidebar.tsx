@@ -8,8 +8,6 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { X } from "@phosphor-icons/react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export type NavItem = {
   label: string;
   href: string;
@@ -20,8 +18,6 @@ export type NavSection = {
   label?: string;
   items: NavItem[];
 };
-
-// ─── Nav items ────────────────────────────────────────────────────────────────
 
 export const creatorNavSections: NavSection[] = [
   {
@@ -169,8 +165,6 @@ export const buyerNavSections: NavSection[] = [
   },
 ];
 
-// ─── Add near the other nav item definitions in sidebar.tsx ────────────────
-
 export const affiliateDashboardNavItem: NavItem = {
   label: "Affiliate Earnings",
   href: "/affiliate/dashboard",
@@ -180,7 +174,6 @@ export const affiliateDashboardNavItem: NavItem = {
     </svg>
   ),
 };
-
 
 export function withAffiliateNavItem(
   sections: NavSection[],
@@ -194,8 +187,6 @@ export function withAffiliateNavItem(
       : section
   );
 }
-
-// ─── Nav item ─────────────────────────────────────────────────────────────────
 
 function NavItem({
   item,
@@ -258,8 +249,6 @@ function NavItem({
     </Link>
   );
 }
-
-// ─── Shared nav content ───────────────────────────────────────────────────────
 
 function NavContent({
   navSections,
@@ -354,8 +343,6 @@ function NavContent({
   );
 }
 
-// ─── Sidebar ──────────────────────────────────────────────────────────────────
-
 export default function Sidebar({
   collapsed,
   onToggle,
@@ -371,7 +358,6 @@ export default function Sidebar({
 }) {
   return (
     <>
-      {/* ── Desktop sidebar ───────────────────────────────────────────── */}
       <motion.aside
         animate={{ width: collapsed ? 68 : 240 }}
         transition={{ type: "spring", stiffness: 400, damping: 35 }}
@@ -406,7 +392,6 @@ export default function Sidebar({
         <NavContent navSections={navSections} collapsed={collapsed} />
       </motion.aside>
 
-      {/* ── Mobile drawer ─────────────────────────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
           <>

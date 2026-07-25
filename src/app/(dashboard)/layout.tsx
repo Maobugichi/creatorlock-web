@@ -20,7 +20,7 @@ export default function DashboardLayout({
   );
 
   return (
-    <div className="flex h-screen bg-[#0C0C0C] overflow-hidden font-inter">
+    <div className="flex h-dvh bg-[#0C0C0C] overflow-hidden font-inter">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}

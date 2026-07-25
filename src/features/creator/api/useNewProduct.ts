@@ -24,9 +24,18 @@ export function useCreateDraft() {
 
 export function useUploadFile() {
   return useMutation({
-    mutationFn: ({ productId, file }: { productId: string; file: File }) => {
+    mutationFn: ({
+      productId,
+      file,
+      isPreview,
+    }: {
+      productId: string;
+      file: File;
+      isPreview?: boolean;
+    }) => {
       const form = new FormData();
       form.append("file", file);
+      if (isPreview) form.append("isPreview", "true");
       return api.post(`/products/${productId}/files`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
