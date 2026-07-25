@@ -1,1 +1,10 @@
-export { default } from "@/features/auth/pages/verifyEmailPage";
+import { Suspense } from "react";
+import VerifyEmailPage from "@/features/auth/pages/verifyEmailPage";
+
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyEmailPage />
+    </Suspense>
+  );
+}
