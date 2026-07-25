@@ -2,6 +2,7 @@
 import { ProductWithFiles } from '@/types/store';
 import ProductCard from './ProductCard';
 import StorePagination from '@/features/buyer/components/storePagination';
+import { Suspense } from 'react';
 
 interface ProductGridProps {
   products: ProductWithFiles[];
@@ -55,7 +56,9 @@ export default function ProductGrid({ products, storeSlug, total , page, totalPa
           ))
         )}
       </div>
-      <StorePagination page={page} totalPages={totalPages} />
+       <Suspense fallback={null}>
+        <StorePagination page={page} totalPages={totalPages} />
+      </Suspense>
     </section>
   );
 }

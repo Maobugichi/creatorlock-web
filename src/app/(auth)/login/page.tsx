@@ -1,1 +1,11 @@
-export { default } from "@/features/auth/pages/loginPage";
+
+import { Suspense } from "react";
+import LoginPage from "@/features/auth/pages/loginPage";
+
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPage />
+    </Suspense>
+  );
+}

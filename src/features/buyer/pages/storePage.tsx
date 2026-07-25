@@ -4,6 +4,7 @@ import type { StoreData } from '@/types/store';
 import StoreHeader from '@/components/store/StoreHeader';
 import ProductGrid from '@/components/store/ProductGrid';
 import CaptureAffiliateRef from '@/components/store/CaptureAffiliateRef';
+import { Suspense } from 'react';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -76,7 +77,9 @@ export default async function StorePage({ params, searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--bg)' }} aria-label={`${profile.display_name}'s store`}>
-      <CaptureAffiliateRef />
+      <Suspense fallback={null}>
+        <CaptureAffiliateRef />
+      </Suspense>
       <StoreHeader profile={profile} productCount={total} />
       <ProductGrid products={products} storeSlug={slug} total={total} page={page} totalPages={totalPages}/>
     </main>
