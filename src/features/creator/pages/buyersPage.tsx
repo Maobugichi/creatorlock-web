@@ -10,8 +10,6 @@ import { BuyerEmailDrawer } from '../component/buyerEmailDrawer';
 import { MagnifyingGlass, X, FunnelSimple } from '@phosphor-icons/react';
 import type { BuyerRow } from '../types/buyer.types';
 
-// ─── Filter types ─────────────────────────────────────────────────────────────
-
 type SpendFilter = 'all' | 'under_5k' | '5k_to_50k' | 'over_50k';
 type OrderFilter = 'all' | 'one' | 'two_to_five' | 'over_five';
 
@@ -36,8 +34,6 @@ const ORDER_OPTIONS: { value: OrderFilter; label: string }[] = [
 
 const DEFAULT_FILTERS: Filters = { spend: 'all', orders: 'all' };
 
-// ─── Filtering logic ──────────────────────────────────────────────────────────
-
 function applyFilters(buyers: BuyerRow[], search: string, filters: Filters): BuyerRow[] {
   const q = search.trim().toLowerCase();
 
@@ -60,22 +56,16 @@ function applyFilters(buyers: BuyerRow[], search: string, filters: Filters): Buy
   });
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function BuyersPage() {
   const { buyers, isLoading, isError } = useBuyers();
 
-  // Selection
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [drawerOpen, setDrawerOpen]   = useState(false);
 
-  // Search + filter
   const [search, setSearch]           = useState('');
   const [filters, setFilters]         = useState<Filters>(DEFAULT_FILTERS);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const searchRef                     = useRef<HTMLInputElement>(null);
-
-  // ─── Derived state ────────────────────────────────────────────────────────
 
   const filteredBuyers = useMemo(
     () => applyFilters(buyers, search, filters),
@@ -100,8 +90,6 @@ export default function BuyersPage() {
   const someVisibleSelected = filteredBuyers.some((b) => selectedIds.has(b.buyer_id));
   const someSelected        = selectedIds.size > 0;
 
-  // ─── Selection handlers ───────────────────────────────────────────────────
-
   const toggleBuyer = useCallback((id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -124,32 +112,25 @@ export default function BuyersPage() {
 
   const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
 
-  // ─── Drawer handlers ──────────────────────────────────────────────────────
-
   const handleDrawerClose = useCallback(() => setDrawerOpen(false), []);
   const handleSendSuccess = useCallback(() => {
     clearSelection();
     setDrawerOpen(false);
   }, [clearSelection]);
 
-  // ─── Filter handlers ──────────────────────────────────────────────────────
-
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
     setSearch('');
   }, []);
 
-  // ─── Render ───────────────────────────────────────────────────────────────
-
   return (
     <>
       <div className="space-y-6">
 
-        {/* Page header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-white font-syne font-extrabold text-2xl">Buyers</h1>
-            <p className="text-[var(--muted)] text-sm mt-1">
+            <h1 className="text-surface-foreground font-syne font-extrabold text-2xl">Buyers</h1>
+            <p className="text-muted-foreground text-sm mt-1">
               Everyone who has purchased your products.
             </p>
           </div>
@@ -160,7 +141,6 @@ export default function BuyersPage() {
           )}
         </div>
 
-        {/* Summary cards */}
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[0, 1, 2].map((i) => <SummaryCardSkeleton key={i} />)}
@@ -169,29 +149,25 @@ export default function BuyersPage() {
           <SummaryCards buyers={buyers} />
         ) : null}
 
-        {/* Buyer list */}
-        <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
+        <div className="bg-surface border border-border rounded-2xl overflow-hidden">
 
-          {/* List header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
-            <h2 className="text-white font-syne font-bold text-base">Buyer List</h2>
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+            <h2 className="text-surface-foreground font-syne font-bold text-base">Buyer List</h2>
             {!isLoading && buyers.length > 0 && (
-              <span className="text-[var(--muted)] text-xs font-mono">
+              <span className="text-muted-foreground text-xs font-mono">
                 {buyers.length.toLocaleString()} buyer{buyers.length !== 1 ? 's' : ''}
               </span>
             )}
           </div>
 
-          {/* Search + filter bar */}
           {!isLoading && (buyers.length > 0 || hasActiveSearch) && (
-            <div className="px-5 py-3 border-b border-[var(--border)] space-y-3">
+            <div className="px-5 py-3 border-b border-border space-y-3">
               <div className="flex items-center gap-2">
 
-                {/* Search input */}
                 <div className="relative flex-1">
                   <MagnifyingGlass
                     weight="regular"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)] pointer-events-none"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"
                   />
                   <input
                     ref={searchRef}
@@ -199,13 +175,13 @@ export default function BuyersPage() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by name or email…"
-                    className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-9 pr-9 py-2.5 text-white text-sm focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all placeholder:text-[var(--muted)]"
+                    className="w-full bg-elevated border border-border rounded-xl pl-9 pr-9 py-2.5 text-surface-foreground text-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground"
                   />
                   {search && (
                     <button
                       type="button"
                       onClick={() => setSearch('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-white transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-surface-foreground transition-colors"
                       aria-label="Clear search"
                     >
                       <X weight="bold" className="w-3.5 h-3.5" />
@@ -213,34 +189,31 @@ export default function BuyersPage() {
                   )}
                 </div>
 
-                {/* Filter toggle */}
                 <button
                   type="button"
                   onClick={() => setFiltersOpen((v) => !v)}
                   className={`relative flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all ${
                     filtersOpen || activeFilterCount > 0
-                      ? 'border-brand/50 bg-brand/[0.07] text-white'
-                      : 'border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] hover:text-white hover:border-brand/25'
+                      ? 'border-primary/50 bg-primary/[0.07] text-surface-foreground'
+                      : 'border-border bg-elevated text-muted-foreground hover:text-surface-foreground hover:border-primary/25'
                   }`}
                   aria-expanded={filtersOpen}
                 >
                   <FunnelSimple weight="regular" className="w-4 h-4" />
                   <span className="hidden sm:inline">Filter</span>
                   {activeFilterCount > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-brand text-white text-[10px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
                       {activeFilterCount}
                     </span>
                   )}
                 </button>
               </div>
 
-              {/* Filter panel */}
               {filtersOpen && (
                 <div className="flex flex-wrap gap-4 pt-1 pb-0.5">
 
-                  {/* Spend */}
                   <div className="space-y-1.5">
-                    <p className="text-[var(--muted)] text-[10px] uppercase tracking-wider">Spend</p>
+                    <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Spend</p>
                     <div className="flex flex-wrap gap-1.5">
                       {SPEND_OPTIONS.map((opt) => (
                         <button
@@ -249,8 +222,8 @@ export default function BuyersPage() {
                           onClick={() => setFilters((f) => ({ ...f, spend: opt.value }))}
                           className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                             filters.spend === opt.value
-                              ? 'border-brand/50 bg-brand/[0.1] text-white'
-                              : 'border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] hover:text-white hover:border-brand/25'
+                              ? 'border-primary/50 bg-primary/[0.1] text-surface-foreground'
+                              : 'border-border bg-elevated text-muted-foreground hover:text-surface-foreground hover:border-primary/25'
                           }`}
                         >
                           {opt.label}
@@ -259,9 +232,8 @@ export default function BuyersPage() {
                     </div>
                   </div>
 
-                  {/* Orders */}
                   <div className="space-y-1.5">
-                    <p className="text-[var(--muted)] text-[10px] uppercase tracking-wider">Orders</p>
+                    <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Orders</p>
                     <div className="flex flex-wrap gap-1.5">
                       {ORDER_OPTIONS.map((opt) => (
                         <button
@@ -270,8 +242,8 @@ export default function BuyersPage() {
                           onClick={() => setFilters((f) => ({ ...f, orders: opt.value }))}
                           className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                             filters.orders === opt.value
-                              ? 'border-brand/50 bg-brand/[0.1] text-white'
-                              : 'border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] hover:text-white hover:border-brand/25'
+                              ? 'border-primary/50 bg-primary/[0.1] text-surface-foreground'
+                              : 'border-border bg-elevated text-muted-foreground hover:text-surface-foreground hover:border-primary/25'
                           }`}
                         >
                           {opt.label}
@@ -280,13 +252,12 @@ export default function BuyersPage() {
                     </div>
                   </div>
 
-                  {/* Reset */}
                   {activeFilterCount > 0 && (
                     <div className="flex items-end pb-0.5">
                       <button
                         type="button"
                         onClick={resetFilters}
-                        className="text-[var(--muted)] hover:text-white text-xs transition-colors underline underline-offset-2"
+                        className="text-muted-foreground hover:text-surface-foreground text-xs transition-colors underline underline-offset-2"
                       >
                         Reset filters
                       </button>
@@ -297,9 +268,8 @@ export default function BuyersPage() {
             </div>
           )}
 
-          {/* Column headers */}
           {!isLoading && buyers.length > 0 && (
-            <div className="hidden sm:flex items-center px-5 py-2 border-b border-[var(--border)] bg-white/[0.01]">
+            <div className="hidden sm:flex items-center px-5 py-2 border-b border-border bg-elevated/50">
               <input
                 type="checkbox"
                 checked={allVisibleSelected}
@@ -307,17 +277,17 @@ export default function BuyersPage() {
                 ref={(el) => {
                   if (el) el.indeterminate = someVisibleSelected && !allVisibleSelected;
                 }}
-                className="w-3.5 h-3.5 rounded border-[var(--border)] accent-brand cursor-pointer mr-4 shrink-0"
+                className="w-3.5 h-3.5 rounded border-border accent-primary cursor-pointer mr-4 shrink-0"
                 aria-label="Select all visible buyers"
               />
-              <span className="text-[var(--muted)] text-xs uppercase tracking-wider flex-1">
+              <span className="text-muted-foreground text-xs uppercase tracking-wider flex-1">
                 Buyer
               </span>
               <div className="flex items-center gap-6 shrink-0 ml-4">
                 {['Orders', 'Spent', 'Last Order'].map((col) => (
                   <span
                     key={col}
-                    className="text-[var(--muted)] text-xs uppercase tracking-wider w-20 text-right"
+                    className="text-muted-foreground text-xs uppercase tracking-wider w-20 text-right"
                   >
                     {col}
                   </span>
@@ -326,49 +296,44 @@ export default function BuyersPage() {
             </div>
           )}
 
-          {/* Loading */}
           {isLoading && [0, 1, 2, 3, 4].map((i) => <BuyerRowSkeleton key={i} />)}
 
-          {/* Error */}
           {isError && !isLoading && (
             <div className="px-5 py-10 text-center">
-              <p className="text-red-400 text-sm">Failed to load buyers. Please refresh.</p>
+              <p className="text-status-exception text-sm">Failed to load buyers. Please refresh.</p>
             </div>
           )}
 
-          {/* Empty — no buyers at all */}
           {!isLoading && !isError && buyers.length === 0 && (
             <div className="px-5 py-14 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
               </div>
-              <p className="text-white font-syne font-bold text-base mb-1">No buyers yet</p>
-              <p className="text-[var(--muted)] text-sm">
+              <p className="text-surface-foreground font-syne font-bold text-base mb-1">No buyers yet</p>
+              <p className="text-muted-foreground text-sm">
                 Buyers will appear here once someone purchases one of your products.
               </p>
             </div>
           )}
 
-          {/* Empty — search/filter produced no results */}
           {!isLoading && !isError && buyers.length > 0 && hasActiveSearch && filteredBuyers.length === 0 && (
             <div className="px-5 py-12 text-center">
-              <p className="text-white font-syne font-bold text-sm mb-1">No results</p>
-              <p className="text-[var(--muted)] text-xs mb-4">
+              <p className="text-surface-foreground font-syne font-bold text-sm mb-1">No results</p>
+              <p className="text-muted-foreground text-xs mb-4">
                 No buyers match your current search or filters.
               </p>
               <button
                 type="button"
                 onClick={resetFilters}
-                className="text-brand hover:text-brand/80 text-xs transition-colors underline underline-offset-2"
+                className="text-primary hover:text-primary/80 text-xs transition-colors underline underline-offset-2"
               >
                 Clear search and filters
               </button>
             </div>
           )}
 
-          {/* Rows */}
           {!isLoading && !isError && filteredBuyers.length > 0 &&
             filteredBuyers.map((buyer) => (
               <BuyerRowItem
@@ -381,11 +346,11 @@ export default function BuyersPage() {
           }
         </div>
 
-       
+
        <div className="h-20" aria-hidden/>
       </div>
 
-      
+
       <div
         className={`fixed bottom-0 left-0 right-0 z-30 flex justify-center px-4 pb-5 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           someSelected
@@ -393,18 +358,18 @@ export default function BuyersPage() {
             : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex items-center gap-3 bg-[#1a1a1a] border border-[var(--border)] rounded-2xl px-4 py-3 shadow-2xl shadow-black/60 w-full max-w-md">
+        <div className="flex items-center gap-3 bg-elevated border border-border rounded-2xl px-4 py-3 shadow-2xl shadow-black/60 w-full max-w-md">
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <span className="w-6 h-6 rounded-lg bg-brand/20 border border-brand/30 text-brand text-xs font-bold font-mono flex items-center justify-center shrink-0">
+            <span className="w-6 h-6 rounded-lg bg-primary/20 border border-primary/30 text-primary text-xs font-bold font-mono flex items-center justify-center shrink-0">
               {selectedIds.size}
             </span>
-            <span className="text-white text-xs font-medium truncate">
+            <span className="text-surface-foreground text-xs font-medium truncate">
               buyer{selectedIds.size !== 1 ? 's' : ''} selected
             </span>
             <button
               type="button"
               onClick={clearSelection}
-              className="text-[var(--muted)] hover:text-white text-xs transition-colors shrink-0 underline underline-offset-2"
+              className="text-muted-foreground hover:text-surface-foreground text-xs transition-colors shrink-0 underline underline-offset-2"
             >
               Clear
             </button>
@@ -412,14 +377,13 @@ export default function BuyersPage() {
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
-            className="flex items-center gap-2 bg-brand hover:bg-brand-dark active:scale-[0.98] text-white font-syne font-semibold rounded-xl px-4 py-2 text-sm transition-all shrink-0"
+            className="flex items-center gap-2 bg-primary hover:bg-primary-dark active:scale-[0.98] text-primary-foreground font-syne font-semibold rounded-xl px-4 py-2 text-sm transition-all shrink-0"
           >
             ✉️ Send email
           </button>
         </div>
       </div>
 
-      {/* Drawer */}
       <BuyerEmailDrawer
         open={drawerOpen}
         buyers={selectedBuyers}

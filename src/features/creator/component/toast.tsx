@@ -11,12 +11,10 @@ const TOAST_ICONS: Record<ToastVariant, React.ElementType> = {
 };
 
 const TOAST_STYLES: Record<ToastVariant, { icon: string; border: string }> = {
-  success: { icon: "text-emerald-400", border: "border-emerald-500/20" },
-  error:   { icon: "text-red-400",     border: "border-red-500/20" },
-  info:    { icon: "text-brand",       border: "border-brand/20" },
+  success: { icon: "text-status-positive", border: "border-status-positive/20" },
+  error:   { icon: "text-status-exception", border: "border-status-exception/20" },
+  info:    { icon: "text-primary", border: "border-primary/20" },
 };
-
-// ─── Toast Item ───────────────────────────────────────────────────────────────
 
 function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: string) => void }) {
   const Icon = TOAST_ICONS[toast.variant];
@@ -29,26 +27,24 @@ function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: string)
 
   return (
     <div
-      className={`flex items-start gap-3 w-full max-w-sm bg-[#111] border ${styles.border} rounded-2xl px-4 py-3.5 shadow-xl animate-in slide-in-from-right-4 fade-in duration-200`}
+      className={`flex items-start gap-3 w-full max-w-sm bg-elevated border ${styles.border} rounded-2xl px-4 py-3.5 shadow-xl animate-in slide-in-from-right-4 fade-in duration-200`}
     >
       <Icon size={16} weight="fill" className={`${styles.icon} shrink-0 mt-0.5`} />
       <div className="flex-1 min-w-0">
-        <p className="font-syne font-semibold text-white text-sm">{toast.message}</p>
+        <p className="font-syne font-semibold text-surface-foreground text-sm">{toast.message}</p>
         {toast.description && (
-          <p className="font-inter text-white/40 text-xs mt-0.5">{toast.description}</p>
+          <p className="font-inter text-muted-foreground text-xs mt-0.5">{toast.description}</p>
         )}
       </div>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="text-white/20 hover:text-white/60 transition-colors shrink-0"
+        className="text-muted-foreground hover:text-surface-foreground transition-colors shrink-0"
       >
         <X size={13} weight="bold" />
       </button>
     </div>
   );
 }
-
-// ─── Toast Container ──────────────────────────────────────────────────────────
 
 export function ToastContainer({
   toasts,

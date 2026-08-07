@@ -8,21 +8,21 @@ export function SummaryCards({ affiliates }: { affiliates: Affiliate[] }) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div className="bg-surface border border-[var(--border)] rounded-2xl p-5">
-        <p className="text-[var(--muted)] text-xs uppercase tracking-wider mb-2">Total Conversions</p>
-        <p className="text-white font-syne font-extrabold text-2xl font-mono">
+      <div className="bg-surface border border-border rounded-2xl p-5">
+        <p className="text-muted-foreground text-xs uppercase tracking-wider mb-2">Total Conversions</p>
+        <p className="text-surface-foreground font-syne font-extrabold text-2xl font-mono">
           {totalConversions.toLocaleString()}
         </p>
       </div>
-      <div className="bg-surface border border-[var(--border)] rounded-2xl p-5">
-        <p className="text-[var(--muted)] text-xs uppercase tracking-wider mb-2">Total Earned (Affiliates)</p>
-        <p className="text-white font-syne font-extrabold text-2xl font-mono">
+      <div className="bg-surface border border-border rounded-2xl p-5">
+        <p className="text-muted-foreground text-xs uppercase tracking-wider mb-2">Total Earned (Affiliates)</p>
+        <p className="text-surface-foreground font-syne font-extrabold text-2xl font-mono">
           {formatNGN(totalEarned)}
         </p>
       </div>
-      <div className="bg-surface border border-[var(--border)] rounded-2xl p-5">
-        <p className="text-[var(--muted)] text-xs uppercase tracking-wider mb-2">Active Affiliates</p>
-        <p className="text-white font-syne font-extrabold text-2xl font-mono">
+      <div className="bg-surface border border-border rounded-2xl p-5">
+        <p className="text-muted-foreground text-xs uppercase tracking-wider mb-2">Active Affiliates</p>
+        <p className="text-surface-foreground font-syne font-extrabold text-2xl font-mono">
           {activeCount}
         </p>
       </div>

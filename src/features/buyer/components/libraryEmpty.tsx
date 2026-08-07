@@ -10,9 +10,9 @@ export default function LibraryEmpty() {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="flex flex-col items-center justify-center py-24 gap-5 text-center"
     >
-      <div className="w-16 h-16 rounded-2xl bg-surface border border-[var(--border)] flex items-center justify-center">
+      <div className="w-16 h-16 rounded-2xl bg-surface border border-border flex items-center justify-center">
         <svg
-          className="w-7 h-7 text-white/20"
+          className="w-7 h-7 text-muted-foreground"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -27,10 +27,10 @@ export default function LibraryEmpty() {
       </div>
 
       <div className="flex flex-col gap-2 max-w-xs">
-        <h2 className="font-syne font-bold text-white text-lg">
+        <h2 className="font-syne font-bold text-surface-foreground text-lg">
           Your library is empty
         </h2>
-        <p className="font-inter text-sm text-white/40 leading-relaxed">
+        <p className="font-inter text-sm text-muted-foreground leading-relaxed">
           Purchases you complete will appear here with download links and
           access details.
         </p>

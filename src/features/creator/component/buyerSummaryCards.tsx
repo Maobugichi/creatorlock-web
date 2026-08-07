@@ -14,9 +14,9 @@ export function SummaryCards({ buyers }: { buyers: BuyerRow[] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {stats.map(({ label, value }) => (
-        <div key={label} className="bg-surface border border-[var(--border)] rounded-2xl p-5">
-          <p className="text-[var(--muted)] text-xs uppercase tracking-wider mb-2">{label}</p>
-          <p className="text-white font-syne font-extrabold text-2xl font-mono">{value}</p>
+        <div key={label} className="bg-surface border border-border rounded-2xl p-5">
+          <p className="text-muted-foreground text-xs uppercase tracking-wider mb-2">{label}</p>
+          <p className="text-surface-foreground font-syne font-extrabold text-2xl font-mono">{value}</p>
         </div>
       ))}
     </div>

@@ -34,7 +34,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center px-4 font-inter">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 font-inter">
       <div className="w-full max-w-md">
         <OnboardingProgress steps={steps} currentStep={step} />
 

@@ -58,7 +58,6 @@ export function SearchableDropdown({
 
   useEffect(() => {
     if (!open) return;
-    // slight delay avoids the mobile keyboard fighting the open animation
     requestAnimationFrame(() => searchInputRef.current?.focus());
   }, [open]);
 
@@ -95,7 +94,7 @@ export function SearchableDropdown({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label className="text-xs text-[var(--muted)] uppercase tracking-widest block mb-1.5">{label}</label>
+        <label className="text-xs text-muted-foreground uppercase tracking-widest block mb-1.5">{label}</label>
       )}
 
       <button
@@ -105,13 +104,13 @@ export function SearchableDropdown({
           setHighlightedIndex(0);
           setOpen((v) => !v);
         }}
-        className="w-full flex items-center justify-between gap-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-left focus:outline-none focus:border-brand/50 transition-colors disabled:opacity-50"
+        className="w-full flex items-center justify-between gap-2 bg-elevated border border-border rounded-xl px-4 py-3 text-sm text-left focus:outline-none focus:border-primary/50 transition-colors disabled:opacity-50"
       >
-        <span className={selected ? 'text-white truncate' : 'text-[var(--muted)] truncate'}>
+        <span className={selected ? 'text-surface-foreground truncate' : 'text-muted-foreground truncate'}>
           {selected ? selected.label : placeholder}
         </span>
         <svg
-          className={`w-4 h-4 text-[var(--muted)] shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -122,10 +121,10 @@ export function SearchableDropdown({
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1.5 w-full bg-surface border border-[var(--border)] rounded-xl overflow-hidden">
-          <div className="relative border-b border-[var(--border)]">
+        <div className="absolute z-20 mt-1.5 w-full bg-surface border border-border rounded-xl overflow-hidden">
+          <div className="relative border-b border-border">
             <svg
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]"
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -144,13 +143,13 @@ export function SearchableDropdown({
               }}
               onKeyDown={handleSearchKeyDown}
               placeholder={searchPlaceholder}
-              className="w-full bg-transparent pl-10 pr-4 py-3 text-sm text-white placeholder:text-[var(--muted)] focus:outline-none"
+              className="w-full bg-transparent pl-10 pr-4 py-3 text-sm text-surface-foreground placeholder:text-muted-foreground focus:outline-none"
             />
           </div>
 
           <ul ref={listRef} className="max-h-60 overflow-y-auto py-1">
             {filtered.length === 0 && (
-              <li className="px-4 py-3 text-sm text-[var(--muted)]">{emptyMessage}</li>
+              <li className="px-4 py-3 text-sm text-muted-foreground">{emptyMessage}</li>
             )}
             {filtered.map((option, i) => {
               const isSelected = option.value === value;
@@ -162,8 +161,8 @@ export function SearchableDropdown({
                     onClick={() => selectOption(option)}
                     onMouseEnter={() => setHighlightedIndex(i)}
                     className={`w-full flex items-center justify-between gap-2 text-left px-4 py-3 text-sm transition-colors ${
-                      isHighlighted ? 'bg-white/[0.06]' : ''
-                    } ${isSelected ? 'text-brand' : 'text-white'}`}
+                      isHighlighted ? 'bg-elevated' : ''
+                    } ${isSelected ? 'text-primary' : 'text-surface-foreground'}`}
                   >
                     <span className="truncate">{option.label}</span>
                     {isSelected && (

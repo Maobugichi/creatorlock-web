@@ -48,10 +48,10 @@ export function ImageUpload({ label, current, aspectClass, onUploaded }: ImageUp
 
   return (
     <div>
-      <p className="text-xs text-[var(--muted)] mb-2 font-inter">{label}</p>
+      <p className="text-xs text-muted-foreground mb-2 font-inter">{label}</p>
       <div
         className={cn(
-          "relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg)] cursor-pointer group",
+          "relative overflow-hidden rounded-xl border border-border bg-elevated cursor-pointer group",
           aspectClass,
         )}
         onClick={() => inputRef.current?.click()}
@@ -60,7 +60,7 @@ export function ImageUpload({ label, current, aspectClass, onUploaded }: ImageUp
           <Image src={preview} alt={label} fill className="object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/20">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-muted-foreground">
               <path
                 d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
                 stroke="currentColor"

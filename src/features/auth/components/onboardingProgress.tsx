@@ -20,7 +20,7 @@ export function OnboardingProgress({ steps, currentStep }: OnboardingProgressPro
             width: i === stepIndex ? 20 : 6,
             opacity: i <= stepIndex ? 1 : 0.2,
           }}
-          className="h-1.5 rounded-full bg-brand"
+          className="h-1.5 rounded-full bg-primary"
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
         />
       ))}

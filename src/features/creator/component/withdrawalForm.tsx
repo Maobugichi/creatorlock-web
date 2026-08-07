@@ -43,36 +43,36 @@ export function WithdrawalForm({ availableCents }: WithdrawalFormProps) {
     availableCents >= MINIMUM_PAYOUT_CENTS;
 
   return (
-    <div className="bg-surface border border-[var(--border)] rounded-2xl p-6 sm:p-8 space-y-7">
+    <div className="bg-surface border border-border rounded-2xl p-6 sm:p-8 space-y-7">
       <h2 className="font-syne font-bold text-lg">Request withdrawal</h2>
 
       {withdrawSuccess && (
-        <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.06] px-5 py-4">
-          <p className="text-sm font-semibold text-green-400">Withdrawal requested</p>
-          <p className="text-sm text-green-400/70 mt-0.5">
+        <div className="rounded-2xl border border-success/20 bg-success/[0.06] px-5 py-4">
+          <p className="text-sm font-semibold text-success">Withdrawal requested</p>
+          <p className="text-sm text-success/70 mt-0.5">
             Pending admin approval — you&apos;ll be notified once it&apos;s processed.
           </p>
         </div>
       )}
 
       {withdrawError && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.06] px-5 py-4">
-          <p className="text-sm font-semibold text-red-400">Withdrawal failed</p>
-          <p className="text-sm text-red-400/70 mt-0.5">
+        <div className="rounded-2xl border border-status-exception/20 bg-status-exception/[0.06] px-5 py-4">
+          <p className="text-sm font-semibold text-status-exception">Withdrawal failed</p>
+          <p className="text-sm text-status-exception/70 mt-0.5">
             {(withdrawErr as ApiError)?.response?.data?.message ?? 'Something went wrong. Try again.'}
           </p>
         </div>
       )}
 
       <div className="space-y-1">
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Withdrawal amount</p>
-        <p className="font-mono text-2xl sm:text-3xl font-bold text-white truncate">
+        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Withdrawal amount</p>
+        <p className="font-mono text-2xl sm:text-3xl font-bold text-success truncate">
           {formatNGN(availableCents)}
         </p>
-        <p className="text-xs text-[var(--muted)]">Full balance, after 7% platform fee</p>
+        <p className="text-xs text-muted-foreground">Full balance, after 7% platform fee</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 border-t border-[var(--border)] pt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 border-t border-border pt-6">
         <SearchableDropdown
           label="Bank"
           options={bankOptions}
@@ -89,7 +89,7 @@ export function WithdrawalForm({ availableCents }: WithdrawalFormProps) {
         />
 
         <div className="space-y-1.5">
-          <label className="text-xs uppercase tracking-[0.14em] text-[var(--muted)] block">
+          <label className="text-xs uppercase tracking-[0.14em] text-muted-foreground block">
             Account number
           </label>
           <input
@@ -104,7 +104,7 @@ export function WithdrawalForm({ availableCents }: WithdrawalFormProps) {
               resetWithdraw();
             }}
             placeholder="0123456789"
-            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-[var(--muted)] font-mono focus:outline-none focus:border-brand/50 transition-colors"
+            className="w-full bg-elevated border border-border rounded-xl px-4 py-3.5 text-sm text-surface-foreground placeholder:text-muted-foreground font-mono focus:outline-none focus:border-primary/50 transition-colors"
           />
         </div>
       </div>
@@ -120,11 +120,11 @@ export function WithdrawalForm({ availableCents }: WithdrawalFormProps) {
         <button
           onClick={() => withdraw({ bankCode, accountNumber })}
           disabled={!canWithdraw || withdrawing}
-          className="w-full bg-brand hover:bg-brand-dark active:scale-[0.98] text-white font-syne font-semibold rounded-xl py-3.5 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+          className="w-full bg-primary hover:bg-primary-dark active:scale-[0.98] text-primary-foreground font-syne font-semibold rounded-xl py-3.5 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
         >
           {withdrawing ? (
             <span className="flex items-center justify-center gap-2">
-              <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               Submitting…
             </span>
           ) : (
@@ -132,7 +132,7 @@ export function WithdrawalForm({ availableCents }: WithdrawalFormProps) {
           )}
         </button>
 
-        <p className="text-xs text-[var(--muted)] text-center">
+        <p className="text-xs text-muted-foreground text-center">
           Withdrawal requests are reviewed before being sent to your bank. Most requests are processed
           within 24 hours.
         </p>

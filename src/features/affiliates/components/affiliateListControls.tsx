@@ -27,8 +27,6 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'conversions', label: 'Most Conversions' },
 ];
 
-// Small sibling to SearchableDropdown — same trigger/panel visual language,
-// no search input, for short option lists where search would be dead weight.
 function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: SortOption) => void }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,11 +48,11 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand/50 transition-colors"
+        className="flex items-center gap-2 bg-elevated border border-border rounded-xl px-3.5 py-2.5 text-sm text-surface-foreground focus:outline-none focus:border-primary/50 transition-colors"
       >
         <span className="whitespace-nowrap">{selected.label}</span>
         <svg
-          className={`w-4 h-4 text-[var(--muted)] shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -62,7 +60,7 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-1.5 w-44 bg-surface border border-[var(--border)] rounded-xl overflow-hidden">
+        <div className="absolute right-0 z-20 mt-1.5 w-44 bg-surface border border-border rounded-xl overflow-hidden">
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -71,8 +69,8 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
                 onChange(opt.value);
                 setOpen(false);
               }}
-              className={`w-full flex items-center justify-between gap-2 text-left px-4 py-2.5 text-sm transition-colors hover:bg-white/[0.06] ${
-                opt.value === value ? 'text-brand' : 'text-white'
+              className={`w-full flex items-center justify-between gap-2 text-left px-4 py-2.5 text-sm transition-colors hover:bg-elevated ${
+                opt.value === value ? 'text-primary' : 'text-surface-foreground'
               }`}
             >
               <span>{opt.label}</span>
@@ -101,7 +99,7 @@ export function AffiliateListControls({
     <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
       <div className="relative flex-1 max-w-sm">
         <svg
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]"
+          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <circle cx="11" cy="11" r="7" />
@@ -112,20 +110,20 @@ export function AffiliateListControls({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Search by name or email…"
-          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-[var(--muted)] focus:outline-none focus:border-brand/50 transition-colors"
+          className="w-full bg-elevated border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-surface-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
         />
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center bg-white/[0.03] border border-[var(--border)] rounded-xl p-1">
+        <div className="flex items-center bg-elevated border border-border rounded-xl p-1">
           {STATUS_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               onClick={() => onStatusFilterChange(opt.value)}
               className={`text-xs font-syne font-semibold px-3 py-1.5 rounded-lg transition-colors ${
                 statusFilter === opt.value
-                  ? 'bg-brand/15 text-brand'
-                  : 'text-[var(--muted)] hover:text-white'
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground hover:text-surface-foreground'
               }`}
             >
               {opt.label}

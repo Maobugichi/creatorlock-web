@@ -13,19 +13,15 @@ import { useCreatorProfile } from "../_hooks/use-creator-profile";
 import { useSaveProfile } from "../_hooks/use-save-profile";
 import { SettingsFormValues } from "../_types";
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
-
 function SettingsSkeleton() {
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
       {([180, 240, 160] as const).map((h, i) => (
-        <div key={i} style={{ height: h }} className="bg-white/[0.03] rounded-2xl animate-pulse" />
+        <div key={i} style={{ height: h }} className="bg-elevated rounded-2xl animate-pulse" />
       ))}
     </div>
   );
 }
-
-// ─── Main form ────────────────────────────────────────────────────────────────
 
 export function SettingsForm() {
   const { control, register, handleSubmit, reset } = useForm<SettingsFormValues>({
@@ -82,28 +78,26 @@ export function SettingsForm() {
 
   return (
     <div className="space-y-5 max-w-2xl mx-auto">
-      {/* Error */}
       <AnimatePresence>
         {errorMessage && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
-            className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl px-4 py-3 font-inter"
+            className="bg-status-exception/10 border border-status-exception/20 text-status-exception text-sm rounded-xl px-4 py-3 font-inter"
           >
             {errorMessage}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Success */}
       <AnimatePresence>
         {saved && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
-            className="bg-green-500/10 border border-green-500/20 text-green-400 text-sm rounded-xl px-4 py-3 font-inter flex items-center gap-2"
+            className="bg-status-positive/10 border border-status-positive/20 text-status-positive text-sm rounded-xl px-4 py-3 font-inter flex items-center gap-2"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path
@@ -119,7 +113,6 @@ export function SettingsForm() {
         )}
       </AnimatePresence>
 
-      {/* Images */}
       <Section title="Store appearance" sub="Your public profile and banner images">
         <div className="space-y-4">
           <Controller
@@ -149,31 +142,29 @@ export function SettingsForm() {
         </div>
       </Section>
 
-      {/* Profile details */}
       <Section title="Profile details" sub="How you appear on your public storefront">
         <div className="space-y-4">
           <Input label="Display name" type="text" placeholder="Adaeze Okonkwo" {...register("display_name")} />
 
           <div>
-            <label className="block text-xs text-[var(--muted)] mb-1.5 font-inter tracking-wide">Bio</label>
+            <label className="block text-xs text-muted-foreground mb-1.5 font-inter tracking-wide">Bio</label>
             <textarea
               {...register("bio")}
               placeholder="Tell buyers a bit about yourself and what you create..."
               rows={4}
-              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors resize-none font-inter"
+              className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-sm text-surface-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors resize-none font-inter"
             />
           </div>
 
-          {/* Store slug */}
           <div>
-            <label className="block text-xs text-[var(--muted)] mb-1.5 font-inter tracking-wide">Store URL</label>
+            <label className="block text-xs text-muted-foreground mb-1.5 font-inter tracking-wide">Store URL</label>
             <div
               className={cn(
-                "flex items-center bg-[var(--bg)] border border-[var(--border)] rounded-xl overflow-hidden",
-                "focus-within:border-brand/60 focus-within:ring-1 focus-within:ring-brand/20 transition-colors",
+                "flex items-center bg-elevated border border-border rounded-xl overflow-hidden",
+                "focus-within:border-primary/60 focus-within:ring-1 focus-within:ring-primary/20 transition-colors",
               )}
             >
-              <span className="px-4 py-3 text-sm text-white/20 font-inter border-r border-[var(--border)] whitespace-nowrap">
+              <span className="px-4 py-3 text-sm text-muted-foreground font-inter border-r border-border whitespace-nowrap">
                 creatorlock.com/store/
               </span>
               <input
@@ -182,15 +173,15 @@ export function SettingsForm() {
                   setValueAs: (v: string) => v.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
                 })}
                 onBlur={handleSlugBlur}
-                className="flex-1 bg-transparent px-3 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none font-inter"
+                className="flex-1 bg-transparent px-3 py-3 text-sm text-surface-foreground placeholder:text-muted-foreground focus:outline-none font-inter"
                 placeholder="your-store"
               />
               <div className="px-3 flex items-center">
                 {slugStatus === "checking" && (
-                  <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin inline-block" />
+                  <span className="w-3.5 h-3.5 border-2 border-border-strong border-t-muted-foreground rounded-full animate-spin inline-block" />
                 )}
                 {slugStatus === "available" && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-green-400">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-status-positive">
                     <path
                       d="M5 12l5 5L20 7"
                       stroke="currentColor"
@@ -201,7 +192,7 @@ export function SettingsForm() {
                   </svg>
                 )}
                 {slugStatus === "taken" && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-red-400">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-status-exception">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
                     <path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
@@ -215,7 +206,7 @@ export function SettingsForm() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="text-xs text-orange-400/80 font-inter mt-2 flex items-center gap-1.5"
+                  className="text-xs text-status-warning font-inter mt-2 flex items-center gap-1.5"
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path
@@ -244,7 +235,7 @@ export function SettingsForm() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="text-xs text-red-400 font-inter mt-2"
+                  className="text-xs text-status-exception font-inter mt-2"
                 >
                   This slug is already taken
                 </motion.p>
@@ -254,7 +245,6 @@ export function SettingsForm() {
         </div>
       </Section>
 
-      {/* Social links */}
       <Section title="Social links" sub="Shown on your public storefront — all optional">
         <div className="space-y-3">
           {(
@@ -270,16 +260,15 @@ export function SettingsForm() {
         </div>
       </Section>
 
-      {/* Save */}
       <div className="flex justify-end pb-8">
         <button
           onClick={onSubmit}
           disabled={saving || slugStatus === "taken" || slugStatus === "checking"}
-          className="bg-brand hover:bg-brand-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-8 py-3 text-sm transition-colors active:scale-[0.98] flex items-center gap-2"
+          className="bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-syne font-semibold rounded-xl px-8 py-3 text-sm transition-colors active:scale-[0.98] flex items-center gap-2"
         >
           {saving ? (
             <>
-              <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               Saving...
             </>
           ) : (

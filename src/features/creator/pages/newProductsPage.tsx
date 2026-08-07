@@ -58,7 +58,7 @@ export default function NewProductPage() {
     if (digitalFiles.length === 0) { setError("Add at least one digital file."); return; }
 
     try {
-      
+
       setSubmitStage("creating");
       const draft = await createDraft.mutateAsync({
         title: title.trim(),
@@ -67,32 +67,32 @@ export default function NewProductPage() {
         category,
       });
 
-    
+
       setSubmitStage("uploading");
       for (const sf of digitalFiles) {
         await uploadFile.mutateAsync({ productId: draft.id, file: sf.file });
       }
 
-     
+
 
       if (previewFile) {
         await uploadFile.mutateAsync({ productId: draft.id, file: previewFile, isPreview: true });
       }
 
-      
+
       if (thumbnailFile) {
         const form = new FormData();
         form.append("thumbnail", thumbnailFile);
         await patchProduct.mutateAsync({ productId: draft.id, data: form });
       }
 
-   
+
       if (publish) {
         setSubmitStage("publishing");
         await publishProduct.mutateAsync(draft.id);
       }
 
-    
+
       queryClient.setQueryData<Product[]>(["products", "me"], (old) => [
         {
           id: draft.id,
@@ -129,26 +129,23 @@ export default function NewProductPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      {/* Header */}
       <div className="mb-8">
-        <h1 className="font-syne font-extrabold text-white text-2xl">New product</h1>
-        <p className="text-[var(--muted)] font-inter text-sm mt-1">
+        <h1 className="font-syne font-extrabold text-surface-foreground text-2xl">New product</h1>
+        <p className="text-muted-foreground font-inter text-sm mt-1">
           Fill in the details, upload your files, then save as draft or publish.
         </p>
       </div>
 
-      {/* Error banner */}
       {error && (
-        <div className="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm font-inter">
+        <div className="mb-6 bg-status-exception/10 border border-status-exception/20 text-status-exception rounded-xl px-4 py-3 text-sm font-inter">
           {error}
         </div>
       )}
 
       <div className="space-y-6">
-        {/* Title */}
         <div>
-          <label htmlFor="title" className="block text-sm font-inter text-white/70 mb-2">
-            Title <span className="text-red-400">*</span>
+          <label htmlFor="title" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+            Title <span className="text-status-exception">*</span>
           </label>
           <input
             id="title"
@@ -156,17 +153,16 @@ export default function NewProductPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Ultimate Notion Finance Template"
-            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+            className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
           />
         </div>
 
-        {/* Price */}
         <div>
-          <label htmlFor="price" className="block text-sm font-inter text-white/70 mb-2">
-            Price <span className="text-red-400">*</span>
+          <label htmlFor="price" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+            Price <span className="text-status-exception">*</span>
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono text-sm select-none">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-mono text-sm select-none">
               ₦
             </span>
             <input
@@ -177,37 +173,35 @@ export default function NewProductPage() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="5000"
-              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-8 pr-4 py-3 text-white font-mono text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+              className="w-full bg-elevated border border-border rounded-xl pl-8 pr-4 py-3 text-surface-foreground font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
             />
           </div>
-          <p className="mt-1.5 text-xs text-white/30 font-inter">
+          <p className="mt-1.5 text-xs text-muted-foreground font-inter">
             Enter amount in naira. Set 0 for a free product.
           </p>
         </div>
 
-        {/* Category */}
         <div>
-          <label htmlFor="category" className="block text-sm font-inter text-white/70 mb-2">
-            Category <span className="text-red-400">*</span>
+          <label htmlFor="category" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+            Category <span className="text-status-exception">*</span>
           </label>
           <select
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value as ProductCategory)}
-            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+            className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
           >
             {CATEGORY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value} className="bg-[var(--bg)]">
+              <option key={opt.value} value={opt.value} className="bg-elevated">
                 {opt.label}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-inter text-white/70 mb-2">
-            Description <span className="text-white/30">(optional)</span>
+          <label htmlFor="description" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+            Description <span className="text-muted-foreground">(optional)</span>
           </label>
           <textarea
             id="description"
@@ -215,14 +209,12 @@ export default function NewProductPage() {
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
             placeholder="What's included? Who is this for?"
-            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors resize-none"
+            className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors resize-none"
           />
         </div>
 
-        {/* Thumbnail */}
         <ThumbnailUpload preview={thumbnailPreview} onChange={handleThumbnailChange} />
 
-        {/* Digital files */}
         <FileDropZone files={digitalFiles} onAdd={handleAddFiles} onRemove={handleRemoveFile} />
 
         <PreviewUpload
@@ -231,20 +223,18 @@ export default function NewProductPage() {
           onRemove={() => setPreviewFile(null)}
         />
 
-        <div className="border-t border-[var(--border)]" />
+        <div className="border-t border-border" />
 
-        {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Save as draft */}
           <button
             type="button"
             disabled={isSubmitting}
             onClick={() => handleSubmit(false)}
-            className="flex-1 bg-white/[0.06] hover:bg-white/[0.1] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
+            className="flex-1 bg-elevated hover:bg-border-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-surface-foreground font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
           >
             {isSubmitting && submitStage !== "publishing" ? (
               <>
-                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 border-2 border-surface-foreground/30 border-t-surface-foreground rounded-full animate-spin" />
                 {stageLabel[submitStage]}
               </>
             ) : (
@@ -252,16 +242,15 @@ export default function NewProductPage() {
             )}
           </button>
 
-          {/* Publish */}
           <button
             type="button"
             disabled={isSubmitting}
             onClick={() => handleSubmit(true)}
-            className="flex-1 bg-brand hover:bg-brand-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
+            className="flex-1 bg-primary hover:bg-primary-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
           >
             {isSubmitting && submitStage === "publishing" ? (
               <>
-                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                 Publishing…
               </>
             ) : (

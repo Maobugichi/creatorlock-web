@@ -1,12 +1,5 @@
 'use client';
-// ─────────────────────────────────────────────
-//  CreatorLock — CouponField
-//  src/components/checkout/CouponField.tsx
-//
-//  Calls POST /coupons/apply (no auth required)
-//  Payload:  { code: string, product_id: string }
-//  Response: { success, data: CouponResult }
-// ─────────────────────────────────────────────
+
 import { useState, useRef } from 'react';
 import api from '@/lib/api';
 import { formatNGN } from '@/lib/utils';
@@ -82,30 +75,25 @@ export default function CouponField({
     }
   };
 
-  // ── Applied state ─────────────────────────
   if (state === 'applied' && applied) {
     return (
-      <div
-        className="flex items-center justify-between rounded-xl border px-4 py-3"
-        style={{ borderColor: 'rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.06)' }}
-      >
+      <div className="flex items-center justify-between rounded-xl border border-status-positive/30 bg-status-positive/[0.06] px-4 py-3">
         <div className="flex items-center gap-2">
-          {/* Checkmark */}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-status-positive" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
           <div>
-            <span className="font-mono text-xs font-medium text-emerald-400">
+            <span className="font-mono text-xs font-medium text-status-positive">
               {code.trim().toUpperCase()}
             </span>
-            <span className="ml-2 font-inter text-xs text-emerald-400/70">
+            <span className="ml-2 font-inter text-xs text-status-positive/70">
               −{formatNGN(applied.discount_cents)} off
             </span>
           </div>
         </div>
         <button
           onClick={handleClear}
-          className="font-inter text-xs text-white/40 transition-colors hover:text-white/80"
+          className="font-inter text-xs text-muted-foreground transition-colors hover:text-surface-foreground"
           type="button"
         >
           Remove
@@ -114,7 +102,6 @@ export default function CouponField({
     );
   }
 
-  // ── Input state ───────────────────────────
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex gap-2">
@@ -130,8 +117,9 @@ export default function CouponField({
           placeholder="Coupon code"
           maxLength={32}
           disabled={state === 'loading'}
-          className="flex-1 rounded-xl border bg-transparent px-3 py-2.5 font-mono text-sm text-white placeholder:text-white/20 outline-none transition-colors focus:border-white/20 disabled:opacity-50"
-          style={{ borderColor: state === 'error' ? 'rgba(239,68,68,0.5)' : 'var(--border)' }}
+          className={`flex-1 rounded-xl border bg-transparent px-3 py-2.5 font-mono text-sm text-surface-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-border-strong disabled:opacity-50 ${
+            state === 'error' ? 'border-status-exception/50' : 'border-border'
+          }`}
           autoComplete="off"
           spellCheck={false}
         />
@@ -139,8 +127,7 @@ export default function CouponField({
           onClick={handleApply}
           disabled={!code.trim() || state === 'loading'}
           type="button"
-          className="rounded-xl border px-4 py-2.5 font-inter text-xs font-medium text-white transition-all hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-40"
-          style={{ borderColor: 'var(--border)', background: 'var(--color-surface)' }}
+          className="rounded-xl border border-border bg-surface px-4 py-2.5 font-inter text-xs font-medium text-surface-foreground transition-all hover:border-border-strong disabled:cursor-not-allowed disabled:opacity-40"
         >
           {state === 'loading' ? (
             <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -152,9 +139,8 @@ export default function CouponField({
         </button>
       </div>
 
-      {/* Error message */}
       {state === 'error' && errorMsg && (
-        <p className="font-inter text-xs text-red-400">{errorMsg}</p>
+        <p className="font-inter text-xs text-status-exception">{errorMsg}</p>
       )}
     </div>
   );

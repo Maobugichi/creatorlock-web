@@ -17,5 +17,5 @@ export default async function DownloadPage({ params }: PageProps) {
 
   if (!result.ok) return <DownloadError expired={result.expired} />;
 
-  return <DownloadSuccess downloads={result.downloads} />;
+  return <DownloadSuccess token={token} logId={result.logId} downloads={result.downloads} />;
 }

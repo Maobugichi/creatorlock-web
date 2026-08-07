@@ -97,25 +97,25 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="bg-[var(--bg)] py-24 px-6 scroll-mt-8"
+      className="bg-background py-24 px-6 scroll-mt-8"
     >
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-16">
-          <p className="font-mono text-xs tracking-widest text-white/30 uppercase mb-4">
+          <p className="font-mono text-xs tracking-widest text-foreground/30 uppercase mb-4">
             How it works
           </p>
-          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-white max-w-sm leading-tight">
+          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-foreground max-w-sm leading-tight">
             Three steps.
             <br />
-            <span className="text-white/40">That&apos;s the whole thing.</span>
+            <span className="text-foreground/40">That&apos;s the whole thing.</span>
           </h2>
         </div>
 
         {/* Steps */}
         <div
           ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[var(--border)]"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border"
         >
           {steps.map(({ number, icon, title, description }, i) => (
             <motion.div
@@ -127,20 +127,20 @@ export default function HowItWorks() {
                 ease: "easeOut",
                 delay: reduce ? 0 : i * 0.1,
               }}
-              className="bg-[var(--bg)] p-8 flex flex-col gap-6"
+              className="bg-background p-8 flex flex-col gap-6"
             >
               {/* Icon + number row */}
               <div className="flex items-start justify-between">
-                <div className="text-brand">{icon}</div>
-                <span className="font-mono text-xs text-white/20">{number}</span>
+                <div className="text-primary">{icon}</div>
+                <span className="font-mono text-xs text-foreground/20">{number}</span>
               </div>
 
               {/* Content */}
               <div className="flex flex-col gap-2">
-                <h3 className="font-syne font-bold text-lg text-white leading-snug">
+                <h3 className="font-syne font-bold text-lg text-foreground leading-snug">
                   {title}
                 </h3>
-                <p className="font-inter text-sm text-white/50 leading-relaxed">
+                <p className="font-inter text-sm text-foreground/50 leading-relaxed">
                   {description}
                 </p>
               </div>
@@ -152,9 +152,9 @@ export default function HowItWorks() {
         <div aria-hidden className="hidden sm:flex items-center mt-6 px-8 gap-0">
           {steps.map((_, i) => (
             <div key={i} className="flex items-center flex-1 last:flex-none">
-              <div className="w-2 h-2 rounded-full bg-brand/40 shrink-0" />
+              <div className="w-2 h-2 rounded-full bg-primary/40 shrink-0" />
               {i < steps.length - 1 && (
-                <div className="flex-1 h-px bg-[var(--border)]" />
+                <div className="flex-1 h-px bg-border" />
               )}
             </div>
           ))}

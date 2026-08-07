@@ -49,19 +49,18 @@ export default function ProductsPage() {
       <ToastContainer toasts={toasts} onDismiss={dismiss} />
 
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-syne font-extrabold text-white text-2xl">Products</h1>
+            <h1 className="font-syne font-extrabold text-surface-foreground text-2xl">Products</h1>
             {!isLoading && !isError && products && (
-              <p className="font-inter text-[var(--muted)] text-sm mt-0.5">
+              <p className="font-inter text-muted-foreground text-sm mt-0.5">
                 {products.length} {products.length === 1 ? "product" : "products"}
               </p>
             )}
           </div>
           <Link
             href="/products/new"
-            className="bg-brand hover:bg-brand-dark active:scale-[0.98] text-white font-syne font-semibold rounded-xl transition-all flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
+            className="bg-primary hover:bg-primary-dark active:scale-[0.98] text-primary-foreground font-syne font-semibold rounded-xl transition-all flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
             aria-label="New product"
           >
             <span className="text-lg leading-none sm:hidden">+</span>
@@ -69,10 +68,8 @@ export default function ProductsPage() {
           </Link>
         </div>
 
-        {/* Error */}
         {isError && <ProductsError onRetry={refetch} />}
 
-        {/* Skeleton */}
         {isLoading && (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -81,7 +78,6 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {/* Loaded */}
         {!isLoading && !isError && products && (
           <>
             {products.length === 0 ? (

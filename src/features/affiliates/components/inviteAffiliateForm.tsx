@@ -30,21 +30,21 @@ export function InviteAffiliateForm() {
   }
 
   return (
-    <div className="bg-surface border border-[var(--border)] rounded-2xl p-5">
-      <h2 className="text-white font-syne font-bold text-base mb-1">Add an Affiliate</h2>
-      <p className="text-[var(--muted)] text-sm mb-4">
+    <div className="bg-surface border border-border rounded-2xl p-5">
+      <h2 className="text-surface-foreground font-syne font-bold text-base mb-1">Add an Affiliate</h2>
+      <p className="text-muted-foreground text-sm mb-4">
         Enter the email address of the person you want to add as an affiliate, and set their
         commission rate.
       </p>
 
       {inviteError && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm mb-4">
+        <div className="bg-status-exception/10 border border-status-exception/20 text-status-exception rounded-xl px-4 py-3 text-sm mb-4">
           {inviteError}
         </div>
       )}
 
       {inviteSuccess && (
-        <div className="bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl px-4 py-3 text-sm mb-4">
+        <div className="bg-status-positive/10 border border-status-positive/20 text-status-positive rounded-xl px-4 py-3 text-sm mb-4">
           Affiliate added successfully!
         </div>
       )}
@@ -54,7 +54,7 @@ export function InviteAffiliateForm() {
           name="affiliate_email"
           type="email"
           placeholder="affiliate@example.com"
-          className="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white text-sm placeholder:text-[var(--muted)] focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+          className="flex-1 bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
         />
         <input
           name="commission_percent"
@@ -63,15 +63,15 @@ export function InviteAffiliateForm() {
           max={90}
           defaultValue={10}
           placeholder="Commission %"
-          className="w-full sm:w-32 bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white text-sm placeholder:text-[var(--muted)] focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+          className="w-full sm:w-32 bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
         />
         <button
           type="submit"
           disabled={isPending}
-          className="flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-5 py-3 text-sm transition-all shrink-0"
+          className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-primary-foreground font-syne font-semibold rounded-xl px-5 py-3 text-sm transition-all shrink-0"
         >
           {isPending && (
-            <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
           )}
           {isPending ? 'Adding…' : 'Add Affiliate'}
         </button>

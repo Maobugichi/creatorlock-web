@@ -52,19 +52,19 @@ function FAQItem({
   const reduce = useReducedMotion();
 
   return (
-    <div className="border-b border-[var(--border)]">
+    <div className="border-b border-border">
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="w-full flex items-start justify-between gap-6 py-6 text-left group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand/40 rounded-sm"
+        className="w-full flex items-start justify-between gap-6 py-6 text-left group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40 rounded-sm"
       >
-        <span className="font-syne font-bold text-base sm:text-lg text-white group-hover:text-brand transition-colors duration-150">
+        <span className="font-syne font-bold text-base sm:text-lg text-foreground group-hover:text-primary transition-colors duration-150">
           {q}
         </span>
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: reduce ? 0 : 0.2, ease: "easeOut" }}
-          className="text-brand mt-1 shrink-0"
+          className="text-primary mt-1 shrink-0"
           aria-hidden
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -88,7 +88,7 @@ function FAQItem({
             transition={{ duration: reduce ? 0 : 0.25, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <p className="font-inter text-sm sm:text-base text-white/55 leading-relaxed pb-6 max-w-2xl">
+            <p className="font-inter text-sm sm:text-base text-foreground/55 leading-relaxed pb-6 max-w-2xl">
               {a}
             </p>
           </motion.div>
@@ -104,16 +104,16 @@ export default function FAQ() {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="bg-[var(--bg)] py-24 px-6">
+    <section className="bg-background py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="mb-14">
-          <p className="font-mono text-xs tracking-widest text-white/30 uppercase mb-4">
+          <p className="font-mono text-xs tracking-widest text-foreground/30 uppercase mb-4">
             FAQ
           </p>
-          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-white leading-tight">
+          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-foreground leading-tight">
             Questions people
             <br />
-            <span className="text-white/40">actually ask.</span>
+            <span className="text-foreground/40">actually ask.</span>
           </h2>
         </div>
 

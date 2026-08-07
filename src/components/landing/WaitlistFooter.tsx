@@ -1,8 +1,8 @@
 export default function WaitlistFooter() {
   return (
-    <footer className="bg-surface border-t border-[var(--border)] px-6 py-8">
+    <footer className="bg-surface border-t border-border px-6 py-8">
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-        <span className="font-syne font-bold text-sm text-white">
+        <span className="font-syne font-bold text-sm text-foreground">
           CreatorLock
         </span>
 
@@ -14,14 +14,14 @@ export default function WaitlistFooter() {
             <a
               key={label}
               href={href}
-              className="font-inter text-xs text-white/40 hover:text-white/70 transition-colors duration-150"
+              className="font-inter text-xs text-foreground/40 hover:text-foreground/70 transition-colors duration-150"
             >
               {label}
             </a>
           ))}
         </nav>
 
-        <span className="font-mono text-xs text-white/20">
+        <span className="font-mono text-xs text-foreground/20">
           © {new Date().getFullYear()} CreatorLock · Built in Nigeria 🇳🇬
         </span>
       </div>

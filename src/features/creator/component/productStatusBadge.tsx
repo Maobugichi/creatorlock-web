@@ -6,43 +6,39 @@ import {
 } from "@phosphor-icons/react";
 import type { ProductStatus } from "../types/product.types";
 
-// ─── Config ───────────────────────────────────────────────────────────────────
-
 export const STATUS_CONFIG: Record<
   ProductStatus,
   { icon: React.ElementType; color: string; bg: string; border: string; label: string }
 > = {
   published: {
     icon: Globe,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/20",
+    color: "text-status-positive",
+    bg: "bg-status-positive/10",
+    border: "border-status-positive/20",
     label: "Published",
   },
   draft: {
     icon: FileDashed,
-    color: "text-white/40",
-    bg: "bg-white/[0.05]",
-    border: "border-white/10",
+    color: "text-muted-foreground",
+    bg: "bg-elevated",
+    border: "border-border",
     label: "Draft",
   },
   unpublished: {
     icon: EyeSlash,
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20",
+    color: "text-status-warning",
+    bg: "bg-status-warning/10",
+    border: "border-status-warning/20",
     label: "Unpublished",
   },
   flagged: {
     icon: Warning,
-    color: "text-red-400",
-    bg: "bg-red-500/10",
-    border: "border-red-500/20",
+    color: "text-status-exception",
+    bg: "bg-status-exception/10",
+    border: "border-status-exception/20",
     label: "Flagged",
   },
 };
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function StatusBadge({ status }: { status: ProductStatus }) {
   const config = STATUS_CONFIG[status];

@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { CheckCircle, ArrowsDownUp } from "@phosphor-icons/react";
 import type { FilterStatus, SortOption } from "../types/product.types";
 
-// ─── Config ───────────────────────────────────────────────────────────────────
-
 export const FILTER_OPTIONS: { value: FilterStatus; label: string }[] = [
   { value: "all",         label: "All" },
   { value: "published",   label: "Published" },
@@ -20,8 +18,6 @@ export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "price_high", label: "Price (high → low)" },
   { value: "price_low",  label: "Price (low → high)" },
 ];
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 interface FilterSortBarProps {
   filter: FilterStatus;
@@ -56,7 +52,6 @@ export default function FilterSortBar({
   return (
     <div className="flex flex-col sm:flex-row gap-3 mb-6">
 
-      {/* Filter pills */}
       <div className="flex gap-1.5 overflow-x-auto scrollbar-none flex-1">
         {FILTER_OPTIONS.map((opt) => {
           const isActive = filter === opt.value;
@@ -67,14 +62,14 @@ export default function FilterSortBar({
               onClick={() => onFilterChange(opt.value)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-inter font-medium whitespace-nowrap transition-colors shrink-0 ${
                 isActive
-                  ? "bg-brand/10 border-brand/30 text-brand"
-                  : "bg-white/[0.03] border-white/[0.07] text-white/40 hover:text-white/70 hover:border-white/15"
+                  ? "bg-primary/10 border-primary/30 text-primary"
+                  : "bg-elevated border-border text-muted-foreground hover:text-surface-foreground hover:border-border-strong"
               }`}
             >
               {opt.label}
               <span
                 className={`font-mono text-[10px] px-1 py-0.5 rounded-md ${
-                  isActive ? "bg-brand/20 text-brand" : "bg-white/[0.05] text-white/25"
+                  isActive ? "bg-primary/20 text-primary" : "bg-elevated text-muted-foreground"
                 }`}
               >
                 {count}
@@ -84,14 +79,13 @@ export default function FilterSortBar({
         })}
       </div>
 
-      {/* Sort dropdown */}
       <div ref={sortRef} className="relative w-fit">
         <button
           onClick={() => setSortOpen((v) => !v)}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-inter font-medium transition-colors w-full sm:w-auto ${
             sortOpen
-              ? "bg-brand/10 border-brand/30 text-brand"
-              : "bg-white/[0.03] border-white/[0.07] text-white/40 hover:text-white/70 hover:border-white/15"
+              ? "bg-primary/10 border-primary/30 text-primary"
+              : "bg-elevated border-border text-muted-foreground hover:text-surface-foreground hover:border-border-strong"
           }`}
         >
           <ArrowsDownUp size={12} weight="bold" />
@@ -112,7 +106,7 @@ export default function FilterSortBar({
         </button>
 
         {sortOpen && (
-          <div className="absolute top-full right-24 left-20 mt-1.5 z-20 w-48 bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-xl">
+          <div className="absolute top-full right-24 left-20 mt-1.5 z-20 w-48 bg-elevated border border-border rounded-xl overflow-hidden shadow-xl">
             {SORT_OPTIONS.map((opt) => {
               const isActive = sort === opt.value;
               return (
@@ -121,12 +115,12 @@ export default function FilterSortBar({
                   onClick={() => { onSortChange(opt.value); setSortOpen(false); }}
                   className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-inter transition-colors ${
                     isActive
-                      ? "text-brand bg-brand/10"
-                      : "text-white/50 hover:text-white hover:bg-white/[0.04]"
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-surface-foreground hover:bg-border-strong"
                   }`}
                 >
                   {opt.label}
-                  {isActive && <CheckCircle size={13} weight="fill" className="text-brand" />}
+                  {isActive && <CheckCircle size={13} weight="fill" className="text-primary" />}
                 </button>
               );
             })}

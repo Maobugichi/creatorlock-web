@@ -19,7 +19,7 @@ export function GoogleButton() {
     <button
       type="button"
       onClick={handleGoogleLogin}
-      className="w-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.07] text-white/60 hover:text-white rounded-xl py-3.5 text-sm transition-colors flex items-center justify-center gap-2.5"
+      className="w-full bg-elevated hover:bg-border-strong border border-border text-muted-foreground hover:text-surface-foreground rounded-xl py-3.5 text-sm transition-colors flex items-center justify-center gap-2.5"
     >
       <GoogleIcon />
       Continue with Google

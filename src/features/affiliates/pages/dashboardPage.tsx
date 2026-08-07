@@ -12,21 +12,21 @@ export default function AffiliateDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-white font-syne font-extrabold text-2xl">Affiliate Dashboard</h1>
-        <p className="text-[var(--muted)] text-sm mt-1">
+        <h1 className="text-surface-foreground font-syne font-extrabold text-2xl">Affiliate Dashboard</h1>
+        <p className="text-muted-foreground text-sm mt-1">
           Track your earnings and request payouts across every creator you promote.
         </p>
       </div>
 
       {balanceLoading && (
-        <div className="bg-white/[0.02] border border-[var(--border)] rounded-2xl p-6 sm:p-8">
+        <div className="bg-surface border border-border rounded-2xl p-6 sm:p-8">
           <AffiliateBalanceCardSkeleton />
         </div>
       )}
 
       {balanceError && !balanceLoading && (
-        <div className="bg-white/[0.02] border border-[var(--border)] rounded-2xl px-5 py-10 text-center">
-          <p className="text-red-400 text-sm">Failed to load your balance. Please refresh.</p>
+        <div className="bg-surface border border-border rounded-2xl px-5 py-10 text-center">
+          <p className="text-status-exception text-sm">Failed to load your balance. Please refresh.</p>
         </div>
       )}
 

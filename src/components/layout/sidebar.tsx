@@ -208,21 +208,21 @@ function NavItem({
       className={cn(
         "relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors group",
         isActive
-          ? "text-white"
-          : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
+          ? "text-surface-foreground"
+          : "text-muted-foreground hover:text-surface-foreground/80 hover:bg-border-strong/10"
       )}
     >
       {isActive && (
         <motion.div
           layoutId="active-nav"
-          className="absolute inset-0 bg-brand/10 border border-brand/20 rounded-xl"
+          className="absolute inset-0 bg-primary/10 border border-primary/20 rounded-xl"
           transition={{ type: "spring", stiffness: 400, damping: 35 }}
         />
       )}
       <span
         className={cn(
           "relative z-10 flex-shrink-0 transition-colors",
-          isActive ? "text-brand" : "text-white/40 group-hover:text-white/60"
+          isActive ? "text-primary" : "text-muted-foreground group-hover:text-surface-foreground/70"
         )}
       >
         {item.icon}
@@ -243,7 +243,7 @@ function NavItem({
       {collapsed && isActive && (
         <motion.div
           layoutId="active-dot"
-          className="absolute right-1 top-1 w-1.5 h-1.5 rounded-full bg-brand"
+          className="absolute right-1 top-1 w-1.5 h-1.5 rounded-full bg-primary"
         />
       )}
     </Link>
@@ -268,10 +268,10 @@ function NavContent({
         {navSections.map((section, i) => (
           <div
             key={section.label ?? `section-${i}`}
-            className={i > 0 ? "mt-4 pt-4 border-t border-white/[0.06]" : ""}
+            className={i > 0 ? "mt-4 pt-4 border-t border-border" : ""}
           >
             {section.label && !collapsed && (
-              <p className="px-3 pb-2 text-[10px] font-inter font-semibold uppercase tracking-widest text-white/25">
+              <p className="px-3 pb-2 text-[10px] font-inter font-semibold uppercase tracking-widest text-muted-foreground/70">
                 {section.label}
               </p>
             )}
@@ -289,15 +289,15 @@ function NavContent({
         ))}
       </nav>
 
-      <div className="px-2 py-4 border-t border-white/[0.06]">
+      <div className="px-2 py-4 border-t border-border">
         <div
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-xl",
             collapsed ? "justify-center" : ""
           )}
         >
-          <div className="w-8 h-8 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center flex-shrink-0">
-            <span className="text-brand text-xs font-bold font-syne">
+          <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-primary text-xs font-bold font-syne">
               {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </span>
           </div>
@@ -310,10 +310,10 @@ function NavContent({
                 transition={{ duration: 0.2 }}
                 className="flex-1 min-w-0 overflow-hidden"
               >
-                <p className="text-xs font-medium text-white truncate font-inter">
+                <p className="text-xs font-medium text-surface-foreground truncate font-inter">
                   {user?.name ?? "User"}
                 </p>
-                <p className="text-[10px] text-white/30 truncate font-inter">
+                <p className="text-[10px] text-muted-foreground truncate font-inter">
                   {user?.email ?? ""}
                 </p>
               </motion.div>
@@ -326,7 +326,7 @@ function NavContent({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={logout}
-                className="text-white/20 hover:text-white/50 transition-colors flex-shrink-0"
+                className="text-muted-foreground/60 hover:text-muted-foreground transition-colors flex-shrink-0"
                 title="Sign out"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -361,9 +361,9 @@ export default function Sidebar({
       <motion.aside
         animate={{ width: collapsed ? 68 : 240 }}
         transition={{ type: "spring", stiffness: 400, damping: 35 }}
-        className="hidden md:flex flex-col h-screen bg-[#0E0E0E] border-r border-white/[0.06] flex-shrink-0 overflow-hidden"
+        className="hidden md:flex flex-col h-screen bg-elevated border-r border-border flex-shrink-0 overflow-hidden"
       >
-        <div className="flex items-center justify-between px-4 py-3  border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <AnimatePresence>
             {!collapsed && (
              <div className="relative h-8 w-32 ">
@@ -378,7 +378,7 @@ export default function Sidebar({
           </AnimatePresence>
           <button
             onClick={onToggle}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors flex-shrink-0"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground/70 hover:text-muted-foreground hover:bg-border-strong/10 transition-colors flex-shrink-0"
           >
             <motion.svg
               animate={{ rotate: collapsed ? 180 : 0 }}
@@ -410,9 +410,9 @@ export default function Sidebar({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 400, damping: 40 }}
-              className="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-[#0E0E0E] border-r border-white/[0.06] md:hidden"
+              className="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-elevated border-r border-border md:hidden"
             >
-              <div className="flex items-center justify-between px-4 py- border-b border-white/[0.06]">
+              <div className="flex items-center justify-between px-4 py- border-b border-border">
                 <Image
                   src="/tisolock.png"
                   alt="CreatorLock logo"
@@ -421,7 +421,7 @@ export default function Sidebar({
                 />
                 <button
                   onClick={onMobileClose}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.05] transition-colors"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground/70 hover:text-muted-foreground hover:bg-border-strong/10 transition-colors"
                 >
                   <X size={24} />
                 </button>

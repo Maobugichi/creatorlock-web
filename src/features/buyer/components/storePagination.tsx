@@ -1,4 +1,3 @@
-// src/components/store/StorePagination.tsx
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -43,26 +42,24 @@ export default function StorePagination({ page, totalPages }: StorePaginationPro
 
   if (totalPages <= 1) return null;
 
-  const window = getPageWindow(page, totalPages);
+  const pageWindow = getPageWindow(page, totalPages);
 
   return (
     <div className="mt-10 flex items-center justify-center gap-2">
       <button
         onClick={() => goTo(page - 1)}
         disabled={page <= 1}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs transition-opacity disabled:opacity-30"
-        style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground font-mono text-xs transition-opacity disabled:opacity-30"
         aria-label="Previous page"
       >
         ‹
       </button>
 
-      {window.map((p, i) =>
+      {pageWindow.map((p, i) =>
         p === '...' ? (
           <span
             key={`ellipsis-${i}`}
-            className="flex h-8 w-8 items-center justify-center font-mono text-xs"
-            style={{ color: 'var(--muted)' }}
+            className="flex h-8 w-8 items-center justify-center font-mono text-xs text-muted-foreground"
           >
             …
           </span>
@@ -70,11 +67,11 @@ export default function StorePagination({ page, totalPages }: StorePaginationPro
           <button
             key={p}
             onClick={() => goTo(p)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs transition-colors"
-            style={{
-              borderColor: p === page ? 'var(--color-brand)' : 'var(--border)',
-              color: p === page ? 'var(--color-brand)' : 'var(--muted)',
-            }}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs transition-colors ${
+              p === page
+                ? 'bg-primary border-primary text-primary-foreground font-bold'
+                : 'border-border text-muted-foreground hover:text-surface-foreground hover:border-primary/40'
+            }`}
             aria-label={`Page ${p}`}
             aria-current={p === page ? 'page' : undefined}
           >
@@ -86,8 +83,7 @@ export default function StorePagination({ page, totalPages }: StorePaginationPro
       <button
         onClick={() => goTo(page + 1)}
         disabled={page >= totalPages}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs transition-opacity disabled:opacity-30"
-        style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground font-mono text-xs transition-opacity disabled:opacity-30"
         aria-label="Next page"
       >
         ›

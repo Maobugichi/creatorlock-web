@@ -11,25 +11,23 @@ export default function LibraryPage() {
   const { data: items, isLoading, isError, refetch } = useLibrary();
 
   return (
-    <div className="min-h-screen bg-[var(--bg)]">
+    <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        {/* ── Page Header ── */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="mb-8 flex flex-col gap-1"
         >
-          <h1 className="font-syne font-extrabold text-white text-2xl sm:text-3xl">
+          <h1 className="font-syne font-extrabold text-surface-foreground text-2xl sm:text-3xl">
             My Library
           </h1>
-          <p className="font-inter text-sm text-white/40">
+          <p className="font-inter text-sm text-muted-foreground">
             All your purchased products and active download links.
           </p>
         </motion.div>
 
-        {/* ── Count badge ── */}
         {!isLoading && !isError && items && items.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -37,9 +35,9 @@ export default function LibraryPage() {
             transition={{ duration: 0.3, delay: 0.1 }}
             className="mb-6"
           >
-            <span className="inline-flex items-center gap-2 text-xs font-inter text-white/40 bg-white/[0.04] border border-[var(--border)] rounded-lg px-3 py-1.5">
+            <span className="inline-flex items-center gap-2 text-xs font-inter text-muted-foreground bg-elevated border border-border rounded-lg px-3 py-1.5">
               <svg
-                className="w-3.5 h-3.5 text-white/30"
+                className="w-3.5 h-3.5 text-muted-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -56,7 +54,6 @@ export default function LibraryPage() {
           </motion.div>
         )}
 
-        {/* ── Loading State ── */}
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => (
@@ -65,15 +62,12 @@ export default function LibraryPage() {
           </div>
         )}
 
-        {/* ── Error State ── */}
         {isError && <LibraryError onRetry={refetch} />}
 
-        {/* ── Empty State ── */}
         {!isLoading && !isError && items && items.length === 0 && (
           <LibraryEmpty />
         )}
 
-        {/* ── Populated Grid ── */}
         {!isLoading && !isError && items && items.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}

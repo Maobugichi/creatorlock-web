@@ -75,18 +75,25 @@ export interface UpdateBuyerProfileFields {
 
 // ─── Download ─────────────────────────────────────────────────────────────────
 
+// ─── Download ─────────────────────────────────────────────────────────────────
+
 export interface DownloadFile {
   filename: string | null;
   url: string;
 }
 
+export interface DownloadData {
+  logId: string;
+  downloads: DownloadFile[];
+}
+
 export interface DownloadResponse {
   success: boolean;
-  data: DownloadFile[];
+  data: DownloadData;
 }
 
 export type DownloadResult =
-  | { ok: true; downloads: DownloadFile[] }
+  | { ok: true; logId: string; downloads: DownloadFile[] }
   | { ok: false; expired: boolean };
 
 

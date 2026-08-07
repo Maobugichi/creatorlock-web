@@ -5,7 +5,7 @@ import type { DownloadResponse, DownloadResult } from '@/features/buyer/types/bu
 export const redeemToken = cache(async (token: string): Promise<DownloadResult> => {
   try {
     const res = await api.get<DownloadResponse>(`/download/${token}`);
-    return { ok: true, downloads: res.data.data };
+    return { ok: true, logId: res.data.data.logId, downloads: res.data.data.downloads };
   } catch (err: unknown) {
     const status = (err as { response?: { status?: number } })?.response?.status;
     return { ok: false, expired: status !== 404 };

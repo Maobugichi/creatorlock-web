@@ -52,13 +52,13 @@ export function AccountResolver({ bankCode, accountNumber, onResolved, onReset }
   return (
     <div className="min-h-[1.25rem]">
       {isPending && (
-        <p className="text-xs text-[var(--muted)] flex items-center gap-1.5">
-          <span className="w-3 h-3 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+        <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+          <span className="w-3 h-3 border-2 border-border-strong border-t-muted-foreground rounded-full animate-spin" />
           Verifying account…
         </p>
       )}
       {isSuccess && data && (
-        <p className="text-xs text-green-400 flex items-start gap-1.5">
+        <p className="text-xs text-status-positive flex items-start gap-1.5">
           <svg
             className="w-3.5 h-3.5 mt-0.5 shrink-0"
             fill="none"
@@ -72,7 +72,7 @@ export function AccountResolver({ bankCode, accountNumber, onResolved, onReset }
         </p>
       )}
       {isError && (
-        <p className="text-xs text-red-400">
+        <p className="text-xs text-status-exception">
           {(error as ApiError)?.response?.data?.message ?? 'Could not verify account. Check the details and try again.'}
         </p>
       )}

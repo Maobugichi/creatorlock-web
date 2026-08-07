@@ -69,8 +69,6 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
     } catch {
-      // Clipboard API can fail (permissions, insecure context) — fail silently
-      // rather than surfacing an error for what's a low-stakes convenience action.
     }
   }
 
@@ -114,44 +112,43 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
   }
 
   return (
-    <div className="border-b border-[var(--border)] last:border-0">
-      {/* ── Desktop row ──────────────────────────────────────────────── */}
+    <div className="border-b border-border last:border-0">
       <div
         onClick={selectMode ? onToggleSelect : undefined}
         className={`hidden sm:flex items-center justify-between px-5 py-4 transition-colors ${
-          selectMode ? 'cursor-pointer hover:bg-white/[0.02]' : 'hover:bg-white/[0.015]'
-        } ${selected ? 'bg-brand/[0.03]' : ''}`}
+          selectMode ? 'cursor-pointer hover:bg-elevated' : 'hover:bg-elevated/50'
+        } ${selected ? 'bg-primary/[0.03]' : ''}`}
       >
         <div className="flex items-center gap-4 flex-1 min-w-0">
           {selectMode && (
             <div
               className={`w-5 h-5 rounded-md border shrink-0 flex items-center justify-center transition-colors ${
-                selected ? 'bg-brand border-brand' : 'border-[var(--border)]'
+                selected ? 'bg-primary border-primary' : 'border-border'
               }`}
             >
               {selected && (
-                <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <svg className="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               )}
             </div>
           )}
-          <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
-            <span className="text-brand text-xs font-syne font-bold">{initials}</span>
+          <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+            <span className="text-primary text-xs font-syne font-bold">{initials}</span>
           </div>
           <div className="min-w-0">
-            <p className="text-white text-sm font-medium truncate">{affiliate.affiliate_name}</p>
-            <p className="text-[var(--muted)] text-xs truncate">{affiliate.affiliate_email}</p>
-            <p className="text-[var(--muted)] text-xs opacity-60">Joined {formatRelativeTime(affiliate.created_at)}</p>
+            <p className="text-surface-foreground text-sm font-medium truncate">{affiliate.affiliate_name}</p>
+            <p className="text-muted-foreground text-xs truncate">{affiliate.affiliate_email}</p>
+            <p className="text-muted-foreground text-xs opacity-60">Joined {formatRelativeTime(affiliate.created_at)}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-6 shrink-0 ml-4">
           <div className="w-20 text-right">
-            <p className="text-white text-sm font-mono">{affiliate.total_conversions}</p>
-            <p className="text-[var(--muted)] text-xs">conversions</p>
+            <p className="text-surface-foreground text-sm font-mono">{affiliate.total_conversions}</p>
+            <p className="text-muted-foreground text-xs">conversions</p>
             {affiliate.conversions_this_week > 0 && (
-              <p className="text-green-400 text-[10px] font-medium">+{affiliate.conversions_this_week} this wk</p>
+              <p className="text-status-positive text-[10px] font-medium">+{affiliate.conversions_this_week} this wk</p>
             )}
           </div>
 
@@ -169,14 +166,14 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
                     if (e.key === 'Escape') handleCancelCommissionEdit();
                   }}
                   autoFocus
-                  className="w-14 bg-[var(--bg)] border border-brand/40 rounded-lg px-1.5 py-1 text-white text-sm font-mono text-right focus:outline-none focus:border-brand"
+                  className="w-14 bg-elevated border border-primary/40 rounded-lg px-1.5 py-1 text-surface-foreground text-sm font-mono text-right focus:outline-none focus:border-primary"
                 />
-                <button onClick={handleSaveCommission} disabled={isUpdating} aria-label="Save commission" className="text-green-400 hover:text-green-300 disabled:opacity-50">
+                <button onClick={handleSaveCommission} disabled={isUpdating} aria-label="Save commission" className="text-status-positive hover:text-status-positive/80 disabled:opacity-50">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </button>
-                <button onClick={handleCancelCommissionEdit} aria-label="Cancel" className="text-[var(--muted)] hover:text-white">
+                <button onClick={handleCancelCommissionEdit} aria-label="Cancel" className="text-muted-foreground hover:text-surface-foreground">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -184,15 +181,15 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
               </div>
             ) : (
               <div className="flex items-center justify-end gap-1.5 group/commission">
-                <p className="text-white text-sm font-mono">{affiliate.commission_percent}%</p>
-                <button onClick={handleStartCommissionEdit} aria-label="Edit commission" className="text-[var(--muted)] opacity-0 group-hover/commission:opacity-100 hover:text-brand transition-opacity">
+                <p className="text-surface-foreground text-sm font-mono">{affiliate.commission_percent}%</p>
+                <button onClick={handleStartCommissionEdit} aria-label="Edit commission" className="text-muted-foreground opacity-0 group-hover/commission:opacity-100 hover:text-primary transition-opacity">
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.5-9.5a2.121 2.121 0 0 1 3 3L12 16l-4 1 1-4 9.5-9.5z" />
                   </svg>
                 </button>
               </div>
             )}
-            <p className="text-[var(--muted)] text-xs">commission</p>
+            <p className="text-muted-foreground text-xs">commission</p>
           </div>
 
           <div className="w-16 flex justify-end">
@@ -207,7 +204,7 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
               onClick={handleCopyLink}
               title="Copy referral link"
               aria-label="Copy referral link"
-              className="w-8 h-8 flex items-center justify-center rounded-lg transition-all bg-brand/10 text-brand border border-brand/20 hover:bg-brand/20"
+              className="w-8 h-8 flex items-center justify-center rounded-lg transition-all bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
             >
               {linkCopied ? (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -225,7 +222,7 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
               onClick={() => resendInvite()}
               disabled={isResending || onCooldown}
               title={onCooldown ? `Available in ${formatCooldown(cooldownRemaining)}` : 'Resend invite email'}
-              className="text-xs font-syne font-semibold px-3 py-1.5 rounded-lg transition-all bg-white/[0.04] text-[var(--muted)] border border-[var(--border)] hover:bg-white/[0.08] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+              className="text-xs font-syne font-semibold px-3 py-1.5 rounded-lg transition-all bg-elevated text-muted-foreground border border-border hover:bg-border-strong hover:text-surface-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
             >
               {isResending ? '…' : onCooldown ? formatCooldown(cooldownRemaining) : 'Resend'}
             </button>
@@ -236,8 +233,8 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
               disabled={isToggling}
               className={`text-xs font-syne font-semibold px-3 py-1.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                 affiliate.active
-                  ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'
-                  : 'bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20'
+                  ? 'bg-status-warning/10 text-status-warning border border-status-warning/20 hover:bg-status-warning/20'
+                  : 'bg-status-positive/10 text-status-positive border border-status-positive/20 hover:bg-status-positive/20'
               }`}
             >
               {isToggling ? '…' : confirmingDeactivate ? 'Confirm?' : affiliate.active ? 'Deactivate' : 'Activate'}
@@ -255,10 +252,10 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
                     ? 'Click again to permanently delete'
                     : 'Delete affiliate'
                 }
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:text-status-exception hover:bg-status-exception/10 transition-colors disabled:opacity-30 disabled:pointer-events-none"
               >
                 {isDeleting ? (
-                  <span className="w-3.5 h-3.5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-status-exception/30 border-t-status-exception rounded-full animate-spin" />
                 ) : (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     {confirmingDelete ? (
@@ -272,7 +269,7 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
             </div>
             {deleteError && (
               <div className="absolute top-full right-0 mt-1 z-10">
-                <p className="text-xs text-red-400 bg-surface border border-red-500/20 rounded-lg px-2.5 py-1.5 whitespace-nowrap">{deleteError}</p>
+                <p className="text-xs text-status-exception bg-surface border border-status-exception/20 rounded-lg px-2.5 py-1.5 whitespace-nowrap">{deleteError}</p>
               </div>
             )}
           </div>
@@ -282,34 +279,33 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
 
       {resendError && (
         <div className="hidden sm:block px-5 pb-3 -mt-1">
-          <p className="text-xs text-red-400">{resendError}</p>
+          <p className="text-xs text-status-exception">{resendError}</p>
         </div>
       )}
 
-      {/* ── Mobile row (compact, tap to open full sheet or select) ──── */}
       <div
         onClick={selectMode ? onToggleSelect : () => setSheetOpen(true)}
-        className={`sm:hidden flex items-center justify-between px-5 py-4 active:bg-white/[0.02] transition-colors cursor-pointer ${selected ? 'bg-brand/[0.03]' : ''}`}
+        className={`sm:hidden flex items-center justify-between px-5 py-4 active:bg-elevated transition-colors cursor-pointer ${selected ? 'bg-primary/[0.03]' : ''}`}
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
-            <span className="text-brand text-xs font-syne font-bold">{initials}</span>
+          <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+            <span className="text-primary text-xs font-syne font-bold">{initials}</span>
           </div>
           <div className="min-w-0">
-            <p className="text-white text-sm font-medium truncate">{affiliate.affiliate_name}</p>
-            <p className="text-[var(--muted)] text-xs truncate">{affiliate.affiliate_email}</p>
-            <p className="text-[var(--muted)] text-xs opacity-60">Joined {formatRelativeTime(affiliate.created_at)}</p>
+            <p className="text-surface-foreground text-sm font-medium truncate">{affiliate.affiliate_name}</p>
+            <p className="text-muted-foreground text-xs truncate">{affiliate.affiliate_email}</p>
+            <p className="text-muted-foreground text-xs opacity-60">Joined {formatRelativeTime(affiliate.created_at)}</p>
           </div>
         </div>
 
         {selectMode ? (
           <div
             className={`w-5 h-5 rounded-md border shrink-0 flex items-center justify-center transition-colors ${
-              selected ? 'bg-brand border-brand' : 'border-[var(--border)]'
+              selected ? 'bg-primary border-primary' : 'border-border'
             }`}
           >
             {selected && (
-              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <svg className="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             )}
@@ -319,7 +315,7 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
           <button
             onClick={handleCopyLink}
             aria-label="Copy referral link"
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all bg-brand/10 text-brand border border-brand/20"
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all bg-primary/10 text-primary border border-primary/20"
           >
             {linkCopied ? (
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -332,7 +328,7 @@ export function AffiliateRow({ affiliate, selectMode = false, selected = false, 
               </svg>
             )}
           </button>
-          <svg className="w-4 h-4 text-[var(--muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </div>

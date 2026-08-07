@@ -24,11 +24,9 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
   return (
     <Link
       href={`/store/${storeSlug}/${product.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:border-white/10 hover:shadow-xl hover:shadow-black/40"
-      style={{ background: 'var(--color-surface)', borderColor: 'var(--border)' }}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-xl hover:shadow-black/40"
     >
-      {/* ── Thumbnail ────────────────────────────── */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[var(--bg)]">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-elevated">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}
@@ -39,57 +37,48 @@ export default function ProductCard({ product, storeSlug }: ProductCardProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <span className="font-syne text-4xl font-extrabold opacity-20 text-brand">
+            <span className="font-syne text-4xl font-extrabold opacity-20 text-primary">
               {product.title.charAt(0).toUpperCase()}
             </span>
           </div>
         )}
 
         {isFree && (
-          <span className="absolute left-3 top-3 rounded-lg border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-400">
+          <span className="absolute left-3 top-3 rounded-lg border border-primary/30 bg-primary/15 px-2 py-0.5 font-mono text-[10px] font-medium text-primary">
             FREE
           </span>
         )}
       </div>
 
-      {/* ── Body ─────────────────────────────────── */}
       <div className="flex flex-1 flex-col gap-2.5 p-4">
-        {/* Title */}
-        <h3 className="line-clamp-2 font-syne text-sm font-bold leading-snug text-white transition-colors group-hover:text-brand">
+        <h3 className="line-clamp-2 font-syne text-sm font-bold leading-snug text-surface-foreground transition-colors group-hover:text-primary">
           {product.title}
         </h3>
 
-        {/* Description */}
         {product.description && (
-          <p className="line-clamp-2 font-inter text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+          <p className="line-clamp-2 font-inter text-xs leading-relaxed text-muted-foreground">
             {product.description}
           </p>
         )}
 
-        
         <div className="mt-auto flex items-center justify-between pt-1">
           <span className="font-mono text-sm font-medium">
             {isFree ? (
-              <span className="text-emerald-400">Free</span>
+              <span className="text-primary">Free</span>
             ) : (
-              <span className="text-white">{formatNGN(product.price_cents)}</span>
+              <span className="text-surface-foreground">{formatNGN(product.price_cents)}</span>
             )}
           </span>
 
           <div className="flex items-center gap-2">
             {fileCount > 0 && (
-              <span className="flex items-center gap-1 font-inter text-[11px]" style={{ color: 'var(--muted)' }}>
+              <span className="flex items-center gap-1 font-inter text-[11px] text-muted-foreground">
                 <FileIcon />
                 {fileCount} {fileCount === 1 ? 'file' : 'files'}
               </span>
             )}
 
-            <span className="rounded-lg text-[var(--muted)] border-[var(--border)] border px-2.5 py-1 font-mono text-[11px] font-medium transition-colors duration-200 group-hover:bg-brand group-hover:border-brand group-hover:text-white"
-              style={{
-                borderColor: '',
-                color: '',
-              }}
-            >
+            <span className="rounded-lg border border-border text-muted-foreground px-2.5 py-1 font-mono text-[11px] font-medium transition-colors duration-200 group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground">
               {isFree ? 'Get' : 'Buy'}
             </span>
           </div>

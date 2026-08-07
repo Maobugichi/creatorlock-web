@@ -1,11 +1,11 @@
-// components/ui/datePicker.tsx
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 
 interface DatePickerProps {
   name: string;
-  minDate?: string; // ISO string, e.g. "2026-07-25"
+  minDate?: string;
   placeholder?: string;
 }
 
@@ -61,35 +61,32 @@ export default function DatePicker({ name, minDate, placeholder = 'Select date' 
       <button
         type="button"
         onClick={() => setOpen((p) => !p)}
-        className={`w-full flex items-center justify-between bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-left transition-colors focus:outline-none focus:border-brand/50 focus:ring-2 focus:ring-brand/20 ${
-          selected ? 'text-white' : 'text-[var(--muted)]'
+        className={`w-full flex items-center justify-between bg-elevated border border-border rounded-xl px-4 py-2.5 text-sm text-left transition-colors focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 ${
+          selected ? 'text-surface-foreground' : 'text-muted-foreground'
         }`}
       >
         <span>{displayLabel}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="shrink-0 text-[var(--muted)]">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="shrink-0 text-muted-foreground">
           <rect x="3" y="4" width="18" height="18" rx="2" />
           <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
         </svg>
       </button>
 
       {open && (
-        <div
-          className="absolute z-50 bottom-full mb-2 left-0 w-72 rounded-2xl border p-4 shadow-xl"
-          style={{ background: '#111', borderColor: 'var(--border)' }}
-        >
+        <div className="absolute z-50 bottom-full mb-2 left-0 w-72 rounded-2xl border border-border bg-elevated p-4 shadow-xl">
           <div className="flex items-center justify-between mb-3">
             <button
               type="button"
               onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/5 transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-surface-foreground hover:bg-border-strong/10 transition-colors"
             >
               ‹
             </button>
-            <span className="text-sm font-syne font-semibold text-white">{monthLabel}</span>
+            <span className="text-sm font-syne font-semibold text-surface-foreground">{monthLabel}</span>
             <button
               type="button"
               onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/5 transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-surface-foreground hover:bg-border-strong/10 transition-colors"
             >
               ›
             </button>
@@ -97,7 +94,7 @@ export default function DatePicker({ name, minDate, placeholder = 'Select date' 
 
           <div className="grid grid-cols-7 gap-1 mb-1">
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-              <div key={i} className="text-[10px] text-[var(--muted)] text-center py-1">{d}</div>
+              <div key={i} className="text-[10px] text-muted-foreground text-center py-1">{d}</div>
             ))}
           </div>
 
@@ -117,10 +114,10 @@ export default function DatePicker({ name, minDate, placeholder = 'Select date' 
                   onClick={() => handleSelect(day)}
                   className={`w-8 h-8 rounded-lg text-xs font-inter transition-colors ${
                     active
-                      ? 'bg-brand text-white font-semibold'
+                      ? 'bg-primary text-primary-foreground font-semibold'
                       : disabled
-                      ? 'text-white/15 cursor-not-allowed'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      ? 'text-muted-foreground/40 cursor-not-allowed'
+                      : 'text-surface-foreground/70 hover:bg-border-strong/10 hover:text-surface-foreground'
                   }`}
                 >
                   {day}
@@ -133,7 +130,7 @@ export default function DatePicker({ name, minDate, placeholder = 'Select date' 
             <button
               type="button"
               onClick={() => { setSelected(null); setOpen(false); }}
-              className="mt-3 w-full text-center text-xs text-[var(--muted)] hover:text-white transition-colors"
+              className="mt-3 w-full text-center text-xs text-muted-foreground hover:text-surface-foreground transition-colors"
             >
               Clear date
             </button>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'motion/react';
 
 interface ConfirmPopoverProps {
   action: 'publish' | 'unpublish';
@@ -29,28 +30,30 @@ function ConfirmContent({ action, onConfirm, onCancel }: ConfirmPopoverProps) {
   const isUnpublish = action === 'unpublish';
   return (
     <>
-      <p className="font-inter text-white/70 text-xs mb-3 leading-relaxed">
+      <p className="font-inter text-muted-foreground text-xs mb-3 leading-relaxed">
         {isUnpublish
           ? "This will hide the product from your store. Confirm?"
           : "This will make the product visible in your store. Confirm?"}
       </p>
       <div className="flex gap-2">
-        <button
+        <motion.button
+          whileTap={{ scale: 0.96 }}
           onClick={onCancel}
-          className="flex-1 py-1.5 rounded-lg border border-white/10 text-white/40 hover:text-white/70 text-xs font-inter transition-colors"
+          className="flex-1 py-1.5 rounded-lg border border-border text-muted-foreground hover:text-surface-foreground text-xs font-inter transition-colors"
         >
           Cancel
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.96 }}
           onClick={onConfirm}
           className={`flex-1 py-1.5 rounded-lg text-xs font-syne font-semibold transition-colors ${
             isUnpublish
-              ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30'
-              : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+              ? 'bg-status-warning/20 text-status-warning hover:bg-status-warning/30'
+              : 'bg-status-positive/20 text-status-positive hover:bg-status-positive/30'
           }`}
         >
           {isUnpublish ? 'Unpublish' : 'Publish'}
-        </button>
+        </motion.button>
       </div>
     </>
   );
@@ -70,14 +73,17 @@ function DesktopPopover({ action, onConfirm, onCancel }: ConfirmPopoverProps) {
   }, [onCancel]);
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className="absolute bottom-full right-0 mb-2 z-20 w-48 bg-[#111] border border-white/10 rounded-xl p-3 shadow-xl"
+      initial={{ opacity: 0, scale: 0.95, y: 4 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+      className="absolute bottom-full right-0 mb-2 z-20 w-48 bg-elevated border border-border rounded-xl p-3 shadow-xl origin-bottom-right"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="absolute -bottom-1.5 right-3 w-3 h-3 bg-[#111] border-r border-b border-white/10 rotate-45" />
+      <div className="absolute -bottom-1.5 right-3 w-3 h-3 bg-elevated border-r border-b border-border rotate-45" />
       <ConfirmContent action={action} onConfirm={onConfirm} onCancel={onCancel} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -90,44 +96,52 @@ function MobileBottomSheet({ action, onConfirm, onCancel }: ConfirmPopoverProps)
   }, []);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 flex items-end"
       style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
       onClick={onCancel}
     >
-      <div
-        className="w-full bg-[#111] border-t border-white/10 rounded-t-2xl px-5 pt-5 pb-8 animate-in slide-in-from-bottom duration-200"
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+        className="w-full bg-elevated border-t border-border rounded-t-2xl px-5 pt-5 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-10 h-1 rounded-full bg-white/10 mx-auto mb-5" />
-        <p className="font-syne font-bold text-white text-base mb-1">
+        <div className="w-10 h-1 rounded-full bg-border-strong mx-auto mb-5" />
+        <p className="font-syne font-bold text-surface-foreground text-base mb-1">
           {isUnpublish ? 'Unpublish product?' : 'Publish product?'}
         </p>
-        <p className="font-inter text-white/40 text-sm mb-6 leading-relaxed">
+        <p className="font-inter text-muted-foreground text-sm mb-6 leading-relaxed">
           {isUnpublish
             ? "This will hide the product from your store. Buyers won't be able to purchase it."
             : 'This will make your product visible and purchasable in your store.'}
         </p>
         <div className="flex flex-col gap-2">
-          <button
+          <motion.button
+            whileTap={{ scale: 0.98 }}
             onClick={onConfirm}
-            className={`w-full py-3.5 rounded-xl text-sm font-syne font-semibold transition-colors ${
+            className={`w-full py-3.5 rounded-xl text-sm font-syne font-semibold transition-colors border ${
               isUnpublish
-                ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 border border-orange-500/20'
-                : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/20'
+                ? 'bg-status-warning/20 text-status-warning hover:bg-status-warning/30 border-status-warning/20'
+                : 'bg-status-positive/20 text-status-positive hover:bg-status-positive/30 border-status-positive/20'
             }`}
           >
             {isUnpublish ? 'Yes, unpublish' : 'Yes, publish'}
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.98 }}
             onClick={onCancel}
-            className="w-full py-3.5 rounded-xl text-sm font-inter text-white/40 hover:text-white/70 border border-white/[0.07] bg-white/[0.03] transition-colors"
+            className="w-full py-3.5 rounded-xl text-sm font-inter text-muted-foreground hover:text-surface-foreground border border-border bg-elevated transition-colors"
           >
             Cancel
-          </button>
+          </motion.button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

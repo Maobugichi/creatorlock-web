@@ -116,14 +116,13 @@ export default function ProductForm({
 
   return (
     <div className="space-y-6">
-      {/* Status badge */}
       <div>
         <span
           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-inter font-medium ${
-            product.status === "published" ? "bg-green-500/10 text-green-400" :
-            product.status === "unpublished" ? "bg-brand/10 text-brand" :
-            product.status === "flagged" ? "bg-red-500/10 text-red-400" :
-            "bg-white/[0.06] text-white/40"
+            product.status === "published" ? "bg-status-positive/10 text-status-positive" :
+            product.status === "unpublished" ? "bg-status-warning/10 text-status-warning" :
+            product.status === "flagged" ? "bg-status-exception/10 text-status-exception" :
+            "bg-elevated text-muted-foreground"
           }`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -131,7 +130,6 @@ export default function ProductForm({
         </span>
       </div>
 
-      {/* Publish / Unpublish */}
       {product.status !== "flagged" && (
         <button
           type="button"
@@ -139,12 +137,12 @@ export default function ProductForm({
           onClick={onPublishToggle}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-syne font-semibold transition-colors active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${
             isPublished
-              ? "bg-white/[0.06] hover:bg-white/[0.1] text-white"
-              : "bg-brand hover:bg-brand-dark text-white"
+              ? "bg-status-warning/10 hover:bg-status-warning/20 text-status-warning"
+              : "bg-status-positive/10 hover:bg-status-positive/20 text-status-positive"
           }`}
         >
           {isPublishing ? (
-            <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="w-3.5 h-3.5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
           ) : isPublished ? (
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
@@ -158,34 +156,31 @@ export default function ProductForm({
         </button>
       )}
 
-      {/* Error */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm font-inter">
+        <div className="bg-status-exception/10 border border-status-exception/20 text-status-exception rounded-xl px-4 py-3 text-sm font-inter">
           {error}
         </div>
       )}
 
-      {/* Title */}
       <div>
-        <label htmlFor="title" className="block text-sm font-inter text-white/70 mb-2">
-          Title <span className="text-red-400">*</span>
+        <label htmlFor="title" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+          Title <span className="text-status-exception">*</span>
         </label>
         <input
           id="title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+          className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
         />
       </div>
 
-      {/* Price */}
       <div>
-        <label htmlFor="price" className="block text-sm font-inter text-white/70 mb-2">
-          Price <span className="text-red-400">*</span>
+        <label htmlFor="price" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+          Price <span className="text-status-exception">*</span>
         </label>
         <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono text-sm select-none">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-mono text-sm select-none">
             ₦
           </span>
           <input
@@ -195,45 +190,42 @@ export default function ProductForm({
             step="1"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl pl-8 pr-4 py-3 text-white font-mono text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+            className="w-full bg-elevated border border-border rounded-xl pl-8 pr-4 py-3 text-surface-foreground font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
           />
         </div>
       </div>
 
-      {/* Category */}
       <div>
-        <label htmlFor="category" className="block text-sm font-inter text-white/70 mb-2">
-          Category <span className="text-red-400">*</span>
+        <label htmlFor="category" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+          Category <span className="text-status-exception">*</span>
         </label>
         <select
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value as ProductCategory)}
-          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors"
+          className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors"
         >
           {CATEGORY_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-[var(--bg)]">
+            <option key={opt.value} value={opt.value} className="bg-elevated">
               {opt.label}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-inter text-white/70 mb-2">
-          Description <span className="text-white/30">(optional)</span>
+        <label htmlFor="description" className="block text-sm font-inter text-surface-foreground/70 mb-2">
+          Description <span className="text-muted-foreground">(optional)</span>
         </label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-white font-inter text-sm placeholder:text-white/20 focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/20 transition-colors resize-none"
+          className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground font-inter text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20 transition-colors resize-none"
         />
       </div>
 
-      {/* Thumbnail */}
       <ThumbnailUpload
         currentUrl={product.thumbnail}
         preview={thumbnailPreview}
@@ -241,11 +233,10 @@ export default function ProductForm({
         showSizeHint
       />
 
-      {/* Files */}
       <div>
-        <label className="block text-sm font-inter text-white/70 mb-2">Digital files</label>
+        <label className="block text-sm font-inter text-surface-foreground/70 mb-2">Digital files</label>
         {product.files.length === 0 && newFiles.length === 0 ? (
-          <p className="text-sm text-white/30 font-inter mb-3">No files yet. Add files below.</p>
+          <p className="text-sm text-muted-foreground font-inter mb-3">No files yet. Add files below.</p>
         ) : (
           <ExistingFileList
             files={product.files}
@@ -266,17 +257,16 @@ export default function ProductForm({
         />
       </div>
 
-      <div className="border-t border-[var(--border)]" />
+      <div className="border-t border-border" />
 
-      {/* Save */}
       <button
         type="button"
         disabled={isSaving}
         onClick={handleSave}
-        className="w-full bg-brand hover:bg-brand-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
+        className="w-full bg-primary hover:bg-primary-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-syne font-semibold rounded-xl px-6 py-3 transition-colors text-sm flex items-center justify-center gap-2"
       >
         {isSaving && (
-          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
         )}
         {saveLabel}
       </button>

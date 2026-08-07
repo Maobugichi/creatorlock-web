@@ -72,8 +72,8 @@ export default function AffiliatesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-white font-syne font-extrabold text-2xl">Affiliates</h1>
-        <p className="text-[var(--muted)] text-sm mt-1">
+        <h1 className="text-surface-foreground font-syne font-extrabold text-2xl">Affiliates</h1>
+        <p className="text-muted-foreground text-sm mt-1">
           Manage your affiliate program and track commissions.
         </p>
       </div>
@@ -97,12 +97,12 @@ export default function AffiliatesPage() {
         />
       )}
 
-      <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
-          <h2 className="text-white font-syne font-bold text-base">Your Affiliates</h2>
+      <div className="bg-surface border border-border rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+          <h2 className="text-surface-foreground font-syne font-bold text-base">Your Affiliates</h2>
           <div className="flex items-center gap-3">
             {!isLoading && affiliates && affiliates.length > 0 && (
-              <span className="text-[var(--muted)] text-xs font-mono">
+              <span className="text-muted-foreground text-xs font-mono">
                 {visibleAffiliates.length === affiliates.length
                   ? `${affiliates.length} affiliate${affiliates.length !== 1 ? 's' : ''}`
                   : `${visibleAffiliates.length} of ${affiliates.length}`}
@@ -113,8 +113,8 @@ export default function AffiliatesPage() {
                 onClick={toggleSelectMode}
                 className={`text-xs font-syne font-semibold px-3 py-1.5 rounded-lg transition-colors ${
                   selectMode
-                    ? 'bg-brand/15 text-brand'
-                    : 'bg-white/[0.04] text-[var(--muted)] hover:text-white border border-[var(--border)]'
+                    ? 'bg-primary/15 text-primary'
+                    : 'bg-elevated text-muted-foreground hover:text-surface-foreground border border-border'
                 }`}
               >
                 {selectMode ? 'Cancel' : 'Select'}
@@ -124,13 +124,13 @@ export default function AffiliatesPage() {
         </div>
 
         {!isLoading && affiliates && affiliates.length > 0 && (
-          <div className="hidden sm:flex items-center justify-between px-5 py-2 border-b border-[var(--border)] bg-white/[0.01]">
-            <span className="text-[var(--muted)] text-xs uppercase tracking-wider flex-1">Affiliate</span>
+          <div className="hidden sm:flex items-center justify-between px-5 py-2 border-b border-border bg-elevated/50">
+            <span className="text-muted-foreground text-xs uppercase tracking-wider flex-1">Affiliate</span>
             <div className="flex items-center gap-6 shrink-0 ml-4">
-              <span className="text-[var(--muted)] text-xs uppercase tracking-wider w-20 text-right">Conversions</span>
-              <span className="text-[var(--muted)] text-xs uppercase tracking-wider w-24 text-right">Commission</span>
-              <span className="text-[var(--muted)] text-xs uppercase tracking-wider w-16 text-right">Status</span>
-              <span className="text-[var(--muted)] text-xs uppercase tracking-wider w-64 text-right">Actions</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider w-20 text-right">Conversions</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider w-24 text-right">Commission</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider w-16 text-right">Status</span>
+              <span className="text-muted-foreground text-xs uppercase tracking-wider w-64 text-right">Actions</span>
             </div>
           </div>
         )}
@@ -139,19 +139,19 @@ export default function AffiliatesPage() {
 
         {isError && !isLoading && (
           <div className="px-5 py-10 text-center">
-            <p className="text-red-400 text-sm">Failed to load affiliates. Please refresh.</p>
+            <p className="text-status-exception text-sm">Failed to load affiliates. Please refresh.</p>
           </div>
         )}
 
         {!isLoading && !isError && affiliates && affiliates.length === 0 && (
           <div className="px-5 py-14 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-brand" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
               </svg>
             </div>
-            <p className="text-white font-syne font-bold text-base mb-1">No affiliates yet</p>
-            <p className="text-[var(--muted)] text-sm">
+            <p className="text-surface-foreground font-syne font-bold text-base mb-1">No affiliates yet</p>
+            <p className="text-muted-foreground text-sm">
               Add someone above to start growing your affiliate network.
             </p>
           </div>
@@ -159,8 +159,8 @@ export default function AffiliatesPage() {
 
         {!isLoading && !isError && affiliates && affiliates.length > 0 && visibleAffiliates.length === 0 && (
           <div className="px-5 py-14 text-center">
-            <p className="text-white font-syne font-bold text-base mb-1">No matches</p>
-            <p className="text-[var(--muted)] text-sm">
+            <p className="text-surface-foreground font-syne font-bold text-base mb-1">No matches</p>
+            <p className="text-muted-foreground text-sm">
               Try a different search term or filter.
             </p>
           </div>
@@ -179,8 +179,8 @@ export default function AffiliatesPage() {
       </div>
 
       {selectMode && selectedIds.size > 0 && (
-        <div className="sticky bottom-4 flex items-center justify-between gap-4 bg-surface border border-[var(--border)] rounded-2xl px-5 py-3.5 shadow-xl">
-          <span className="text-white text-sm font-medium">
+        <div className="sticky bottom-4 flex items-center justify-between gap-4 bg-surface border border-border rounded-2xl px-5 py-3.5 shadow-xl">
+          <span className="text-surface-foreground text-sm font-medium">
             {selectedIds.size} selected
           </span>
           <div className="flex items-center gap-2">
@@ -191,7 +191,7 @@ export default function AffiliatesPage() {
                 bulkDeactivate(targets);
                 setSelectedIds(new Set());
               }}
-              className="text-xs font-syne font-semibold px-3.5 py-2 rounded-lg bg-white/[0.06] text-white hover:bg-white/[0.1] transition-colors disabled:opacity-50"
+              className="text-xs font-syne font-semibold px-3.5 py-2 rounded-lg bg-status-warning/10 text-status-warning border border-status-warning/20 hover:bg-status-warning/20 transition-colors disabled:opacity-50"
             >
               Deactivate Selected
             </button>
@@ -202,7 +202,7 @@ export default function AffiliatesPage() {
                 bulkDelete(targets);
                 setSelectedIds(new Set());
               }}
-              className="text-xs font-syne font-semibold px-3.5 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+              className="text-xs font-syne font-semibold px-3.5 py-2 rounded-lg bg-status-exception/10 text-status-exception border border-status-exception/20 hover:bg-status-exception/20 transition-colors disabled:opacity-50"
             >
               Delete Selected
             </button>

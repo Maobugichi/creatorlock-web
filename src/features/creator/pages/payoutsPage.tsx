@@ -12,7 +12,7 @@ export default function PayoutsPage() {
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl sm:text-4xl font-syne font-extrabold tracking-tight">Payouts</h1>
-        <p className="text-sm text-[var(--muted)]">
+        <p className="text-sm text-muted-foreground">
           Withdraw your earnings to your Nigerian bank account.
         </p>
       </div>

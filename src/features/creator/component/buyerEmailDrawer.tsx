@@ -27,7 +27,6 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
     <AnimatePresence>
       {open && (
         <>
-          {/* Overlay */}
           <motion.div
             key="buyer-email-overlay"
             role="presentation"
@@ -39,7 +38,6 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
             className="fixed inset-0 bg-black/50 z-40"
           />
 
-          {/* Drawer */}
           <motion.div
             key="buyer-email-drawer"
             ref={drawerRef}
@@ -51,16 +49,15 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-[400px] flex flex-col bg-[#0C0C0C]  border-l border-(--border) "
+            className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-[400px] flex flex-col bg-surface border-l border-border"
           >
-            {/* Header */}
-            <div className="flex items-start justify-between px-5 py-4 border-b border-(--border) shrink-0">
+            <div className="flex items-start justify-between px-5 py-4 border-b border-border shrink-0">
               <div>
-                <h2 className="text-white font-syne font-bold text-sm">
+                <h2 className="text-surface-foreground font-syne font-bold text-sm">
                   {stage === 'success' ? 'Email sent!' : 'Send email'}
                 </h2>
                 {stage !== 'success' && (
-                  <p className="text-(--muted) text-xs mt-0.5">
+                  <p className="text-muted-foreground text-xs mt-0.5">
                     {activeBuyers.length} buyer{activeBuyers.length !== 1 ? 's' : ''} selected
                   </p>
                 )}
@@ -69,20 +66,18 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                 type="button"
                 onClick={onClose}
                 disabled={isPending}
-                className="w-7 h-7 rounded-lg bg-white/4 border border-(--border) text-(--muted) hover:text-white hover:bg-white/7 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all text-sm"
+                className="w-7 h-7 rounded-lg bg-elevated border border-border text-muted-foreground hover:text-surface-foreground hover:bg-border-strong disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all text-sm"
                 aria-label="Close drawer"
               >
                 ✕
               </button>
             </div>
 
-            {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
 
-              {/* ── Pick template ── */}
               {stage === 'pick' && (
                 <>
-                  <p className="text-(--muted) text-[10px] uppercase tracking-wider">Templates</p>
+                  <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Templates</p>
                   <div className="space-y-2">
                     {STANDARD_TEMPLATES.map((t) => (
                       <TemplateCard
@@ -95,9 +90,9 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                   </div>
 
                   <div className="flex items-center gap-3 my-2">
-                    <div className="flex-1 h-px bg-(--border)" />
-                    <span className="text-(--muted) text-[10px] uppercase tracking-wider">or</span>
-                    <div className="flex-1 h-px bg-(--border)" />
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-muted-foreground text-[10px] uppercase tracking-wider">or</span>
+                    <div className="flex-1 h-px bg-border" />
                   </div>
 
                   <TemplateCard
@@ -108,20 +103,18 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                 </>
               )}
 
-              {/* ── Compose ── */}
               {stage === 'compose' && (
                 <>
                   <button
                     type="button"
                     onClick={() => setStage('pick')}
-                    className="flex items-center gap-1.5 text-(--muted) hover:text-white text-xs transition-colors"
+                    className="flex items-center gap-1.5 text-muted-foreground hover:text-surface-foreground text-xs transition-colors"
                   >
                     ← Back to templates
                   </button>
 
-                  {/* To */}
                   <div>
-                    <p className="text-(--muted) text-[10px] uppercase tracking-wider mb-2">To</p>
+                    <p className="text-muted-foreground text-[10px] uppercase tracking-wider mb-2">To</p>
                     <div className="flex flex-wrap gap-1.5">
                       {activeBuyers.map((b) => (
                         <BuyerPill key={b.buyer_id} buyer={b} onRemove={handleRemoveBuyer} />
@@ -129,78 +122,74 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                     </div>
                   </div>
 
-                  {/* Subject */}
                   <div>
-                    <p className="text-(--muted) text-[10px] uppercase tracking-wider mb-2">Subject</p>
+                    <p className="text-muted-foreground text-[10px] uppercase tracking-wider mb-2">Subject</p>
                     <input
                       type="text"
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
                       maxLength={150}
                       placeholder="Email subject..."
-                      className="w-full bg-(--bg) border border-(--border) rounded-xl px-4 py-3 text-white text-sm focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all placeholder:text-(--muted)"
+                      className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground"
                     />
                   </div>
 
-                  {/* Extras: coupon */}
                   {selectedTemplate?.extras === 'coupon' && (
                     <div>
-                      <p className="text-(--muted) text-[10px] uppercase tracking-wider mb-2">
-                        Coupon code <span className="normal-case text-(--muted)">(optional)</span>
+                      <p className="text-muted-foreground text-[10px] uppercase tracking-wider mb-2">
+                        Coupon code <span className="normal-case text-muted-foreground">(optional)</span>
                       </p>
                       <input
                         type="text"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         placeholder="e.g. LOYAL15"
-                        className="w-full bg-(--bg) border border-(--border) rounded-xl px-4 py-3 text-brand font-mono text-sm tracking-widest focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all placeholder:text-(--muted) placeholder:tracking-normal placeholder:font-inter"
+                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-primary font-mono text-sm tracking-widest focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground placeholder:tracking-normal placeholder:font-inter"
                       />
                     </div>
                   )}
 
-                  {/* Extras: product */}
                   {selectedTemplate?.extras === 'product' && (
                     <div className="space-y-3">
                       <div>
-                        <p className="text-(--muted) text-[10px] uppercase tracking-wider mb-2">
-                          Product name <span className="normal-case text-(--muted)">(optional)</span>
+                        <p className="text-muted-foreground text-[10px] uppercase tracking-wider mb-2">
+                          Product name <span className="normal-case text-muted-foreground">(optional)</span>
                         </p>
                         <input
                           type="text"
                           value={productTitle}
                           onChange={(e) => setProductTitle(e.target.value)}
                           placeholder="e.g. The Ultimate Design Handbook"
-                          className="w-full bg-(--bg) border border-(--border) rounded-xl px-4 py-3 text-white text-sm focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all placeholder:text-(--muted)"
+                          className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground"
                         />
                       </div>
                       <div>
-                        <p className="text-(--muted) text-[10px] uppercase tracking-wider mb-2">
-                          Product URL <span className="normal-case text-(--muted)">(optional)</span>
+                        <p className="text-muted-foreground text-[10px] uppercase tracking-wider mb-2">
+                          Product URL <span className="normal-case text-muted-foreground">(optional)</span>
                         </p>
                         <input
                           type="url"
                           value={productUrl}
                           onChange={(e) => setProductUrl(e.target.value)}
                           placeholder="https://..."
-                          className="w-full bg-(--bg) border border-(--border) rounded-xl px-4 py-3 text-white text-sm focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all placeholder:text-(--muted)"
+                          className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground"
                         />
                       </div>
                     </div>
                   )}
 
-                  {/* Body */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-(--muted) text-[10px] uppercase tracking-wider">Message</p>
-                      <span className={`text-[10px] font-mono ${bodyCount > 4500 ? 'text-red-400' : 'text-(--muted)'}`}>
+                      <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Message</p>
+                      <span className={`text-[10px] font-mono ${bodyCount > 4500 ? 'text-status-exception' : 'text-muted-foreground'}`}>
                         {bodyCount} / 5000
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white/2 border border-(--border) rounded-lg px-3 py-2 mb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
-                      <p className="text-(--muted) text-[11px]">
-                        <span className="text-white/60 font-mono">{'{name}'}</span> will be replaced with each buyer&apos;s name
+                    <div className="flex items-center gap-2 bg-elevated border border-border rounded-lg px-3 py-2 mb-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                      <p className="text-muted-foreground text-[11px]">
+                        <span className="text-surface-foreground/60 font-mono">{'{name}'}</span> will be replaced with each buyer&apos;s name
                       </p>
                     </div>
 
@@ -210,14 +199,13 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                       maxLength={5000}
                       rows={7}
                       placeholder="Write your message..."
-                      className="w-full bg-(--bg) border border-(--border) rounded-xl px-4 py-3 text-white text-sm focus:border-brand/60 focus:ring-1 focus:ring-brand/20 outline-none transition-all resize-none placeholder:text-(--muted) leading-relaxed"
+                      className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-surface-foreground text-sm focus:border-primary/60 focus:ring-1 focus:ring-primary/20 outline-none transition-all resize-none placeholder:text-muted-foreground leading-relaxed"
                     />
                   </div>
 
-                  {/* Inline error */}
                   {isError && (
-                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                      <p className="text-red-400 text-xs">
+                    <div className="bg-status-exception/10 border border-status-exception/20 rounded-xl px-4 py-3">
+                      <p className="text-status-exception text-xs">
                         {error?.message ?? 'Something went wrong. Please try again.'}
                       </p>
                     </div>
@@ -225,16 +213,15 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                 </>
               )}
 
-              {/* ── Success ── */}
               {stage === 'success' && (
                 <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center mx-auto mb-4 text-2xl">
+                  <div className="w-12 h-12 rounded-2xl bg-status-positive/10 border border-status-positive/20 flex items-center justify-center mx-auto mb-4 text-2xl">
                     ✅
                   </div>
-                  <p className="text-white font-syne font-bold text-base mb-2">Email queued!</p>
-                  <p className="text-(--muted) text-sm leading-relaxed">
+                  <p className="text-surface-foreground font-syne font-bold text-base mb-2">Email queued!</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     Your email has been queued for{' '}
-                    <span className="text-white font-medium">
+                    <span className="text-surface-foreground font-medium">
                       {activeBuyers.length} buyer{activeBuyers.length !== 1 ? 's' : ''}
                     </span>{' '}
                     and will be sent shortly via Resend.
@@ -242,7 +229,7 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                   <button
                     type="button"
                     onClick={onClose}
-                    className="mt-6 text-(--muted) hover:text-white text-xs transition-colors underline underline-offset-2"
+                    className="mt-6 text-muted-foreground hover:text-surface-foreground text-xs transition-colors underline underline-offset-2"
                   >
                     Close
                   </button>
@@ -250,15 +237,14 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
               )}
             </div>
 
-            {/* Footer — compose stage only */}
             {stage === 'compose' && (
-              <div className="px-5 py-4 border-t border-(--border) shrink-0">
+              <div className="px-5 py-4 border-t border-border shrink-0">
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => setStage('pick')}
                     disabled={isPending}
-                    className="bg-white/4 hover:bg-white/7 border border-(--border) text-(--muted) hover:text-white disabled:opacity-40 disabled:cursor-not-allowed font-syne font-semibold rounded-xl px-4 py-3 text-sm transition-all"
+                    className="bg-elevated hover:bg-border-strong border border-border text-muted-foreground hover:text-surface-foreground disabled:opacity-40 disabled:cursor-not-allowed font-syne font-semibold rounded-xl px-4 py-3 text-sm transition-all"
                   >
                     Back
                   </button>
@@ -267,7 +253,7 @@ export function BuyerEmailDrawer({ open, buyers, onClose, onSendSuccess }: Buyer
                     onClick={handleSend}
                     disabled={!canSend}
                     whileTap={canSend ? { scale: 0.98 } : undefined}
-                    className="flex-1 bg-brand hover:bg-brand-dark disabled:bg-white/6 disabled:text-white/20 disabled:cursor-not-allowed text-white font-syne font-semibold rounded-xl py-3 text-sm transition-all flex items-center justify-center gap-2"
+                    className="flex-1 bg-primary hover:bg-primary-dark disabled:bg-elevated disabled:text-muted-foreground disabled:cursor-not-allowed text-primary-foreground font-syne font-semibold rounded-xl py-3 text-sm transition-all flex items-center justify-center gap-2"
                   >
                     {isPending ? (
                       <>

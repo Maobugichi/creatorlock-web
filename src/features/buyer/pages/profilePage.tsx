@@ -47,17 +47,15 @@ export default function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
 
-      {/* Header */}
       <div>
-        <h1 className="text-2xl font-syne font-extrabold text-white">Settings</h1>
-        <p className="text-sm text-[var(--muted)] mt-1">Manage your account details.</p>
+        <h1 className="text-2xl font-syne font-extrabold text-surface-foreground">Settings</h1>
+        <p className="text-sm text-muted-foreground mt-1">Manage your account details.</p>
       </div>
 
-      {/* Profile summary card */}
-      <div className="bg-surface border border-[var(--border)] rounded-2xl p-6">
+      <div className="bg-surface border border-border rounded-2xl p-6">
         <div className="flex items-center gap-4">
           {isLoading ? (
-            <div className="w-14 h-14 rounded-2xl bg-white/[0.04] animate-pulse flex-shrink-0" />
+            <div className="w-14 h-14 rounded-2xl bg-elevated animate-pulse flex-shrink-0" />
           ) : profile ? (
             <BuyerAvatar name={profile.name} email={profile.email} />
           ) : null}
@@ -67,14 +65,14 @@ export default function ProfilePage() {
               <ProfileSkeleton />
             ) : profile ? (
               <>
-                <p className="font-syne font-bold text-white truncate">
+                <p className="font-syne font-bold text-surface-foreground truncate">
                   {profile.name ?? 'No name set'}
                 </p>
-                <p className="text-sm font-mono text-[var(--muted)] truncate mt-0.5">
+                <p className="text-sm font-mono text-muted-foreground truncate mt-0.5">
                   {profile.email}
                 </p>
                 {memberSince && (
-                  <p className="text-xs text-[var(--muted)] mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Member since {memberSince}
                   </p>
                 )}
@@ -84,16 +82,14 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Edit form */}
-      <div className="bg-surface border border-[var(--border)] rounded-2xl p-6 space-y-6">
+      <div className="bg-surface border border-border rounded-2xl p-6 space-y-6">
         <div>
-          <h2 className="font-syne font-bold text-lg text-white">Account details</h2>
-          <p className="text-xs text-[var(--muted)] mt-0.5">Only changed fields will be saved.</p>
+          <h2 className="font-syne font-bold text-lg text-surface-foreground">Account details</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Only changed fields will be saved.</p>
         </div>
 
-        {/* Feedback banners */}
         {isSuccess && (
-          <div className="bg-green-500/10 border border-green-500/20 rounded-xl px-5 py-3.5 text-sm text-green-400 flex items-center gap-2.5">
+          <div className="bg-status-positive/10 border border-status-positive/20 rounded-xl px-5 py-3.5 text-sm text-status-positive flex items-center gap-2.5">
             <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
@@ -102,7 +98,7 @@ export default function ProfilePage() {
         )}
 
         {isError && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-3.5 text-sm text-red-400">
+          <div className="bg-status-exception/10 border border-status-exception/20 rounded-xl px-5 py-3.5 text-sm text-status-exception">
             {errorMessage}
           </div>
         )}
@@ -114,9 +110,8 @@ export default function ProfilePage() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
             <div className="space-y-1.5">
-              <label htmlFor="name" className="text-xs text-[var(--muted)] uppercase tracking-widest block">
+              <label htmlFor="name" className="text-xs text-muted-foreground uppercase tracking-widest block">
                 Name
               </label>
               <input
@@ -125,13 +120,12 @@ export default function ProfilePage() {
                 type="text"
                 defaultValue={profile?.name ?? ''}
                 placeholder="Your name"
-                className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-[var(--muted)] focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/20 transition-colors"
+                className="w-full bg-elevated border border-border rounded-xl px-4 py-2.5 text-sm text-surface-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
               />
             </div>
 
-            {/* Email */}
             <div className="space-y-1.5">
-              <label htmlFor="email" className="text-xs text-[var(--muted)] uppercase tracking-widest block">
+              <label htmlFor="email" className="text-xs text-muted-foreground uppercase tracking-widest block">
                 Email
               </label>
               <input
@@ -140,21 +134,20 @@ export default function ProfilePage() {
                 type="email"
                 defaultValue={profile?.email ?? ''}
                 placeholder="you@example.com"
-                className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm font-mono text-white placeholder:text-[var(--muted)] focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/20 transition-colors"
+                className="w-full bg-elevated border border-border rounded-xl px-4 py-2.5 text-sm font-mono text-surface-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
               />
             </div>
 
-            {/* Password hint */}
-            <div className="bg-white/[0.03] border border-[var(--border)] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="bg-elevated border border-border rounded-xl px-4 py-3 flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-inter text-white/60">Password</p>
-                <p className="text-xs text-[var(--muted)] mt-0.5">
+                <p className="text-xs font-inter text-surface-foreground/70">Password</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   Use the forgot password flow to update your password.
                 </p>
               </div>
               <a
                 href="/forgot-password"
-                className="text-xs text-brand hover:text-brand-dark font-syne font-semibold flex-shrink-0 transition-colors"
+                className="text-xs text-primary hover:text-primary-dark font-syne font-semibold flex-shrink-0 transition-colors"
               >
                 Reset →
               </a>
@@ -163,11 +156,11 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-brand hover:bg-brand-dark active:scale-[0.98] text-white font-syne font-semibold rounded-xl py-3 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+              className="w-full bg-primary hover:bg-primary-dark active:scale-[0.98] text-primary-foreground font-syne font-semibold rounded-xl py-3 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
             >
               {isPending ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                   Saving…
                 </span>
               ) : (

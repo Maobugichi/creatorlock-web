@@ -18,30 +18,27 @@ const problems = [
 
 export default function Problem() {
   return (
-    <section className="bg-[var(--bg)] py-24 px-6">
+    <section className="bg-background py-24 px-6">
       <div className="max-w-3xl mx-auto">
-        {/* Section label */}
-        <p className="font-mono text-xs tracking-widest text-white/30 uppercase mb-12">
+        <p className="font-mono text-xs tracking-widest text-foreground/30 uppercase mb-12">
           The problem
         </p>
 
-        {/* Problem statements */}
-        <ul className="flex flex-col divide-y divide-[var(--border)]">
+        <ul className="flex flex-col divide-y divide-border">
           {problems.map(({ id, headline, body }) => (
             <li key={id} className="py-10 flex flex-col sm:flex-row gap-6 sm:gap-10">
-              {/* Number marker */}
               <span
                 aria-hidden
-                className="font-mono text-xs text-white/20 shrink-0 pt-1 w-6"
+                className="font-mono text-xs text-foreground/20 shrink-0 pt-1 w-6"
               >
                 {id}
               </span>
 
               <div className="flex flex-col gap-3">
-                <h2 className="font-syne font-bold text-xl sm:text-2xl text-white leading-snug">
+                <h2 className="font-syne font-bold text-xl sm:text-2xl text-foreground leading-snug">
                   {headline}
                 </h2>
-                <p className="font-inter text-base text-white/55 leading-relaxed max-w-xl">
+                <p className="font-inter text-base text-foreground/55 leading-relaxed max-w-xl">
                   {body}
                 </p>
               </div>

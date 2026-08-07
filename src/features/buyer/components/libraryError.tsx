@@ -14,9 +14,9 @@ export default function LibraryError({ onRetry }: LibraryErrorProps) {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="flex flex-col items-center justify-center py-24 gap-5 text-center"
     >
-      <div className="w-16 h-16 rounded-2xl bg-surface border border-red-500/20 flex items-center justify-center">
+      <div className="w-16 h-16 rounded-2xl bg-surface border border-status-exception/20 flex items-center justify-center">
         <svg
-          className="w-7 h-7 text-red-400/60"
+          className="w-7 h-7 text-status-exception/60"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -31,10 +31,10 @@ export default function LibraryError({ onRetry }: LibraryErrorProps) {
       </div>
 
       <div className="flex flex-col gap-2 max-w-xs">
-        <h2 className="font-syne font-bold text-white text-lg">
+        <h2 className="font-syne font-bold text-surface-foreground text-lg">
           Failed to load library
         </h2>
-        <p className="font-inter text-sm text-white/40 leading-relaxed">
+        <p className="font-inter text-sm text-muted-foreground leading-relaxed">
           Something went wrong fetching your purchases. Check your connection
           and try again.
         </p>
@@ -42,7 +42,7 @@ export default function LibraryError({ onRetry }: LibraryErrorProps) {
 
       <button
         onClick={onRetry}
-        className="bg-brand hover:bg-brand-dark active:scale-[0.98] text-white font-syne font-semibold rounded-xl px-6 py-2.5 transition-all text-sm"
+        className="bg-primary hover:bg-primary-dark active:scale-[0.98] text-primary-foreground font-syne font-semibold rounded-xl px-6 py-2.5 transition-all text-sm"
       >
         Try again
       </button>

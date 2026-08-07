@@ -19,10 +19,10 @@ const props = [
     body: "Set your price in the currency your buyers actually use. No conversion rates, no withheld funds, no explaining why payment failed.",
     detail: (
       <div className="flex items-baseline gap-2 mt-auto pt-6">
-        <span className="font-mono text-2xl text-brand">
+        <span className="font-mono text-2xl text-primary">
           {formatNGN(500000)}
         </span>
-        <span className="font-mono text-sm text-white/30">your price, exactly</span>
+        <span className="font-mono text-sm text-foreground/30">your price, exactly</span>
       </div>
     ),
   },
@@ -38,16 +38,16 @@ const props = [
           { label: "You receive", amount: 475000, dim: false },
         ].map(({ label, amount, dim }) => (
           <div key={label} className="flex justify-between items-center">
-            <span className={`font-inter text-xs ${dim ? "text-white/30" : "text-white/60"}`}>
+            <span className={`font-inter text-xs ${dim ? "text-foreground/30" : "text-foreground/60"}`}>
               {label}
             </span>
             <span
               className={`font-mono text-xs ${
                 dim
-                  ? "text-white/30"
+                  ? "text-foreground/30"
                   : amount > 0
-                  ? "text-brand"
-                  : "text-white/40"
+                  ? "text-success"
+                  : "text-foreground/40"
               }`}
             >
               {amount < 0 ? `−${formatNGN(Math.abs(amount))}` : formatNGN(amount)}
@@ -63,9 +63,9 @@ const props = [
     body: "Guest checkout only. Enter an email, pay, get the download key. Zero friction between intent and purchase — no sign-up wall to kill the sale.",
     detail: (
       <div className="mt-auto pt-6">
-        <div className="bg-[var(--bg)] rounded-xl px-4 py-3 flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-brand shrink-0" />
-          <span className="font-inter text-xs text-white/50">
+        <div className="bg-background rounded-xl px-4 py-3 flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
+          <span className="font-inter text-xs text-foreground/50">
             No account required — just your email
           </span>
         </div>
@@ -78,20 +78,20 @@ const props = [
     body: "Every purchase generates a single-use, time-limited download key sent by email. Once used or expired, it's gone. Your files stay yours.",
     detail: (
       <div className="mt-auto pt-6 flex flex-col gap-2">
-        <div className="flex justify-between font-mono text-xs text-white/30">
+        <div className="flex justify-between font-mono text-xs text-foreground/30">
           <span>KEY</span>
           <span>STATUS</span>
           <span>EXPIRES</span>
         </div>
         {[
-          { key: "clk_9f2a…", status: "used", color: "text-white/20" },
-          { key: "clk_4e8b…", status: "active", color: "text-brand" },
-          { key: "clk_1c3d…", status: "expired", color: "text-white/20" },
+          { key: "clk_9f2a…", status: "used", color: "text-foreground/20" },
+          { key: "clk_4e8b…", status: "active", color: "text-success" },
+          { key: "clk_1c3d…", status: "expired", color: "text-foreground/20" },
         ].map(({ key, status, color }) => (
           <div key={key} className="flex justify-between font-mono text-xs">
-            <span className="text-white/50">{key}</span>
+            <span className="text-foreground/50">{key}</span>
             <span className={color}>{status}</span>
-            <span className="text-white/25">24 h</span>
+            <span className="text-foreground/25">24 h</span>
           </div>
         ))}
       </div>
@@ -105,21 +105,19 @@ export default function ValueProps() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section className="bg-[var(--bg)] py-24 px-6">
+    <section className="bg-background py-24 px-6">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="mb-16">
-          <p className="font-mono text-xs tracking-widest text-white/30 uppercase mb-4">
+          <p className="font-mono text-xs tracking-widest text-foreground/30 uppercase mb-4">
             Why CreatorLock
           </p>
-          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-white leading-tight">
+          <h2 className="font-syne font-bold text-3xl sm:text-4xl text-foreground leading-tight">
             Built around outcomes,
             <br />
-            <span className="text-white/40">not feature lists.</span>
+            <span className="text-foreground/40">not feature lists.</span>
           </h2>
         </div>
 
-        {/* Cards grid */}
         <div
           ref={ref}
           className="grid grid-cols-1 sm:grid-cols-2 gap-4"
@@ -134,22 +132,19 @@ export default function ValueProps() {
                 ease: "easeOut",
                 delay: reduce ? 0 : i * 0.08,
               }}
-              className="bg-surface border border-[var(--border)] rounded-2xl p-5 flex flex-col min-h-[280px]"
+              className="bg-surface border border-border rounded-2xl p-5 flex flex-col min-h-[280px]"
             >
-              {/* Tag */}
-              <span className="font-mono text-xs text-brand/70 tracking-widest uppercase mb-4">
+              <span className="font-mono text-xs text-primary/70 tracking-widest uppercase mb-4">
                 {tag}
               </span>
 
-              {/* Text */}
-              <h3 className="font-syne font-bold text-lg text-white leading-snug mb-2">
+              <h3 className="font-syne font-bold text-lg text-foreground leading-snug mb-2">
                 {headline}
               </h3>
-              <p className="font-inter text-sm text-white/50 leading-relaxed">
+              <p className="font-inter text-sm text-foreground/50 leading-relaxed">
                 {body}
               </p>
 
-              {/* Detail — visual accent unique to each card */}
               {detail}
             </motion.div>
           ))}

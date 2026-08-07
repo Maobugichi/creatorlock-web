@@ -19,7 +19,6 @@ type Step = 'review' | 'email' | 'paying' | 'free_ok' | 'error';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// ── Trap focus inside modal ───────────────────
 function useFocusTrap(active: boolean) {
   useEffect(() => {
     if (!active) return;
@@ -28,7 +27,6 @@ function useFocusTrap(active: boolean) {
   }, [active]);
 }
 
-// ── Lock body scroll while modal is open ─────
 function useScrollLock(active: boolean) {
   useEffect(() => {
     if (!active) return;
@@ -46,29 +44,24 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
 
   const isFree = product.price_cents === 0;
 
-  // Coupon state
   const [couponResult, setCouponResult] = useState<CouponResult | null>(null);
   const [couponCode, setCouponCode] = useState('');
 
-  // Guest checkout state
   const [guestEmail, setGuestEmail] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [emailError, setEmailError] = useState('');
 
-  // Derived price
   const displayPriceCents = couponResult
     ? couponResult.final_price_cents
     : product.price_cents;
   const isEffectivelyFree = displayPriceCents === 0;
 
-  // Step machine
   const [step, setStep] = useState<Step>('review');
   const [errorMsg, setErrorMsg] = useState('');
 
   useFocusTrap(true);
   useScrollLock(true);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && step !== 'paying') onClose();
@@ -79,7 +72,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
 
   const handleCouponApplied = useCallback((result: CouponResult) => {
     setCouponResult(result);
-    // Store code for submission — CouponField uppercases it internally
   }, []);
 
   const handleCouponCleared = useCallback(() => {
@@ -87,7 +79,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     setCouponCode('');
   }, []);
 
-  // ── Submits the actual purchase to the backend ─────
   const submitPurchase = async (email?: string) => {
     setStep('paying');
     setErrorMsg('');
@@ -97,7 +88,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
         product_id: product.id,
       };
 
-      // Only send coupon_code if one was successfully applied
       if (couponResult && couponCode) {
         payload.coupon_code = couponCode;
       }
@@ -141,7 +131,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     }
   };
 
-  // ── Main purchase handler (review step CTA) ─────────────────
   const handlePurchase = async () => {
     if (!isAuthenticated && !guestEmail) {
       setStep('email');
@@ -151,7 +140,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     await submitPurchase(guestEmail || undefined);
   };
 
-  // ── Email step submit ─────────────────
   const handleEmailSubmit = async () => {
     const trimmed = emailInput.trim().toLowerCase();
 
@@ -165,31 +153,26 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
     await submitPurchase(trimmed);
   };
 
-  // ── Backdrop click ────────────────────────
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && step !== 'paying') onClose();
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center sm:items-center"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
+      className="fixed inset-0 z-50 flex items-end justify-center sm:items-center bg-black/70 backdrop-blur-sm"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-label="Checkout"
     >
       <div
-        className="relative w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 flex flex-col gap-5"
-        style={{ background: '#111111', border: '1px solid var(--border)' }}
+        className="relative w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 flex flex-col gap-5 bg-elevated border border-border"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ── Close button ───────────────────── */}
         {step !== 'paying' && (
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg text-white/40 transition-colors hover:text-white/80"
-            style={{ background: 'var(--color-surface)' }}
+            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-surface text-muted-foreground transition-colors hover:text-surface-foreground"
             aria-label="Close"
             type="button"
           >
@@ -199,36 +182,28 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
           </button>
         )}
 
-        {/* ══════════════════════════════════════
-            STEP: REVIEW
-        ══════════════════════════════════════ */}
         {step === 'review' && (
           <>
             <div>
-              <p className="font-inter text-xs mb-1" style={{ color: 'var(--muted)' }}>
+              <p className="font-inter text-xs mb-1 text-muted-foreground">
                 You&apos;re purchasing
               </p>
-              <h2 className="font-syne text-lg font-extrabold text-white leading-snug pr-8">
+              <h2 className="font-syne text-lg font-extrabold text-surface-foreground leading-snug pr-8">
                 {product.title}
               </h2>
             </div>
 
-            {/* Price block */}
-            <div
-              className="rounded-xl border p-4 flex items-center justify-between"
-              style={{ borderColor: 'var(--border)', background: 'var(--color-surface)' }}
-            >
-              <span className="font-inter text-sm" style={{ color: 'var(--muted)' }}>Total</span>
+            <div className="rounded-xl border border-border bg-surface p-4 flex items-center justify-between">
+              <span className="font-inter text-sm text-muted-foreground">Total</span>
               <div className="text-right">
-                {/* Show strikethrough original if coupon applied */}
                 {couponResult && couponResult.discount_cents > 0 && (
-                  <p className="font-mono text-xs line-through" style={{ color: 'var(--muted)' }}>
+                  <p className="font-mono text-xs line-through text-muted-foreground">
                     {formatNGN(product.price_cents)}
                   </p>
                 )}
-                <p className="font-syne text-xl font-extrabold text-white">
+                <p className="font-syne text-xl font-extrabold text-surface-foreground">
                   {isEffectivelyFree || isFree ? (
-                    <span className="text-emerald-400">Free</span>
+                    <span className="text-primary">Free</span>
                   ) : (
                     formatNGN(displayPriceCents)
                   )}
@@ -236,10 +211,9 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
               </div>
             </div>
 
-            {/* Coupon field — only show for paid products */}
             {!isFree && (
               <div>
-                <p className="font-inter text-xs mb-2" style={{ color: 'var(--muted)' }}>
+                <p className="font-inter text-xs mb-2 text-muted-foreground">
                   Have a coupon?
                 </p>
                 <CouponField
@@ -247,8 +221,6 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
                   originalPriceCents={product.price_cents}
                   onApplied={(result) => {
                     handleCouponApplied(result);
-                    // Track the code string for submission
-                    // CouponField uppercases internally; we read from its state via callback
                   }}
                   onCleared={handleCouponCleared}
                   onCodeChange={setCouponCode}
@@ -256,37 +228,32 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
               </div>
             )}
 
-            {/* CTA */}
             <button
               onClick={handlePurchase}
               type="button"
-              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-white transition-opacity hover:opacity-90 active:opacity-80"
-              style={{ background: 'var(--color-brand)' }}
+              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90 active:opacity-80"
             >
               {isFree || isEffectivelyFree
                 ? 'Claim for Free'
                 : `Pay ${formatNGN(displayPriceCents)}`}
             </button>
 
-            <p className="text-center font-inter text-xs" style={{ color: 'var(--muted)' }}>
+            <p className="text-center font-inter text-xs text-muted-foreground">
               Secure checkout · Instant delivery via email
             </p>
           </>
         )}
 
-        {/* ══════════════════════════════════════
-            STEP: EMAIL (guest checkout)
-        ══════════════════════════════════════ */}
         {step === 'email' && (
           <>
             <div>
-              <p className="font-inter text-xs mb-1" style={{ color: 'var(--muted)' }}>
+              <p className="font-inter text-xs mb-1 text-muted-foreground">
                 Almost there
               </p>
-              <h2 className="font-syne text-lg font-extrabold text-white leading-snug pr-8">
+              <h2 className="font-syne text-lg font-extrabold text-surface-foreground leading-snug pr-8">
                 Where should we send it?
               </h2>
-              <p className="mt-1.5 font-inter text-sm" style={{ color: 'var(--muted)' }}>
+              <p className="mt-1.5 font-inter text-sm text-muted-foreground">
                 We&apos;ll send your download link and receipt to this email.
               </p>
             </div>
@@ -305,19 +272,19 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
                   if (e.key === 'Enter') handleEmailSubmit();
                 }}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border px-4 py-3.5 font-inter text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[var(--color-brand)]"
-                style={{ borderColor: emailError ? '#ef4444' : 'var(--border)', background: 'var(--color-surface)' }}
+                className={`w-full rounded-xl border bg-surface px-4 py-3.5 font-inter text-sm text-surface-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary ${
+                  emailError ? 'border-status-exception' : 'border-border'
+                }`}
               />
               {emailError && (
-                <p className="mt-1.5 font-inter text-xs text-red-400">{emailError}</p>
+                <p className="mt-1.5 font-inter text-xs text-status-exception">{emailError}</p>
               )}
             </div>
 
             <button
               onClick={handleEmailSubmit}
               type="button"
-              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-white transition-opacity hover:opacity-90 active:opacity-80"
-              style={{ background: 'var(--color-brand)' }}
+              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90 active:opacity-80"
             >
               {isFree || isEffectivelyFree
                 ? 'Claim for Free'
@@ -327,27 +294,23 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
             <button
               onClick={() => setStep('review')}
               type="button"
-              className="text-center font-inter text-xs transition-colors hover:text-white"
-              style={{ color: 'var(--muted)' }}
+              className="text-center font-inter text-xs text-muted-foreground transition-colors hover:text-surface-foreground"
             >
               ← Back
             </button>
           </>
         )}
 
-        {/* ══════════════════════════════════════
-            STEP: PAYING (spinner)
-        ══════════════════════════════════════ */}
         {step === 'paying' && (
           <div className="flex flex-col items-center gap-4 py-8">
             <svg
-              className="animate-spin"
+              className="animate-spin text-primary"
               width="32" height="32" viewBox="0 0 24 24"
-              fill="none" stroke="var(--color-brand)" strokeWidth="2"
+              fill="none" stroke="currentColor" strokeWidth="2"
             >
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>
-            <p className="font-inter text-sm" style={{ color: 'var(--muted)' }}>
+            <p className="font-inter text-sm text-muted-foreground">
               {isEffectivelyFree || isFree
                 ? 'Claiming your product…'
                 : 'Redirecting to payment…'}
@@ -355,67 +318,52 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
           </div>
         )}
 
-        {/* ══════════════════════════════════════
-            STEP: FREE_OK
-        ══════════════════════════════════════ */}
         {step === 'free_ok' && (
           <div className="flex flex-col items-center gap-4 py-6 text-center">
-            <div
-              className="flex h-14 w-14 items-center justify-center rounded-full"
-              style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)' }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-status-positive/[0.12] border border-status-positive/30">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-status-positive" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
             <div>
-              <h3 className="font-syne text-lg font-extrabold text-white">You&apos;re all set!</h3>
-              <p className="mt-1.5 font-inter text-sm" style={{ color: 'var(--muted)' }}>
+              <h3 className="font-syne text-lg font-extrabold text-surface-foreground">You&apos;re all set!</h3>
+              <p className="mt-1.5 font-inter text-sm text-muted-foreground">
                 Check your email for the download link. It may take a moment to arrive.
               </p>
             </div>
             <button
               onClick={onClose}
               type="button"
-              className="mt-2 w-full rounded-xl py-3 font-syne text-sm font-bold text-white transition-opacity hover:opacity-90"
-              style={{ background: 'var(--color-brand)' }}
+              className="mt-2 w-full rounded-xl py-3 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90"
             >
               Done
             </button>
           </div>
         )}
 
-        {/* ══════════════════════════════════════
-            STEP: ERROR
-        ══════════════════════════════════════ */}
         {step === 'error' && (
           <div className="flex flex-col items-center gap-4 py-6 text-center">
-            <div
-              className="flex h-14 w-14 items-center justify-center rounded-full"
-              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)' }}
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-status-exception/10 border border-status-exception/25">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-status-exception" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
             </div>
             <div>
-              <h3 className="font-syne text-base font-extrabold text-white">Something went wrong</h3>
-              <p className="mt-1.5 font-inter text-sm text-red-400">{errorMsg}</p>
+              <h3 className="font-syne text-base font-extrabold text-surface-foreground">Something went wrong</h3>
+              <p className="mt-1.5 font-inter text-sm text-status-exception">{errorMsg}</p>
             </div>
             <div className="flex w-full gap-3">
               <button
                 onClick={onClose}
                 type="button"
-                className="flex-1 rounded-xl border py-3 font-inter text-sm text-white/60 transition-colors hover:text-white"
-                style={{ borderColor: 'var(--border)', background: 'var(--color-surface)' }}
+                className="flex-1 rounded-xl border border-border bg-surface py-3 font-inter text-sm text-muted-foreground transition-colors hover:text-surface-foreground"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setStep('review')}
                 type="button"
-                className="flex-1 rounded-xl py-3 font-syne text-sm font-bold text-white transition-opacity hover:opacity-90"
-                style={{ background: 'var(--color-brand)' }}
+                className="flex-1 rounded-xl py-3 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90"
               >
                 Try again
               </button>

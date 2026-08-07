@@ -13,18 +13,18 @@ export function TemplateCard({ template, selected, onSelect }: TemplateCardProps
     <button
       type="button"
       onClick={onSelect}
-      className={`w-full text-left flex items-start gap-3 p-3 rounded-xl border border-gray-600  hover:border-brand/25 hover:bg-brand/20 transition-all active:scale-[0.98] ${
+      className={`w-full text-left flex items-start gap-3 p-3 rounded-xl hover:border-primary/25 hover:bg-primary/20 transition-all active:scale-[0.98] ${
         selected
-          ? 'border-brand/50 bg-brand/7'
-          : 'border-(--border) bg-surface'
+          ? 'border border-primary/50 bg-primary/7'
+          : 'border border-border bg-surface'
       }`}
     >
-      <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0 text-sm">
+      <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 text-sm">
         {template.icon}
       </div>
       <div className="min-w-0">
-        <p className="text-white text-xs font-syne font-bold mb-0.5">{template.label}</p>
-        <p className="text-(--muted) text-xs font-inter leading-relaxed">{template.description}</p>
+        <p className="text-surface-foreground text-xs font-syne font-bold mb-0.5">{template.label}</p>
+        <p className="text-muted-foreground text-xs font-inter leading-relaxed">{template.description}</p>
       </div>
     </button>
   );

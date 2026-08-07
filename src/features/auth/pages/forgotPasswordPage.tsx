@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import AuthNav from "@/components/ui/authnav";
 import Input from "@/components/ui/input";
 import { useForgotPassword } from "../api/useForgotPassword";
@@ -23,25 +23,25 @@ export default function ForgotPasswordPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] flex flex-col font-inter w-full">
+    <div className="min-h-screen bg-background flex flex-col font-inter w-full">
       <AuthNav />
 
       <div className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-[420px]">
 
           <div className="flex items-center justify-center gap-2 mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-brand" />
-            <span className="text-xs text-white/30 tracking-wide">Password recovery</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-xs text-muted-foreground tracking-wide">Password recovery</span>
           </div>
 
-          <h1 className="font-syne font-extrabold text-[28px] text-white text-center tracking-tight mb-2">
+          <h1 className="font-syne font-extrabold text-[28px] text-foreground text-center tracking-tight mb-2">
             Forgot your password?
           </h1>
-          <p className="text-sm text-white/30 text-center mb-8 font-inter leading-relaxed">
+          <p className="text-sm text-muted-foreground text-center mb-8 font-inter leading-relaxed">
             No stress. Enter your email and we&apos;ll send you a reset link.
           </p>
 
-          <div className="bg-[#111] border border-white/[0.07] rounded-2xl p-7">
+          <div className="bg-surface border border-border rounded-2xl p-7">
             <AuthErrorBanner message={errorMessage} />
 
             <AnimatePresence mode="wait">
@@ -64,11 +64,11 @@ export default function ForgotPasswordPage() {
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="w-full bg-brand hover:bg-brand-dark disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-xl py-3.5 text-sm transition-colors flex items-center justify-center gap-2 font-inter"
+                    className="w-full bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-medium rounded-xl py-3.5 text-sm transition-colors flex items-center justify-center gap-2 font-inter"
                   >
                     {isPending ? (
                       <>
-                        <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                         Sending reset link...
                       </>
                     ) : (
@@ -80,9 +80,9 @@ export default function ForgotPasswordPage() {
             </AnimatePresence>
           </div>
 
-          <p className="text-center text-sm text-white/25 mt-6 font-inter">
+          <p className="text-center text-sm text-muted-foreground mt-6 font-inter">
             Remembered it?{" "}
-            <Link href="/login" className="text-brand hover:underline">
+            <Link href="/login" className="text-primary hover:underline">
               Sign in
             </Link>
           </p>

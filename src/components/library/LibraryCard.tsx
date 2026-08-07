@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
 import type { LibraryItem } from "@/types/library.types";
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
 
 const formatNGN = (cents: number): string =>
   new Intl.NumberFormat("en-NG", {
@@ -24,8 +22,6 @@ const formatDate = (iso: string): string =>
 
 const isExpired = (iso: string): boolean => new Date(iso) < new Date();
 
-// ─── ResendButton ────────────────────────────────────────────────────────────
-
 const COOLDOWN_SECONDS = 60;
 
 interface ResendButtonProps {
@@ -37,7 +33,6 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
   const [cooldownRemaining, setCooldownRemaining] = useState<number>(0);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
 
   const { mutate, isPending } = useMutation<
     { success: boolean; message: string },
@@ -53,7 +48,6 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
       setSuccessMessage(data.message);
       setErrorMessage(null);
 
-      // Start immutable cooldown countdown — cannot be interrupted
       let remaining = COOLDOWN_SECONDS;
       setCooldownRemaining(remaining);
 
@@ -83,12 +77,12 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
         className={[
           "w-full font-syne font-semibold text-sm rounded-xl px-4 py-2.5 transition-all active:scale-[0.98]",
           revoked
-            ? "bg-white/5 text-white/20 cursor-not-allowed"
+            ? "bg-elevated text-muted-foreground/50 cursor-not-allowed"
             : isOnCooldown
-              ? "bg-white/5 text-white/40 cursor-not-allowed"
+              ? "bg-elevated text-muted-foreground cursor-not-allowed"
               : isPending
-                ? "bg-brand/60 text-white/60 cursor-wait"
-                : "bg-brand hover:bg-brand-dark text-white cursor-pointer",
+                ? "bg-primary/60 text-primary-foreground/60 cursor-wait"
+                : "bg-primary hover:bg-primary-dark text-primary-foreground cursor-pointer",
         ].join(" ")}
       >
         {isPending
@@ -108,7 +102,7 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="text-xs text-emerald-400 font-inter text-center"
+            className="text-xs text-status-positive font-inter text-center"
           >
             {successMessage}
           </motion.p>
@@ -120,7 +114,7 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="text-xs text-red-400 font-inter text-center"
+            className="text-xs text-status-exception font-inter text-center"
           >
             {errorMessage}
           </motion.p>
@@ -129,8 +123,6 @@ function ResendButton({ orderId, revoked }: ResendButtonProps) {
     </div>
   );
 }
-
-// ─── DownloadMeter ───────────────────────────────────────────────────────────
 
 interface DownloadMeterProps {
   used: number;
@@ -144,21 +136,21 @@ function DownloadMeter({ used, max }: DownloadMeterProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-white/40 font-inter">Downloads used</span>
+        <span className="text-xs text-muted-foreground font-inter">Downloads used</span>
         <span
           className={[
             "text-xs font-mono",
-            exhausted ? "text-red-400" : "text-white/60",
+            exhausted ? "text-status-exception" : "text-surface-foreground/70",
           ].join(" ")}
         >
           {used} / {max}
         </span>
       </div>
-      <div className="h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
+      <div className="h-1 w-full rounded-full bg-elevated overflow-hidden">
         <motion.div
           className={[
             "h-full rounded-full",
-            exhausted ? "bg-red-500/70" : "bg-brand/70",
+            exhausted ? "bg-status-exception/70" : "bg-primary/70",
           ].join(" ")}
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -169,8 +161,6 @@ function DownloadMeter({ used, max }: DownloadMeterProps) {
   );
 }
 
-// ─── StatusPill ──────────────────────────────────────────────────────────────
-
 interface StatusPillProps {
   revoked: boolean;
   expiresAt: string;
@@ -179,8 +169,8 @@ interface StatusPillProps {
 function StatusPill({ revoked, expiresAt }: StatusPillProps) {
   if (revoked) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20">
-        <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
+      <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-status-exception/10 text-status-exception border border-status-exception/20">
+        <span className="w-1.5 h-1.5 rounded-full bg-status-exception inline-block" />
         Revoked
       </span>
     );
@@ -188,22 +178,20 @@ function StatusPill({ revoked, expiresAt }: StatusPillProps) {
 
   if (isExpired(expiresAt)) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/20">
-        <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block" />
+      <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-status-warning/10 text-status-warning border border-status-warning/20">
+        <span className="w-1.5 h-1.5 rounded-full bg-status-warning inline-block" />
         Expired
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+    <span className="inline-flex items-center gap-1.5 text-xs font-inter px-2.5 py-1 rounded-lg bg-status-positive/10 text-status-positive border border-status-positive/20">
+      <span className="w-1.5 h-1.5 rounded-full bg-status-positive animate-pulse inline-block" />
       Active
     </span>
   );
 }
-
-// ─── LibraryCard (PurchaseCard) ──────────────────────────────────────────────
 
 interface LibraryCardProps {
   item: LibraryItem;
@@ -219,12 +207,10 @@ export function LibraryCard({ item }: LibraryCardProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className="bg-surface border border-[var(--border)] rounded-2xl p-5 flex flex-col gap-5"
+      className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-5"
     >
-      {/* ── Product Identity Row ── */}
       <div className="flex gap-4 items-start">
-        {/* Thumbnail */}
-        <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-white/[0.04] border border-[var(--border)]">
+        <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-elevated border border-border">
           {item.product_thumbnail ? (
             <img
               src={item.product_thumbnail}
@@ -234,7 +220,7 @@ export function LibraryCard({ item }: LibraryCardProps) {
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-white/20"
+                className="w-6 h-6 text-muted-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -250,10 +236,9 @@ export function LibraryCard({ item }: LibraryCardProps) {
           )}
         </div>
 
-        {/* Title + Creator + Status */}
         <div className="flex-1 min-w-0 flex flex-col gap-1.5">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-syne font-bold text-white text-sm leading-snug line-clamp-2">
+            <h3 className="font-syne font-bold text-surface-foreground text-sm leading-snug line-clamp-2">
               {item.product_title}
             </h3>
             <StatusPill
@@ -261,33 +246,32 @@ export function LibraryCard({ item }: LibraryCardProps) {
               expiresAt={item.token_expires_at}
             />
           </div>
-          <p className="text-xs text-white/40 font-inter truncate">
+          <p className="text-xs text-muted-foreground font-inter truncate">
             by{" "}
-            <span className="text-white/60">{item.creator_name}</span>
+            <span className="text-surface-foreground/70">{item.creator_name}</span>
           </p>
         </div>
       </div>
 
-      {/* ── Financial + Date Row ── */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-white/30 font-inter">Amount paid</span>
-          <span className="font-mono text-white text-sm">
+          <span className="text-xs text-muted-foreground font-inter">Amount paid</span>
+          <span className="font-mono text-surface-foreground text-sm">
             {formatNGN(item.amount_cents)}
           </span>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-white/30 font-inter">Purchased</span>
-          <span className="font-mono text-white/70 text-sm">
+          <span className="text-xs text-muted-foreground font-inter">Purchased</span>
+          <span className="font-mono text-surface-foreground/70 text-sm">
             {formatDate(item.purchased_at)}
           </span>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-white/30 font-inter">Link expires</span>
+          <span className="text-xs text-muted-foreground font-inter">Link expires</span>
           <span
             className={[
               "font-mono text-sm",
-              inaccessible ? "text-red-400/70" : "text-white/70",
+              inaccessible ? "text-status-exception/70" : "text-surface-foreground/70",
             ].join(" ")}
           >
             {item.token_revoked ? "—" : formatDate(item.token_expires_at)}
@@ -295,16 +279,13 @@ export function LibraryCard({ item }: LibraryCardProps) {
         </div>
       </div>
 
-      {/* ── Download Meter ── */}
       <DownloadMeter
         used={item.downloads_used}
         max={item.max_downloads}
       />
 
-      {/* ── Divider ── */}
-      <div className="h-px w-full bg-white/[0.06]" />
+      <div className="h-px w-full bg-border" />
 
-      {/* ── Resend Action ── */}
       <ResendButton orderId={item.order_id} revoked={item.token_revoked} />
     </motion.article>
   );

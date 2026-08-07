@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-import Image from "next/image";
 import ParallaxCoin from "./parallaxCoin";
 import { useParallax } from "@/hooks/hero.hooks";
 import Link from "next/link";
@@ -25,27 +24,27 @@ const Hero = () => {
    const COINS = [
     {
       size: 300, rotate: 10, skewX: 10, skewY: -10, scale: 0.8,
-      opacity: 0.55, blur: 0, depth: 0.03,
+      opacity: 0, blur: 0, depth: 0.03,
       className: "top-[8%] left-[0%] hidden md:block",
     },
     {
       size: 210, rotate: 30, skewX: -10, skewY: 2, scale: 1.0,
-      opacity: 0.55, blur: 0.4, depth: 0.05,
+      opacity: 0, blur: 0, depth: 0.05,
       className: "bottom-[10%] md:left-[-3%] left-[-15%]",
     },
     {
       size: 165, rotate: 18, skewX: -8, skewY: 6, scale: 0.8,
-      opacity: 0.45, blur: 0.8, depth: 0.04,
+      opacity: 0, blur: 0, depth: 0.04,
       className: "top-[3%] right-[-4%] hidden md:block",
     },
     {
       size: 220, rotate: -8, skewX: 14, skewY: -6, scale: 1.15,
-      opacity: 0.72, blur: 0, depth: 0.06,
+      opacity: 0, blur: 0, depth: 0.06,
       className: "top-[35%] md:right-[-5%] right-[-20%]",
     },
     {
       size: 185, rotate: -14, skewX: 10, skewY: -8, scale: 0.92,
-      opacity: 0.58, blur: 0.3, depth: 0.035,
+      opacity: 0, blur: 0, depth: 0.035,
       className: "bottom-[84%] md:bottom-[80%] right-[25%]",
     },
   ];
@@ -53,7 +52,7 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-[clamp(600px,80vh,800px)] flex items-center justify-center bg-neutral-950 text-white relative overflow-hidden"
+      className="min-h-[clamp(600px,80vh,800px)] flex items-center justify-center bg-background text-foreground relative overflow-hidden"
     >
       {COINS.map((coin, i) => (
         <ParallaxCoin key={i} {...coin} smoothX={smoothX} smoothY={smoothY} />
@@ -62,21 +61,8 @@ const Hero = () => {
       <div className="max-w-3xl relative z-10  grid gap-5 place-items-center">
         <h1 className="text-[clamp(2rem,5vw,3.75rem)] text-center font-bold">
           Your knowledge.<br />
-          <span className="text-[#FB5C06] inline-flex items-center">
-            Pr
-
-            <span className=" inline-flex h-[0.6em] w-[0.6em] items-center justify-center rounded-full bg-white align-baseline relative top-[0.05em]">
-              <Image
-                src="/tlockk.png"
-                alt="o"
-                width={12}
-                height={12}
-                priority
-                className="h-[60%] w-[60%] object-contain"
-              />
-            </span>
-
-            tected.
+          <span className="text-primary">
+            Protected.
           </span>{" "}
           Profitable.
         </h1>
@@ -84,7 +70,7 @@ const Hero = () => {
          <motion.p
           {...fadeUp}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-          className="font-inter text-base text-center sm:text-lg text-white/55 max-w-xl leading-relaxed"
+          className="font-inter text-base text-center sm:text-lg text-foreground/55 max-w-xl leading-relaxed"
         >
           The marketplace built for Nigerian creators. Sell eBooks, courses,
           templates, and music, paid in Naira, delivered instantly, zero
@@ -95,13 +81,13 @@ const Hero = () => {
   
           <Link
             href="/login"
-            className="group relative inline-block text-md font-bold text-[#FF5C00]   py-4 px-6 text-md whitespace-nowrap cursor-pointer"
+            className="group relative inline-block text-md font-bold text-primary   py-4 px-6 text-md whitespace-nowrap cursor-pointer"
           >
             Login
 
             <motion.span
               className="
-                absolute left-0 -bottom-1 h-0.5 w-full bg-[#FF5C00]
+                absolute left-0 -bottom-1 h-0.5 w-full bg-primary
                 scale-x-100 md:scale-x-0
                 origin-left
                 transition-transform duration-300
@@ -114,8 +100,7 @@ const Hero = () => {
           <motion.div
             onHoverStart={() => setRegisterHovered(true)}
             onHoverEnd={() => setRegisterHovered(false)}
-            className="overflow-hidden relative rounded-lg py-4 px-6 text-md font-bold whitespace-nowrap cursor-pointer"
-            style={{ backgroundColor: "#FF5C00" }}
+            className="overflow-hidden relative rounded-lg py-4 px-6 text-md font-bold whitespace-nowrap cursor-pointer bg-primary"
           >
             <Link href="/signup" className="block">
               <motion.span
@@ -126,8 +111,8 @@ const Hero = () => {
                 transition={{ duration: 0.3 }}
               />
               <motion.span
-                className="relative z-10"
-                animate={{ color: registerHovered ? "#FF5C00" : "#ffffff" }}
+                className="relative z-10 text-primary-foreground"
+                animate={{ color: registerHovered ? "var(--color-primary)" : "var(--color-primary-foreground)" }}
                 transition={{ duration: 0.3 }}
               >
                 Register
@@ -143,7 +128,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/20"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-foreground/20"
       >
         <span className="font-mono text-xs tracking-widest uppercase">scroll</span>
         <svg width="16" height="24" viewBox="0 0 16 24" fill="none">

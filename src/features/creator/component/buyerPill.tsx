@@ -9,7 +9,7 @@ interface BuyerPillProps {
 
 export function BuyerPill({ buyer, onRemove }: BuyerPillProps) {
   return (
-    <span className="inline-flex items-center gap-1.5 bg-brand/10 border border-brand/25 text-brand text-xs rounded-full px-2.5 py-1">
+    <span className="inline-flex items-center gap-1.5 bg-primary/10 border border-primary/25 text-primary text-xs rounded-full px-2.5 py-1">
       {buyer.name}
       <button
         type="button"

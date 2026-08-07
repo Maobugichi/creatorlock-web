@@ -28,13 +28,13 @@ const Coin = ({
       style={{
       
         transform: `rotate(${rotate}deg) skewX(${skewX}deg) skewY(${skewY}deg) scale(${scale})`,
-        opacity,
+      
         filter: blur ? `blur(${blur}px)` : undefined,
         zIndex: 0,
       }}
     >
       <Image
-        src="/coin.png"
+        src="/lightorange.svg"
         alt="coin"
         width={size}
         height={size}

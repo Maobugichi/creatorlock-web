@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { DashboardCard } from "@/features/shared/component/dashboardCard";
 import { formatStat } from '../utils/overview.utils';
 
 interface StatCardProps {
@@ -20,27 +21,23 @@ export function StatCard({ label, value, rawValue, sub, accent }: StatCardProps)
   const isAbbreviated = formatted !== null;
 
   return (
-    <div
-      className={`bg-[#111] border rounded-2xl p-5 ${
-        accent ? 'border-brand/30' : 'border-white/[0.07]'
-      }`}
-    >
-      <p className="text-xs text-white/40 font-inter mb-2">{label}</p>
+    <DashboardCard accent={accent}>
+      <p className="text-xs text-muted-foreground font-inter mb-2">{label}</p>
 
       <p
         onClick={() => isAbbreviated && setRevealed((v) => !v)}
         className={`font-mono text-2xl font-bold truncate transition-colors ${
-          accent ? 'text-brand' : 'text-white'
+          accent ? 'text-primary' : 'text-surface-foreground'
         } ${
           isAbbreviated
-            ? 'cursor-pointer underline decoration-dotted underline-offset-4 decoration-white/20'
+            ? 'cursor-pointer underline decoration-dotted underline-offset-4 decoration-border-strong'
             : ''
         }`}
       >
         {revealed && tooltipValue ? tooltipValue : displayValue}
       </p>
 
-      {sub && <p className="text-xs text-white/30 font-inter mt-1">{sub}</p>}
-    </div>
+      {sub && <p className="text-xs text-muted-foreground font-inter mt-1">{sub}</p>}
+    </DashboardCard>
   );
 }

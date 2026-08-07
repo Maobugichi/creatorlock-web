@@ -14,7 +14,7 @@ export default function CouponsPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-syne font-extrabold">Coupons</h1>
-        <p className="text-sm text-[var(--muted)] mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Create and manage discount codes for your products.
         </p>
       </div>
@@ -23,18 +23,18 @@ export default function CouponsPage() {
         <h2 className="font-syne font-bold text-lg">Your coupons</h2>
 
         {isError && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4 text-sm text-red-400">
+          <div className="bg-status-exception/10 border border-status-exception/20 rounded-xl px-5 py-4 text-sm text-status-exception">
             {extractApiError(error)}
           </div>
         )}
 
-        <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
+        <div className="bg-surface border border-border rounded-2xl overflow-hidden">
           {isLoading && <><SkeletonRow /><SkeletonRow /><SkeletonRow /></>}
 
           {!isLoading && !isError && coupons.length === 0 && (
             <div className="flex flex-col items-center justify-center py-14 px-6 text-center space-y-2">
-              <p className="font-syne font-semibold text-white">No coupons yet</p>
-              <p className="text-sm text-[var(--muted)]">
+              <p className="font-syne font-semibold text-surface-foreground">No coupons yet</p>
+              <p className="text-sm text-muted-foreground">
                 Create your first coupon below to start offering discounts.
               </p>
             </div>

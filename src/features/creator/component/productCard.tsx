@@ -9,11 +9,6 @@ import StatusBadge from "./productStatusBadge";
 import { formatNGN, formatRelativeTime } from "../utils/product.utils";
 import type { Product, ProductStatus } from "../types/product.types";
 
-// ─── NOTE: ConfirmPopover is imported from its current location in
-// app/(dashboard)/products/_components/ConfirmPopup.tsx
-// This is a shared-component candidate flagged in §9 of the handoff doc.
-// Move it to features/dashboard/shared/components/ when that question is resolved.
-
 interface ProductCardProps {
   product: Product;
   onToggle: (id: string, currentStatus: ProductStatus) => void;
@@ -48,11 +43,10 @@ export default function ProductCard({ product, onToggle, isToggling }: ProductCa
 
   return (
     <div
-      className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden cursor-pointer hover:border-white/20 transition-colors group"
+      className="bg-surface border border-border rounded-2xl overflow-hidden cursor-pointer hover:border-border-strong transition-colors group"
       onClick={() => router.push(`/products/${product.id}`)}
     >
-      {/* Thumbnail */}
-      <div className="h-36 bg-[var(--bg)] flex items-center justify-center overflow-hidden relative">
+      <div className="h-36 bg-elevated flex items-center justify-center overflow-hidden relative">
         {product.thumbnail ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -61,7 +55,7 @@ export default function ProductCard({ product, onToggle, isToggling }: ProductCa
             className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-4xl font-syne font-extrabold text-white/10 select-none">
+          <span className="text-4xl font-syne font-extrabold text-muted-foreground/40 select-none">
             {product.title.charAt(0).toUpperCase()}
           </span>
         )}
@@ -76,16 +70,15 @@ export default function ProductCard({ product, onToggle, isToggling }: ProductCa
         </Link>
       </div>
 
-      {/* Card body */}
       <div className="p-4">
-        <h3 className="font-syne font-bold text-white text-sm leading-snug line-clamp-1 mb-1 group-hover:text-brand transition-colors">
+        <h3 className="font-syne font-bold text-surface-foreground text-sm leading-snug line-clamp-1 mb-1 group-hover:text-primary transition-colors">
           {product.title}
         </h3>
 
-        <p className="font-mono text-[10px] text-white/30 mb-3 truncate">
+        <p className="font-mono text-[10px] text-muted-foreground mb-3 truncate">
           {formatNGN(product.price_cents)}
           {product.updated_at && (
-            <span className="text-white/20"> · {formatRelativeTime(product.updated_at)}</span>
+            <span className="text-muted-foreground/70"> · {formatRelativeTime(product.updated_at)}</span>
           )}
         </p>
 
@@ -99,8 +92,8 @@ export default function ProductCard({ product, onToggle, isToggling }: ProductCa
                 disabled={isToggling}
                 className={`flex items-center justify-center gap-1.5 px-2.5 h-7 rounded-lg border text-[10px] font-inter font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   isPublished
-                    ? "border-orange-500/20 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20"
-                    : "border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                    ? "border-status-warning/20 bg-status-warning/10 text-status-warning hover:bg-status-warning/20"
+                    : "border-status-positive/20 bg-status-positive/10 text-status-positive hover:bg-status-positive/20"
                 }`}
               >
                 {isToggling ? (

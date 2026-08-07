@@ -25,10 +25,8 @@ export default function DiscoverLayout({
   const mounted = useHasMounted();
   const user = useAuthStore((s) => s.user);
 
-  
   const { data: affiliateStats } = useAffiliateStats(mounted && !!user?.role);
 
- 
   if (!mounted || !user?.role) return <>{children}</>;
 
   const baseNavSections = user.role === "creator" ? creatorNavSections : buyerNavSections;
@@ -38,7 +36,7 @@ export default function DiscoverLayout({
   );
 
   return (
-    <div className="flex h-dvh bg-[#0C0C0C] overflow-hidden font-inter">
+    <div className="flex h-dvh bg-background overflow-hidden font-inter">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((p) => !p)}

@@ -21,18 +21,18 @@ function PayoutStatusBadge({ status }: { status: AffiliatePayout['status'] }) {
 
 function PayoutRow({ payout }: { payout: AffiliatePayout }) {
   return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] last:border-0 hover:bg-white/[0.015] transition-colors">
+    <div className="flex items-center justify-between px-5 py-4 border-b border-border last:border-0 hover:bg-elevated/50 transition-colors">
       <div className="min-w-0">
-        <p className="text-white text-sm font-mono">{formatNGN(payout.amount_cents)}</p>
-        <p className="text-[var(--muted)] text-xs truncate">
+        <p className="text-surface-foreground text-sm font-mono">{formatNGN(payout.amount_cents)}</p>
+        <p className="text-muted-foreground text-xs truncate">
           {payout.account_name ?? '—'} {payout.account_number ? `··${payout.account_number.slice(-4)}` : ''}
         </p>
       </div>
 
       <div className="flex items-center gap-6 shrink-0 ml-4">
         <div className="hidden sm:block text-right">
-          <p className="text-white text-sm">{formatDate(payout.requested_at)}</p>
-          <p className="text-[var(--muted)] text-xs">requested</p>
+          <p className="text-surface-foreground text-sm">{formatDate(payout.requested_at)}</p>
+          <p className="text-muted-foreground text-xs">requested</p>
         </div>
         <PayoutStatusBadge status={payout.status} />
       </div>
@@ -42,14 +42,14 @@ function PayoutRow({ payout }: { payout: AffiliatePayout }) {
 
 function PayoutRowSkeleton() {
   return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] last:border-0 animate-pulse">
+    <div className="flex items-center justify-between px-5 py-4 border-b border-border last:border-0 animate-pulse">
       <div className="space-y-2">
-        <div className="h-4 bg-white/[0.06] rounded w-24" />
-        <div className="h-3 bg-white/[0.04] rounded w-32" />
+        <div className="h-4 bg-elevated rounded w-24" />
+        <div className="h-3 bg-elevated rounded w-32" />
       </div>
       <div className="flex items-center gap-6">
-        <div className="h-3 bg-white/[0.04] rounded w-16" />
-        <div className="h-6 bg-white/[0.06] rounded-lg w-20" />
+        <div className="h-3 bg-elevated rounded w-16" />
+        <div className="h-6 bg-elevated rounded-lg w-20" />
       </div>
     </div>
   );
@@ -59,11 +59,11 @@ export function PayoutHistoryTable() {
   const { data: payouts, isLoading, isError } = useAffiliatePayouts();
 
   return (
-    <div className="bg-surface border border-[var(--border)] rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
-        <h2 className="text-white font-syne font-bold text-base">Payout History</h2>
+    <div className="bg-surface border border-border rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+        <h2 className="text-surface-foreground font-syne font-bold text-base">Payout History</h2>
         {!isLoading && payouts && payouts.length > 0 && (
-          <span className="text-[var(--muted)] text-xs font-mono">
+          <span className="text-muted-foreground text-xs font-mono">
             {payouts.length} payout{payouts.length !== 1 ? 's' : ''}
           </span>
         )}
@@ -73,14 +73,14 @@ export function PayoutHistoryTable() {
 
       {isError && !isLoading && (
         <div className="px-5 py-10 text-center">
-          <p className="text-red-400 text-sm">Failed to load payout history. Please refresh.</p>
+          <p className="text-status-exception text-sm">Failed to load payout history. Please refresh.</p>
         </div>
       )}
 
       {!isLoading && !isError && payouts && payouts.length === 0 && (
         <div className="px-5 py-14 text-center">
-          <p className="text-white font-syne font-bold text-base mb-1">No payouts yet</p>
-          <p className="text-[var(--muted)] text-sm">
+          <p className="text-surface-foreground font-syne font-bold text-base mb-1">No payouts yet</p>
+          <p className="text-muted-foreground text-sm">
             Once you request a payout, it&apos;ll show up here.
           </p>
         </div>
