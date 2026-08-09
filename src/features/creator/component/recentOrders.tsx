@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { DashboardCard } from "@/features/shared/component/dashboardCard";
 import type { DashboardData } from '../types/overview.types';
 import { formatNGN, formatDate } from '@/lib/utils';
@@ -10,7 +11,17 @@ interface RecentOrdersProps {
 export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
   return (
     <DashboardCard>
-      <h2 className="font-syne font-bold text-surface-foreground text-base mb-4">Recent orders</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-syne font-bold text-surface-foreground text-base">Recent orders</h2>
+        {!isLoading && orders.length > 0 && (
+          <Link
+            href="/dashboard/orders"
+            className="text-xs font-medium text-muted-foreground hover:text-surface-foreground font-inter transition-colors"
+          >
+            View all
+          </Link>
+        )}
+      </div>
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -22,7 +33,7 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
           <p className="text-sm text-muted-foreground font-inter">No orders yet</p>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-1 max-h-[360px] overflow-y-auto scrollbar-hide">
           {orders.map((order) => (
             <div
               key={order.order_id}
@@ -33,7 +44,7 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
                 <p className="text-xs text-muted-foreground font-inter truncate">{order.product_title}</p>
               </div>
               <div className="text-right flex-shrink-0 ml-3">
-                <p className="text-sm font-bold text-surface-foreground font-mono">{formatNGN(order.amount_cents)}</p>
+                <p className="text-sm font-bold text-price font-mono">+{formatNGN(order.amount_cents)}</p>
                 <p className="text-xs text-muted-foreground font-inter">{formatDate(order.ordered_at)}</p>
               </div>
             </div>

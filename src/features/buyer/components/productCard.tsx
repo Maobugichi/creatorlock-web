@@ -1,12 +1,29 @@
+'use client';
+
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatNGN } from '@/lib/utils';
 import { ArrowRightIcon, FileIcon } from '@/features/buyer/components/icons';
-import type { DiscoverProduct } from '@/features/buyer/types/buyer.types';
-import { CATEGORY_OPTIONS } from '@/features/buyer/types/buyer.types';
 
-export function DiscoverProductCardSkeleton() {
+interface ProductCardProduct {
+  id: string;
+  title: string;
+  description?: string | null;
+  thumbnail?: string | null;
+  price_cents: number;
+  files?: unknown[];
+}
+
+interface ProductCardProps {
+  product: ProductCardProduct;
+  storeSlug: string;
+  displayName?: string;
+  categoryLabel?: string;
+  index?: number;
+}
+
+export function ProductCardSkeleton() {
   return (
     <div className="bg-surface border border-border rounded-2xl overflow-hidden h-full flex flex-col">
       <div className="bg-elevated animate-pulse aspect-[4/3] w-full" />
@@ -26,15 +43,9 @@ export function DiscoverProductCardSkeleton() {
   );
 }
 
-interface DiscoverProductCardProps {
-  product: DiscoverProduct;
-  index: number;
-}
-
-export function DiscoverProductCard({ product, index }: DiscoverProductCardProps) {
+export function ProductCard({ product, storeSlug, displayName, categoryLabel, index = 0 }: ProductCardProps) {
   const isFree = product.price_cents === 0;
-  const fileCount = product.files.length;
-  const categoryLabel = CATEGORY_OPTIONS.find((c) => c.value === product.category)?.label;
+  const fileCount = product.files?.length ?? 0;
 
   return (
     <motion.div
@@ -54,19 +65,15 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="opacity-20">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21 15 16 10 5 21" />
-              </svg>
-            </div>
+            <span className="text-4xl font-syne font-extrabold text-muted-foreground/40 select-none">
+              {product.title.charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
 
         {isFree && (
           <div className="absolute top-2 left-2 lg:top-3 lg:left-3">
-            <span className="bg-primary/90 text-primary-foreground font-syne font-bold text-[9px] lg:text-[10px] uppercase tracking-wider px-1.5 lg:px-2 py-0.5 lg:py-1 rounded-lg backdrop-blur-sm">
+            <span className="bg-price/90 text-price-foreground font-syne font-bold text-[9px] lg:text-[10px] uppercase tracking-wider px-1.5 lg:px-2 py-0.5 lg:py-1 rounded-lg backdrop-blur-sm">
               Free
             </span>
           </div>
@@ -95,12 +102,14 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
           <h3 className="font-syne font-bold text-surface-foreground text-sm leading-snug line-clamp-2">
             {product.title}
           </h3>
-          <Link
-            href={`/store/${product.store_slug}`}
-            className="inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors shrink-0"
-          >
-            {product.display_name}
-          </Link>
+          {displayName && (
+            <Link
+              href={`/store/${storeSlug}`}
+              className="inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors shrink-0"
+            >
+              {displayName}
+            </Link>
+          )}
         </div>
 
         {product.description && (
@@ -110,12 +119,12 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
         )}
 
         <div className="mt-auto flex items-center justify-between pt-3 border-t border-border">
-          <span className="font-mono font-bold text-primary text-base">
+          <span className="font-mono font-bold text-price text-base">
             {isFree ? 'Free' : formatNGN(product.price_cents)}
           </span>
 
           <Link
-            href={`/store/${product.store_slug}/${product.id}`}
+            href={`/store/${storeSlug}/${product.id}`}
             className="lg:hidden w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary transition-all duration-200 hover:bg-primary hover:border-primary hover:text-primary-foreground"
             aria-label={`View ${product.title}`}
           >
@@ -123,7 +132,7 @@ export function DiscoverProductCard({ product, index }: DiscoverProductCardProps
           </Link>
 
           <Link
-            href={`/store/${product.store_slug}/${product.id}`}
+            href={`/store/${storeSlug}/${product.id}`}
             className="hidden lg:inline-flex items-center gap-1.5 rounded-xl bg-primary/10 border border-primary/20 px-3 py-1.5 text-primary font-syne font-semibold text-xs transition-all duration-200 hover:bg-primary hover:border-primary hover:text-primary-foreground group/btn"
           >
             View

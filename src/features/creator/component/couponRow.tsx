@@ -60,14 +60,14 @@ export function CouponRow({ coupon }: { coupon: Coupon }) {
           whileTap={{ scale: 0.96 }}
           onClick={() => toggleActive()}
           disabled={toggling}
-          className={`text-xs bg-elevated border text-surface-foreground font-syne font-semibold rounded-xl px-3 py-2 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
+          className={`text-xs border font-syne font-semibold rounded-xl px-3 py-2 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
             coupon.active
-              ? 'border-border hover:border-status-warning/40 hover:text-status-warning'
-              : 'border-border hover:border-status-positive/40 hover:text-status-positive'
+              ? 'bg-status-warning/10 text-status-warning border-status-warning/20 hover:bg-status-warning/20'
+              : 'bg-status-positive/10 text-status-positive border-status-positive/20 hover:bg-status-positive/20'
           }`}
         >
           {toggling ? (
-            <span className="w-3.5 h-3.5 border-2 border-surface-foreground/30 border-t-surface-foreground rounded-full animate-spin inline-block" />
+            <span className="w-3.5 h-3.5 border-2 border-current/30 border-t-current rounded-full animate-spin inline-block" />
           ) : coupon.active ? 'Deactivate' : 'Activate'}
         </motion.button>
 

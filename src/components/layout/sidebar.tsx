@@ -6,7 +6,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { X } from "@phosphor-icons/react";
+import {
+  X,
+  SquaresFour,
+  Package,
+  CreditCard,
+  ShareNetwork,
+  Ticket,
+  Users,
+  Gear,
+  Compass,
+  BookBookmark,
+  TrendUp,
+} from "@phosphor-icons/react";
 
 export type NavItem = {
   label: string;
@@ -19,83 +31,46 @@ export type NavSection = {
   items: NavItem[];
 };
 
+const ICON_SIZE = 18;
+const ICON_WEIGHT = "duotone" as const;
+
 export const creatorNavSections: NavSection[] = [
   {
     items: [
       {
         label: "Dashboard",
         href: "/dashboard",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-            <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-            <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-          </svg>
-        ),
+        icon: <SquaresFour size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Products",
         href: "/products",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 22V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M3.27 6.96L12 12.01l8.73-5.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <Package size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Payouts",
         href: "/payouts",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M6 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <CreditCard size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Affiliates",
         href: "/affiliates",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <ShareNetwork size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Coupons",
         href: "/coupons",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
-          </svg>
-        ),
+        icon: <Ticket size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Buyers",
         href: "/buyers",
-        icon: (
-          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.119-1.243l1.263-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/>
-          </svg>
-        ),
+        icon: <Users size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Settings",
         href: "/settings",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" strokeWidth="1.5"/>
-          </svg>
-        ),
+        icon: <Gear size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
     ],
   },
@@ -105,23 +80,12 @@ export const creatorNavSections: NavSection[] = [
       {
         label: "Discover",
         href: "/discover",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M11 8v6M8 11h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <Compass size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Library",
         href: "/library",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        ),
+        icon: <BookBookmark size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
     ],
   },
@@ -133,33 +97,17 @@ export const buyerNavSections: NavSection[] = [
       {
         label: "Discover",
         href: "/discover",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M11 8v6M8 11h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <Compass size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Library",
         href: "/library",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        ),
+        icon: <BookBookmark size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
       {
         label: "Settings",
         href: "/profile",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" strokeWidth="1.5"/>
-          </svg>
-        ),
+        icon: <Gear size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
     ],
   },
@@ -168,11 +116,7 @@ export const buyerNavSections: NavSection[] = [
 export const affiliateDashboardNavItem: NavItem = {
   label: "Affiliate Earnings",
   href: "/affiliate/dashboard",
-  icon: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
+  icon: <TrendUp size={ICON_SIZE} weight={ICON_WEIGHT} />,
 };
 
 export function withAffiliateNavItem(
@@ -445,13 +389,7 @@ export const adminNavSections: NavSection[] = [
       {
         label: "Payouts",
         href: "/admin/payouts",
-        icon: (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M6 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        ),
+        icon: <CreditCard size={ICON_SIZE} weight={ICON_WEIGHT} />,
       },
     ],
   },

@@ -25,7 +25,7 @@ const Hero = () => {
     {
       size: 300, rotate: 10, skewX: 10, skewY: -10, scale: 0.8,
       opacity: 0, blur: 0, depth: 0.03,
-      className: "top-[8%] left-[0%] hidden md:block",
+      className: "top-[8%] md:left-[0%] right-[50%]",
     },
     {
       size: 210, rotate: 30, skewX: -10, skewY: 2, scale: 1.0,
@@ -35,7 +35,7 @@ const Hero = () => {
     {
       size: 165, rotate: 18, skewX: -8, skewY: 6, scale: 0.8,
       opacity: 0, blur: 0, depth: 0.04,
-      className: "top-[3%] right-[-4%] hidden md:block",
+      className: "md:top-[3%] bottom-[0%] right-[-4%] ",
     },
     {
       size: 220, rotate: -8, skewX: 14, skewY: -6, scale: 1.15,

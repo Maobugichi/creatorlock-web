@@ -63,7 +63,7 @@ export function RevenueChart({ data, isLoading, period, onPeriodChange }: Revenu
 
       {isLoading ? (
         <div className="h-52 flex items-center justify-center">
-          <span className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <span className="w-5 h-5 border-2 border-price/30 border-t-price rounded-full animate-spin" />
         </div>
       ) : data.length === 0 ? (
         <div className="h-52 flex items-center justify-center">
@@ -74,8 +74,8 @@ export function RevenueChart({ data, isLoading, period, onPeriodChange }: Revenu
           <AreaChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
+                <stop offset="5%" stopColor="var(--color-price)" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="var(--color-price)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -95,11 +95,11 @@ export function RevenueChart({ data, isLoading, period, onPeriodChange }: Revenu
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="var(--color-primary)"
+              stroke="var(--color-price)"
               strokeWidth={2}
               fill="url(#revenueGrad)"
               dot={false}
-              activeDot={{ r: 4, fill: 'var(--color-primary)', strokeWidth: 0 }}
+              activeDot={{ r: 4, fill: 'var(--color-price)', strokeWidth: 0 }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { DashboardCard } from "@/features/shared/component/dashboardCard";
 import type { DashboardData } from '../types/overview.types';
 import { formatNGN } from '@/lib/utils';
@@ -10,7 +11,17 @@ interface TopProductsProps {
 export function TopProducts({ products, isLoading }: TopProductsProps) {
   return (
     <DashboardCard>
-      <h2 className="font-syne font-bold text-surface-foreground text-base mb-4">Top products</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-syne font-bold text-surface-foreground text-base">Top products</h2>
+        {!isLoading && products.length > 0 && (
+          <Link
+            href="/dashboard/products"
+            className="text-xs font-medium text-muted-foreground hover:text-surface-foreground font-inter transition-colors"
+          >
+            View all
+          </Link>
+        )}
+      </div>
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -22,7 +33,7 @@ export function TopProducts({ products, isLoading }: TopProductsProps) {
           <p className="text-sm text-muted-foreground font-inter">No products yet</p>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-1 max-h-[360px] overflow-y-auto scrollbar-hide">
           {products.map((product, i) => (
             <div
               key={product.product_id}
@@ -42,7 +53,7 @@ export function TopProducts({ products, isLoading }: TopProductsProps) {
                   {product.total_sales} sale{product.total_sales !== 1 ? 's' : ''}
                 </p>
               </div>
-              <p className="text-sm font-bold text-surface-foreground font-mono flex-shrink-0">
+              <p className="text-sm font-bold text-price font-mono flex-shrink-0">
                 {formatNGN(product.total_revenue_cents)}
               </p>
             </div>

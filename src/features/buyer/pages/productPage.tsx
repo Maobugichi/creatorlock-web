@@ -151,7 +151,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <p className="mb-1 font-inter text-xs text-muted-foreground">Price</p>
                 <p className="font-syne text-3xl font-extrabold text-surface-foreground">
                   {isFree ? (
-                    <span className="text-primary">Free</span>
+                    <span className="text-price">Free</span>
                   ) : (
                     formatNGN(product.price_cents)
                   )}

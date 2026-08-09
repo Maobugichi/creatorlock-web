@@ -1,5 +1,5 @@
 import { ProductWithFiles } from '@/types/store';
-import ProductCard from './ProductCard';
+import { ProductCard } from '@/features/buyer/components/productCard';
 import StorePagination from '@/features/buyer/components/storePagination';
 import { Suspense } from 'react';
 
@@ -30,7 +30,7 @@ const EmptyState = () => (
   </div>
 );
 
-export default function ProductGrid({ products, storeSlug, total , page, totalPages }: ProductGridProps) {
+export default function ProductGrid({ products, storeSlug, total, page, totalPages }: ProductGridProps) {
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <div className="mb-6 flex items-center justify-between">
@@ -42,7 +42,7 @@ export default function ProductGrid({ products, storeSlug, total , page, totalPa
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         {products.length === 0 ? (
           <EmptyState />
         ) : (

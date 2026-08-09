@@ -203,7 +203,7 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
                 )}
                 <p className="font-syne text-xl font-extrabold text-surface-foreground">
                   {isEffectivelyFree || isFree ? (
-                    <span className="text-primary">Free</span>
+                    <span className="text-price">Free</span>
                   ) : (
                     formatNGN(displayPriceCents)
                   )}
@@ -231,7 +231,7 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
             <button
               onClick={handlePurchase}
               type="button"
-              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90 active:opacity-80"
+              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-price-foreground bg-price transition-opacity hover:opacity-90 active:opacity-80"
             >
               {isFree || isEffectivelyFree
                 ? 'Claim for Free'
@@ -284,7 +284,7 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
             <button
               onClick={handleEmailSubmit}
               type="button"
-              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-primary-foreground bg-primary transition-opacity hover:opacity-90 active:opacity-80"
+              className="w-full rounded-xl py-3.5 font-syne text-sm font-bold text-price-foreground bg-price transition-opacity hover:opacity-90 active:opacity-80"
             >
               {isFree || isEffectivelyFree
                 ? 'Claim for Free'
@@ -304,7 +304,7 @@ export default function CheckoutModal({ product, onClose }: CheckoutModalProps) 
         {step === 'paying' && (
           <div className="flex flex-col items-center gap-4 py-8">
             <svg
-              className="animate-spin text-primary"
+              className="animate-spin text-price"
               width="32" height="32" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" strokeWidth="2"
             >

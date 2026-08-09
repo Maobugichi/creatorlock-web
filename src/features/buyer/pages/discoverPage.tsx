@@ -3,10 +3,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDiscoverProducts } from '@/features/buyer/api/useDiscoverProducts';
-import {
-  DiscoverProductCard,
-  DiscoverProductCardSkeleton,
-} from '@/features/buyer/components/discoverProductCard';
+import { ProductCard, ProductCardSkeleton } from '@/features/buyer/components/productCard';
 import { DiscoverErrorBanner } from '@/features/buyer/components/discoverErrorBanner';
 import { DiscoverEmptyState } from '@/features/buyer/components/discoverEmptyState';
 import { DiscoverPagination } from '@/features/buyer/components/discoverPagination';
@@ -213,7 +210,7 @@ export default function DiscoverPage() {
           {showSkeletons && (
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
               {Array.from({ length: 9 }).map((_, i) => (
-                <DiscoverProductCardSkeleton key={i} />
+                <ProductCardSkeleton key={i} />
               ))}
             </div>
           )}
@@ -224,7 +221,14 @@ export default function DiscoverPage() {
                 <DiscoverEmptyState search={debouncedSearch} />
               ) : (
                 products.map((product, index) => (
-                  <DiscoverProductCard key={product.id} product={product} index={index} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    storeSlug={product.store_slug}
+                    displayName={product.display_name}
+                    categoryLabel={CATEGORY_OPTIONS.find((c) => c.value === product.category)?.label}
+                    index={index}
+                  />
                 ))
               )}
             </div>
