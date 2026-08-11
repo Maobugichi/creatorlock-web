@@ -15,7 +15,7 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
         <h2 className="font-syne font-bold text-surface-foreground text-base">Recent orders</h2>
         {!isLoading && orders.length > 0 && (
           <Link
-            href="/dashboard/orders"
+            href="/buyers"
             className="text-xs font-medium text-muted-foreground hover:text-surface-foreground font-inter transition-colors"
           >
             View all

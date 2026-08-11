@@ -20,7 +20,7 @@ export default function PayoutsPage() {
       {balanceLoading ? (
         <BalanceCardSkeleton />
       ) : balanceData ? (
-        <BalanceCard {...balanceData} />
+        <BalanceCard {...balanceData} feeNote="After 7% platform fee" />
       ) : null}
 
       <WithdrawalForm availableCents={balanceData?.available ?? 0} />

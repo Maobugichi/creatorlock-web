@@ -15,7 +15,7 @@ export function TopProducts({ products, isLoading }: TopProductsProps) {
         <h2 className="font-syne font-bold text-surface-foreground text-base">Top products</h2>
         {!isLoading && products.length > 0 && (
           <Link
-            href="/dashboard/products"
+            href="/products"
             className="text-xs font-medium text-muted-foreground hover:text-surface-foreground font-inter transition-colors"
           >
             View all

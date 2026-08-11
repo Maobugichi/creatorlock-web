@@ -310,12 +310,18 @@ export default function Sidebar({
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <AnimatePresence>
             {!collapsed && (
-             <div className="relative h-8 w-32 ">
+             <div className="relative h-8 w-32">
+              <Image
+                src="/logo-lightmode.png"
+                alt="CreatorLock logo"
+                fill
+                className="object-contain dark:hidden"
+              />
               <Image
                 src="/desktoplogo.png"
                 alt="CreatorLock logo"
                 fill
-                className="object-contain"
+                className="object-contain hidden dark:block"
               />
             </div>
             )}
@@ -356,13 +362,21 @@ export default function Sidebar({
               transition={{ type: "spring", stiffness: 400, damping: 40 }}
               className="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-elevated border-r border-border md:hidden"
             >
-              <div className="flex items-center justify-between px-4 py- border-b border-border">
-                <Image
-                  src="/tisolock.png"
-                  alt="CreatorLock logo"
-                  width={55}
-                  height={55}
-                />
+              <div className="flex items-center justify-between px-4  border-b border-border">
+                <div className="relative h-[55px] w-[100px]">
+                  <Image
+                    src="/desktop-light.png"
+                    alt="CreatorLock logo"
+                    fill
+                    className="object-contain dark:hidden"
+                  />
+                  <Image
+                    src="/desktoplogo.png"
+                    alt="CreatorLock logo"
+                    fill
+                    className="object-contain hidden dark:block"
+                  />
+                </div>
                 <button
                   onClick={onMobileClose}
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground/70 hover:text-muted-foreground hover:bg-border-strong/10 transition-colors"

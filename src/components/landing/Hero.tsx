@@ -60,21 +60,21 @@ const Hero = () => {
 
       <div className="max-w-3xl relative z-10  grid gap-5 place-items-center">
         <h1 className="text-[clamp(2rem,5vw,3.75rem)] text-center font-bold">
-          Your knowledge.<br />
-          <span className="text-primary">
-            Protected.
+          Sell digital products.
+          <br />
+           Keep{" "}
+          <span className="text-logo">
+            control 
           </span>{" "}
-          Profitable.
+          of them.
         </h1>
 
          <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
           className="font-inter text-base text-center sm:text-lg text-foreground/55 max-w-xl leading-relaxed"
         >
-          The marketplace built for Nigerian creators. Sell eBooks, courses,
-          templates, and music, paid in Naira, delivered instantly, zero
-          platform drama.
+            Sell eBooks, courses, templates, music, and more. CreatorLock helps
+            Nigerian creators get paid in Naira and deliver every purchase securely
+            with protected, controlled downloads.
         </motion.p>
 
         <div className='flex gap-5'>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #FAF7F0;
   --foreground: #1a1a1a;
@@ -43,8 +45,8 @@
   --color-elevated: #23262E;
   --color-surface-foreground: #f5f6f7;
 
-  --color-primary: #94A3B8;
-  --color-primary-dark: #64748B;
+  --color-primary: #E7E4DC;
+  --color-primary-dark: #D6D2C8;
   --color-primary-foreground: #0F172A;
 
   --color-success: #34C368;
