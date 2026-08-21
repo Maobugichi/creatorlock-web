@@ -22,7 +22,7 @@ export default function WaitlistFooter() {
         </nav>
 
         <span className="font-mono text-xs text-foreground/20">
-          © {new Date().getFullYear()} CreatorLock · Built in Nigeria 🇳🇬
+          © {new Date().getFullYear()} CreatorLock 
         </span>
       </div>
     </footer>
